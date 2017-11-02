@@ -1,0 +1,20 @@
+# Podfile content
+source 'https://github.com/CocoaPods/Specs.git'
+
+platform :ios, '8.0'
+
+target 'Hellobox' do
+    
+    pod 'GoogleMaps'  # <~~ remove this line if you do not want to support GoogleMaps on iOS
+    pod 'GooglePlaces'
+    pod 'GooglePlacePicker'
+end
+post_install do |installer|
+    installer.pods_project.targets.each do |target|
+        if target.name == "react-native-google-maps"
+            target.build_configurations.each do |config|
+                config.build_settings['CLANG_ENABLE_MODULES'] = 'No'
+            end
+        end
+    end
+end
