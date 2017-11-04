@@ -105,14 +105,13 @@ export function getAddressPredictions() {
 			)
 			.then((results) =>
 				dispatch({
-					type: GET_ADDRESS_PREDICTIONS,
-					payload: results
-				}),
-
-				dispatch({
-					type: UPDATE_SEARCH_ADDRESS_LOADING_STATUS,
-					payload: false
-				})
+							type: GET_ADDRESS_PREDICTIONS,
+							payload: results
+						}
+					).then(() => dispatch({
+						type: UPDATE_SEARCH_ADDRESS_LOADING_STATUS,
+						payload: false
+					}))
 			)
 			.catch((error) => console.log(error.message))
 		}

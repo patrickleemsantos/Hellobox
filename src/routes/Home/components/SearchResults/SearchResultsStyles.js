@@ -19,6 +19,8 @@ const styles = {
     },
     spinner: {
         color: "#E90000",
+        marginTop: 150,
+        alignSelf: "center"
     },
     listWrapper: {
         opacity:0.9

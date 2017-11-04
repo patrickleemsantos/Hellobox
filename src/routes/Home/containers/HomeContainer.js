@@ -42,7 +42,7 @@ const mapStateToProps = (state) => ({
     additionalService4: state.home.additionalService4 || false,
     additionalService5: state.home.additionalService5 || false,
     additionalService6: state.home.additionalService6 || false,
-    nearByDrivers:state.home.nearByDrivers || [],
+    nearByDrivers: state.home.nearByDrivers || [],
     isSearchAddressLoading: state.home.isSearchAddressLoading || false,
 });
 
@@ -60,8 +60,7 @@ const mapActionCreators = {
     removeAdditionalPrice,
     updateAdditionalService,
     bookCar,
-    getNearByDrivers,
-    updateSearchAddressLoadingStatus
+    getNearByDrivers
 };
 
 export default connect(mapStateToProps, mapActionCreators)(Home);

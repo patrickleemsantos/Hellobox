@@ -51,7 +51,6 @@ class Home extends React.Component {
                                 selectedAddress={this.props.selectedAddress}
                                 carMarker={carMarker}
                                 nearByDrivers={this.props.nearByDrivers}
-                                updateSearchAddressLoadingStatus={this.props.updateSearchAddressLoadingStatus}
                                 isSearchAddressLoading={this.props.isSearchAddressLoading}
                             />
                         }
