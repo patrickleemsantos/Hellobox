@@ -18,7 +18,10 @@ import {
     additionalService4,
     additionalService5,
     additionalService6,
-    updateAdditionalService
+    updateAdditionalService,
+    bookCar,
+    getNearByDrivers,
+    updateSearchAddressLoadingStatus
 } from "../modules/home";
 
 const mapStateToProps = (state) => ({   
@@ -28,6 +31,7 @@ const mapStateToProps = (state) => ({
     predictions: state.home.predictions || [],
     selectedAddress: state.home.selectedAddress || {},
     fare: state.home.fare,
+    booking: state.home.booking || {},
     selectedVehicle: state.home.selectedVehicle || {},
     isAdditionalModalVisible: state.home.isAdditionalModalVisible || false,
     additionalServices: state.home.additionalServices || [],
@@ -37,7 +41,9 @@ const mapStateToProps = (state) => ({
     additionalService3: state.home.additionalService3 || false,
     additionalService4: state.home.additionalService4 || false,
     additionalService5: state.home.additionalService5 || false,
-    additionalService6: state.home.additionalService6 || false
+    additionalService6: state.home.additionalService6 || false,
+    nearByDrivers:state.home.nearByDrivers || [],
+    isSearchAddressLoading: state.home.isSearchAddressLoading || false,
 });
 
 const mapActionCreators = {
@@ -52,7 +58,10 @@ const mapActionCreators = {
     removeAdditionalServices,
     addAdditionalPrice,
     removeAdditionalPrice,
-    updateAdditionalService
+    updateAdditionalService,
+    bookCar,
+    getNearByDrivers,
+    updateSearchAddressLoadingStatus
 };
 
 export default connect(mapStateToProps, mapActionCreators)(Home);

@@ -9,6 +9,20 @@ const styles = {
         backgroundColor:"#fff",
         opacity:0.9
     },
+    spinnerContainer: {
+        flex:1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor:'blue',
+        paddingBottom: 250
+    },
+    spinner: {
+        color: "#E90000",
+    },
+    listWrapper: {
+        opacity:0.9
+    },
     primaryText:{
         fontWeight: "bold",
         color:"#373737"

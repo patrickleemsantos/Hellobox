@@ -27,7 +27,10 @@ const { GET_CURRENT_LOCATION,
 		ADDITIONAL_SERVICE_4,
 		ADDITIONAL_SERVICE_5,
 		ADDITIONAL_SERVICE_6,
-		UPDATE_ADDITIONAL_SERVICE
+		UPDATE_ADDITIONAL_SERVICE,
+		BOOK_CAR,
+		GET_NEARBY_DRIVERS,
+		UPDATE_SEARCH_ADDRESS_LOADING_STATUS
 	} = constants;
 
 const { width, height } = Dimensions.get("window");
@@ -40,6 +43,13 @@ const LONGITUDE_DELTA = ASPECT_RATIO * LATITUDE_DELTA;
 //------------------------
 //Actions
 //------------------------
+export function updateSearchAddressLoadingStatus() {
+	return (dispatch) => {
+		type: UPDATE_SEARCH_ADDRESS_LOADING_STATUS,
+		payload
+	}
+}
+
 export function getCurrentLocation(){
 	return(dispatch) => {
 		navigator.geolocation.getCurrentPosition(
@@ -84,6 +94,10 @@ export function getAddressPredictions() {
 	return(dispatch, store) => {
 		let userInput = store().home.resultTypes.pickUp ? store().home.inputData.pickUp : store().home.inputData.dropOff;
 		if (userInput != "") {
+			dispatch({
+				type: UPDATE_SEARCH_ADDRESS_LOADING_STATUS,
+				payload: true
+			})
 			RNGooglePlaces.getAutocompletePredictions(userInput,
 				{
 					country: "PH"
@@ -93,6 +107,11 @@ export function getAddressPredictions() {
 				dispatch({
 					type: GET_ADDRESS_PREDICTIONS,
 					payload: results
+				}),
+
+				dispatch({
+					type: UPDATE_SEARCH_ADDRESS_LOADING_STATUS,
+					payload: false
 				})
 			)
 			.catch((error) => console.log(error.message))
@@ -361,9 +380,81 @@ export function updateAdditionalService(payload) {
 
 }
 
+//Book Car
+export function bookCar(payload) {
+	return (dispatch, store) => {
+		const nearByDrivers = store().home.nearByDrivers;
+		const nearByDriver = nearByDrivers[Math.floor(Math.random() * nearByDrivers.length)];
+		const payload = {
+			data:{
+				username:"patrick",
+				pickUp:{
+					address:store().home.selectedAddress.selectedPickUp.address,
+					name:store().home.selectedAddress.selectedPickUp.name,
+					latitude:store().home.selectedAddress.selectedPickUp.latitude,
+					longitude:store().home.selectedAddress.selectedPickUp.latitude
+				},
+				dropOff:{
+					address:store().home.selectedAddress.selectedDropOff.address,
+					name:store().home.selectedAddress.selectedDropOff.name,
+					latitude:store().home.selectedAddress.selectedDropOff.latitude,
+					longitude:store().home.selectedAddress.selectedDropOff.latitude
+				},
+				fare:store().home.fare,
+				additionalPrice:store().home.additionalPrice,
+				additionalServices:store().home.additionalServices,
+				status:"pending"
+			},
+			nearByDriver: {
+				socketId: nearByDriver.socketId,
+				driverId: nearByDriver.driverId,
+				latitude: nearByDriver.coordinate.coordinates[1],
+				longitude: nearByDriver.coordinate.coordinates[0]
+			}
+		};
+
+		request.post("http://52.220.212.6:3121/api/bookings")
+		.send(payload)
+		.finish((error, res)=>{
+			dispatch({
+				type:BOOK_CAR,
+				payload:res.body
+			});
+		});
+	}
+}
+
+// Get nearby drivers
+export function getNearByDrivers(){
+	return(dispatch, store)=>{
+		request.get("http://52.220.212.6:3121/api/driverLocation")
+		.query({
+			latitude:store().home.region.latitude,
+			longitude:store().home.region.longitude	
+		})
+		.finish((error, res)=>{
+			if(res){
+				dispatch({
+					type:GET_NEARBY_DRIVERS,
+					payload:res.body
+				});
+			}
+
+		});
+	};
+}
+
 //------------------------
 //Action Handlers
 //------------------------
+function handleUpdateSearchAddressLoadingStatus(state, action) {
+	return update(state, {
+		isSearchAddressLoading:{
+			$set: action.payload	
+		}
+	})
+}
+
 function handleGetCurrentLocation(state, action){
 	return update(state, {
 		region:{
@@ -410,7 +501,7 @@ function handleToggleSearchResult(state, action){
 			},
 			selectedAddress: {
 				selectedPickUp: {
-					$set: {}
+					$set: null
 				}
 			},
 			fare: {
@@ -434,7 +525,7 @@ function handleToggleSearchResult(state, action){
 			},
 			selectedAddress: {
 				selectedDropOff: {
-					$set: {}
+					$set: null
 				}
 			},
 			fare: {
@@ -633,6 +724,24 @@ function handleAdditionalService(state, action) {
 	}
 }
 
+// Handle book car
+function handleBookCar(state, action) {
+	return update(state, {
+		booking: {
+			$set: action.payload
+		}
+	})
+}
+
+//Handle get nearby drivers
+function handleGetNearbyDrivers(state, action){
+	return update(state, {
+		nearByDrivers:{
+			$set:action.payload
+		}
+	});
+}
+
 const ACTION_HANDLERS = {
 	GET_CURRENT_LOCATION: handleGetCurrentLocation,
 	GET_INPUT: handleGetInputData,
@@ -652,7 +761,10 @@ const ACTION_HANDLERS = {
 	ADDITIONAL_SERVICE_4: handleAdditionalService4,
 	ADDITIONAL_SERVICE_5: handleAdditionalService5,
 	ADDITIONAL_SERVICE_6: handleAdditionalService6,
-	UPDATE_ADDITIONAL_SERVICE: handleAdditionalService
+	UPDATE_ADDITIONAL_SERVICE: handleAdditionalService,
+	BOOK_CAR: handleBookCar,
+	GET_NEARBY_DRIVERS:handleGetNearbyDrivers,
+	UPDATE_SEARCH_ADDRESS_LOADING_STATUS:handleUpdateSearchAddressLoadingStatus
 }
 
 const initialState = {
@@ -668,7 +780,8 @@ const initialState = {
 	additionalService3: false,
 	additionalService4: false,
 	additionalService5: false,
-	additionalService6: false
+	additionalService6: false,
+	isSearchAddressLoading: false
 };
 
 export function HomeReducer (state = initialState, action) {
