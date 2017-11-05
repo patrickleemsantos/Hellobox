@@ -30,7 +30,8 @@ const { GET_CURRENT_LOCATION,
 		UPDATE_ADDITIONAL_SERVICE,
 		BOOK_CAR,
 		GET_NEARBY_DRIVERS,
-		UPDATE_SEARCH_ADDRESS_LOADING_STATUS
+		UPDATE_SEARCH_ADDRESS_LOADING_STATUS,
+		CLOSE_RESULT_TYPE
 	} = constants;
 
 const { width, height } = Dimensions.get("window");
@@ -43,6 +44,16 @@ const LONGITUDE_DELTA = ASPECT_RATIO * LATITUDE_DELTA;
 //------------------------
 //Actions
 //------------------------
+export function closeResultType(payload) {
+	return(dispatch, store) => {
+		dispatch({
+				type: CLOSE_RESULT_TYPE,
+				payload
+			}
+		)
+	}
+}
+
 export function updateSearchAddressLoadingStatus() {
 	return (dispatch) => {
 		type: UPDATE_SEARCH_ADDRESS_LOADING_STATUS,
@@ -98,6 +109,11 @@ export function getAddressPredictions() {
 				type: UPDATE_SEARCH_ADDRESS_LOADING_STATUS,
 				payload: true
 			})
+
+			dispatch({
+				type: GET_ADDRESS_PREDICTIONS,
+				payload: {}
+			})
 			RNGooglePlaces.getAutocompletePredictions(userInput,
 				{
 					country: "PH"
@@ -108,11 +124,12 @@ export function getAddressPredictions() {
 							type: GET_ADDRESS_PREDICTIONS,
 							payload: results
 						}
-					).then(() => dispatch({
-						type: UPDATE_SEARCH_ADDRESS_LOADING_STATUS,
-						payload: false
-					}))
+					)
 			)
+			.then(() => dispatch({
+				type: UPDATE_SEARCH_ADDRESS_LOADING_STATUS,
+				payload: false
+			}))
 			.catch((error) => console.log(error.message))
 		}
 	};
@@ -167,7 +184,7 @@ export function getSelectedAddress(payload) {
 							payload: fare
 						})
 					}
-				}, 1000)
+				}, 2000)
 			}
 		})
 		.catch((error) => console.log(error.message));
@@ -446,6 +463,19 @@ export function getNearByDrivers(){
 //------------------------
 //Action Handlers
 //------------------------
+function handleCloseResultType(state, action) {
+	return update(state, {
+		resultTypes: {
+			pickUp: {
+				$set: false
+			},
+			dropOff: {
+				$set: false
+			}
+		}
+	})
+}
+
 function handleUpdateSearchAddressLoadingStatus(state, action) {
 	return update(state, {
 		isSearchAddressLoading:{
@@ -763,7 +793,8 @@ const ACTION_HANDLERS = {
 	UPDATE_ADDITIONAL_SERVICE: handleAdditionalService,
 	BOOK_CAR: handleBookCar,
 	GET_NEARBY_DRIVERS:handleGetNearbyDrivers,
-	UPDATE_SEARCH_ADDRESS_LOADING_STATUS:handleUpdateSearchAddressLoadingStatus
+	UPDATE_SEARCH_ADDRESS_LOADING_STATUS:handleUpdateSearchAddressLoadingStatus,
+	CLOSE_RESULT_TYPE:handleCloseResultType
 }
 
 const initialState = {

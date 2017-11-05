@@ -17,7 +17,8 @@ export const MapContainer = ({region,
                                 carMarker,
                                 nearByDrivers,
                                 updateSearchAddressLoadingStatus,
-                                isSearchAddressLoading
+                                isSearchAddressLoading,
+                                closeResultType
                             }) => {
 
     const { selectedPickUp, selectedDropOff } = selectedAddress || {};
@@ -41,6 +42,15 @@ export const MapContainer = ({region,
                     coordinate={{latitude:selectedDropOff.latitude, longitude:selectedDropOff.longitude}}
                     pinColor="blue"
 
+                />	
+            }
+            { (selectedPickUp && selectedDropOff) &&
+                <MapView.Polyline
+                    coordinates={[{latitude:selectedPickUp.latitude, longitude:selectedPickUp.longitude},
+                                {latitude:selectedDropOff.latitude, longitude:selectedDropOff.longitude}]}
+                    strokeColor="#E90000"
+                    strokeOpacity={0.8}
+                    strokeWidth={5}
                 />	
             }
 
@@ -69,6 +79,7 @@ export const MapContainer = ({region,
                     isSearchAddressLoading={isSearchAddressLoading}
                     predictions={predictions}
                     getSelectedAddress={getSelectedAddress}
+                    closeResultType={closeResultType}
                 />
             }
         </View>

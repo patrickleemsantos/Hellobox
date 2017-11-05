@@ -52,6 +52,7 @@ class Home extends React.Component {
                                 carMarker={carMarker}
                                 nearByDrivers={this.props.nearByDrivers}
                                 isSearchAddressLoading={this.props.isSearchAddressLoading}
+                                closeResultType={this.props.closeResultType}
                             />
                         }
 

@@ -21,7 +21,8 @@ import {
     updateAdditionalService,
     bookCar,
     getNearByDrivers,
-    updateSearchAddressLoadingStatus
+    updateSearchAddressLoadingStatus,
+    closeResultType
 } from "../modules/home";
 
 const mapStateToProps = (state) => ({   
@@ -60,7 +61,8 @@ const mapActionCreators = {
     removeAdditionalPrice,
     updateAdditionalService,
     bookCar,
-    getNearByDrivers
+    getNearByDrivers,
+    closeResultType
 };
 
 export default connect(mapStateToProps, mapActionCreators)(Home);

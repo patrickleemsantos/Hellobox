@@ -19,7 +19,7 @@ const styles = {
     },
     spinner: {
         color: "#E90000",
-        marginTop: 150,
+        marginTop: 50,
         alignSelf: "center"
     },
     listWrapper: {
@@ -44,6 +44,14 @@ const styles = {
     },
     distance:{
         fontSize:12,
+    },
+    icon:{
+        color: "#E90000",
+        fontSize: 20,
+    },
+    button:{
+        marginRight: 10,
+        alignSelf: "flex-end"
     }
 };
 
