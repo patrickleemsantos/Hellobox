@@ -53,6 +53,7 @@ class Home extends React.Component {
                                 nearByDrivers={this.props.nearByDrivers}
                                 isSearchAddressLoading={this.props.isSearchAddressLoading}
                                 closeResultType={this.props.closeResultType}
+                                directions={this.directions}
                             />
                         }
 

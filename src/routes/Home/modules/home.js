@@ -31,7 +31,8 @@ const { GET_CURRENT_LOCATION,
 		BOOK_CAR,
 		GET_NEARBY_DRIVERS,
 		UPDATE_SEARCH_ADDRESS_LOADING_STATUS,
-		CLOSE_RESULT_TYPE
+		CLOSE_RESULT_TYPE,
+		GET_DIRECTIONS
 	} = constants;
 
 const { width, height } = Dimensions.get("window");
@@ -168,6 +169,26 @@ export function getSelectedAddress(payload) {
 						payload:res.body
 					});
 				})
+
+				request.get("https://maps.googleapis.com/maps/api/directions/json")
+				.query({
+					origins:store().home.selectedAddress.selectedPickUp.latitude + "," + store().home.selectedAddress.selectedPickUp.longitude,
+					destinations:store().home.selectedAddress.selectedDropOff.latitude + "," + store().home.selectedAddress.selectedDropOff.longitude
+				})
+				.finish((error, res)=>{
+					let points = Polyline.decode(res.routes[0].overview_polyline.points);
+					let coords = points.map((point, index) => {
+						return  {
+							latitude : point[0],
+							longitude : point[1]
+						}
+					})
+					dispatch({
+						type:GET_DIRECTIONS,
+						payload:coords
+					});
+				})
+
 				setTimeout(function() {
 					if(store().home.selectedAddress.selectedPickUp && store().home.selectedAddress.selectedDropOff){
 						const fare = calculateFare(
@@ -463,6 +484,14 @@ export function getNearByDrivers(){
 //------------------------
 //Action Handlers
 //------------------------
+function handleGetDirections(state, action) {
+	return update(state, {
+		directions: {
+			$set: action.payload
+		}
+	})
+}
+
 function handleCloseResultType(state, action) {
 	return update(state, {
 		resultTypes: {
@@ -794,7 +823,8 @@ const ACTION_HANDLERS = {
 	BOOK_CAR: handleBookCar,
 	GET_NEARBY_DRIVERS:handleGetNearbyDrivers,
 	UPDATE_SEARCH_ADDRESS_LOADING_STATUS:handleUpdateSearchAddressLoadingStatus,
-	CLOSE_RESULT_TYPE:handleCloseResultType
+	CLOSE_RESULT_TYPE:handleCloseResultType,
+	GET_DIRECTIONS:handleGetDirections
 }
 
 const initialState = {

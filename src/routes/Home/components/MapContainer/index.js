@@ -1,6 +1,7 @@
 import React from "react";
 import { View } from "native-base";
 import MapView from "react-native-maps";
+import Polyline from '@mapbox/polyline';
 import SearchBox from "../SearchBox";
 import SearchResults from "../SearchResults";
 
@@ -46,8 +47,7 @@ export const MapContainer = ({region,
             }
             { (selectedPickUp && selectedDropOff) &&
                 <MapView.Polyline
-                    coordinates={[{latitude:selectedPickUp.latitude, longitude:selectedPickUp.longitude},
-                                {latitude:selectedDropOff.latitude, longitude:selectedDropOff.longitude}]}
+                    coordinates={directions}
                     strokeColor="#E90000"
                     strokeOpacity={0.8}
                     strokeWidth={5}
