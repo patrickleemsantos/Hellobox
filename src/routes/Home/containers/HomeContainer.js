@@ -45,7 +45,7 @@ const mapStateToProps = (state) => ({
     additionalService6: state.home.additionalService6 || false,
     nearByDrivers: state.home.nearByDrivers || [],
     isSearchAddressLoading: state.home.isSearchAddressLoading || false,
-    directions: state.home.directions || {}
+    directions: state.home.directions || []
 });
 
 const mapActionCreators = {

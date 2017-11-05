@@ -2,6 +2,7 @@ import update from "react-addons-update";
 import constants from "./actionConstants";
 import { Dimensions } from "react-native";
 import RNGooglePlaces from "react-native-google-places";
+import Polyline from '@mapbox/polyline';
 import request from "../../../util/request";
 import calculateFare from "../../../util/fareCalculator";
 
@@ -172,11 +173,11 @@ export function getSelectedAddress(payload) {
 
 				request.get("https://maps.googleapis.com/maps/api/directions/json")
 				.query({
-					origins:store().home.selectedAddress.selectedPickUp.latitude + "," + store().home.selectedAddress.selectedPickUp.longitude,
-					destinations:store().home.selectedAddress.selectedDropOff.latitude + "," + store().home.selectedAddress.selectedDropOff.longitude
+					origin:store().home.selectedAddress.selectedPickUp.latitude + "," + store().home.selectedAddress.selectedPickUp.longitude,
+					destination:store().home.selectedAddress.selectedDropOff.latitude + "," + store().home.selectedAddress.selectedDropOff.longitude
 				})
 				.finish((error, res)=>{
-					let points = Polyline.decode(res.routes[0].overview_polyline.points);
+					let points = Polyline.decode(res.body.routes[0].overview_polyline.points);
 					let coords = points.map((point, index) => {
 						return  {
 							latitude : point[0],
