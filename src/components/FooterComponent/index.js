@@ -23,10 +23,6 @@ export const FooterComponent = () => {
             icon: "truck"
         }];
 
-    function handleSelectedVehicle(value) {
-        
-    }
-
     return (
         <Footer>
             <FooterTab style={styles.footerContainer} iosBarStyle="light-content" androidStatusBarColor="#E90000">

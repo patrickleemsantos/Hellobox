@@ -426,26 +426,27 @@ export function bookCar(payload) {
 		const payload = {
 			data:{
 				username:"patrick",
-				pickUp:{
+				pick_up:{
 					address:store().home.selectedAddress.selectedPickUp.address,
 					name:store().home.selectedAddress.selectedPickUp.name,
 					latitude:store().home.selectedAddress.selectedPickUp.latitude,
 					longitude:store().home.selectedAddress.selectedPickUp.latitude
 				},
-				dropOff:{
+				drop_off:{
 					address:store().home.selectedAddress.selectedDropOff.address,
 					name:store().home.selectedAddress.selectedDropOff.name,
 					latitude:store().home.selectedAddress.selectedDropOff.latitude,
 					longitude:store().home.selectedAddress.selectedDropOff.latitude
 				},
+				vehicle:store().home.selectedVehicle,
 				fare:store().home.fare,
-				additionalPrice:store().home.additionalPrice,
-				additionalServices:store().home.additionalServices,
+				additional_price:store().home.additionalPrice,
+				additional_services:store().home.additionalServices,
 				status:"pending"
 			},
 			nearByDriver: {
-				socketId: nearByDriver.socketId,
-				driverId: nearByDriver.driverId,
+				socket_id: nearByDriver.socket_id,
+				driver_id: nearByDriver.driver_id,
 				latitude: nearByDriver.coordinate.coordinates[1],
 				longitude: nearByDriver.coordinate.coordinates[0]
 			}
@@ -801,6 +802,14 @@ function handleGetNearbyDrivers(state, action){
 	});
 }
 
+function handleBookingConfirmed(state, action) {
+	return update(state, {
+		booking:{
+			$set:action.payload
+		}
+	});
+}
+
 const ACTION_HANDLERS = {
 	GET_CURRENT_LOCATION: handleGetCurrentLocation,
 	GET_INPUT: handleGetInputData,
@@ -825,7 +834,8 @@ const ACTION_HANDLERS = {
 	GET_NEARBY_DRIVERS:handleGetNearbyDrivers,
 	UPDATE_SEARCH_ADDRESS_LOADING_STATUS:handleUpdateSearchAddressLoadingStatus,
 	CLOSE_RESULT_TYPE:handleCloseResultType,
-	GET_DIRECTIONS:handleGetDirections
+	GET_DIRECTIONS:handleGetDirections,
+	BOOKING_CONFIRMED:handleBookingConfirmed
 }
 
 const initialState = {

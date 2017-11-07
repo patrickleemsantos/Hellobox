@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text } from "react-native";
 import { Container } from "native-base";
+import { Actions } from "react-native-router-flux";
 import MapContainer from "./MapContainer";
 import HeaderComponent from "../../../components/HeaderComponent";
 import SelectVehicle from "./SelectVehicle";
@@ -22,6 +23,12 @@ class Home extends React.Component {
 		}, 1000);
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.booking.status === "confirmed" ){
+            Actions.trackDriver({type: "reset"});
+        }
+    }
+
     render() {
         const region = {
             latitude: 14.574036,
@@ -29,7 +36,9 @@ class Home extends React.Component {
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421
         }
+
         const { status } = this.props.booking;
+        
         return (
             <Container>
                 { (status !== "pending") &&

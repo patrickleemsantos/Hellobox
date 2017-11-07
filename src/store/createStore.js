@@ -3,11 +3,13 @@ import thunk from "redux-thunk";
 import makeRootReducer from "./reducers";
 import { createLogger } from "redux-logger";
 
-import createSocketIoMiddleware from "redux-socket.io";
-import io from "socket.io-client/dist/socket.io";
+import createSocketIoMiddleware from 'redux-socket.io';
+import io from 'socket.io-client';
 
-let socket = io("http://115.85.17.61:3121", {jsonp:false});
-let socketIoMiddleware = createSocketIoMiddleware(socket, "hellobox/");
+// import io from "socket.io-client/dist/socket.io";
+
+let socket = io("http://52.220.212.6:3121", {jsonp:false});
+let socketIoMiddleware = createSocketIoMiddleware(socket, "server/");
 
 const log =  createLogger({ diff: true, collapsed: true });
 

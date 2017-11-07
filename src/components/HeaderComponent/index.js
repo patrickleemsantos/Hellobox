@@ -14,6 +14,8 @@ export const HeaderComponent = ({logo, showAdditionalModal}) => {
             </Left>
             <Body>
                 <Text style={styles.headerText}>Hellobox</Text>
+                {/* ||
+				<Text style={styles.headerText}>Driver on the way</Text> */}
                 {/* <Image resizeMode="contain" style={styles.logo} source={logo} /> */}
             </Body>
             <Right>
