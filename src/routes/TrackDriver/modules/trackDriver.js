@@ -66,6 +66,7 @@ export function getDriverLocation(){
 		let id = store().home.booking.driver_id;
 		request.get("http://52.220.212.6:3121/api/driverLocation/" + id)
 		.finish((error, res)=>{
+			console.log('loc response: '+res.body);
 			dispatch({
 				type:GET_DRIVER_LOCATION,
 				payload:res.body
@@ -164,8 +165,6 @@ const ACTION_HANDLERS = {
 	UPDATE_DRIVER_LOCATION:handleUpdateDriverLocation,
 	GET_DRIVER_LOCATION:handleGetDriverLocation,
 	GET_DISTANCE_FROM_DRIVER:handleGetDistanceFromDriver
-
-
 }
 const initialState = {
 	region:{},

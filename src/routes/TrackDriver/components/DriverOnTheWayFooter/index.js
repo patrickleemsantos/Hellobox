@@ -14,7 +14,7 @@ export const DriverOnTheWayFooter = ({ driverInfo, distanceFromDriver})=>{
 				<Icon name="window-minimize" style={styles.icon}/>
 				<Text style={styles.distanceText}>{(duration.value < 100) ? "Your driver has arrived" : duration.text}</Text>
 				<Text style={styles.onWayText}>Your driver is on the way</Text>
-				<Text style={styles.vehicleText}>{vehicle && vehicle.plateNumber} {vehicle && vehicle.model}</Text>
+				<Text style={styles.vehicleText}>{vehicle && vehicle.plate_number} {vehicle && vehicle.model}</Text>
 
 			</View>
 
