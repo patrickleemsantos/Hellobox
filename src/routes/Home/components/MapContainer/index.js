@@ -55,7 +55,7 @@ export const MapContainer = ({region,
             }
 
             {
-                nearByDrivers && nearByDrivers.map((marker, index)=>
+                nearByDrivers.name != "MongoError" && nearByDrivers.map((marker, index)=>
                     <MapView.Marker
                         key={index}
                         coordinate={{latitude:marker.coordinate.coordinates[1], longitude:marker.coordinate.coordinates[0] }}
