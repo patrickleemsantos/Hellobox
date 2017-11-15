@@ -47,33 +47,34 @@ class Home extends React.Component {
                                 logo={justBoxLogo}
                                 showAdditionalModal={this.props.showAdditionalModal}
                             />
+                        <Content>
+                            {this.props.region.latitude &&
+                                <MapContainer 
+                                    region={this.props.region} 
+                                    getInputData={this.props.getInputData} 
+                                    toggleSearchResultmodal={this.props.toggleSearchResultmodal}
+                                    getAddressPredictions={this.props.getAddressPredictions}
+                                    resultTypes={this.props.resultTypes}
+                                    predictions={this.props.predictions}
+                                    getSelectedAddress={this.props.getSelectedAddress}
+                                    selectedAddress={this.props.selectedAddress}
+                                    carMarker={carMarker}
+                                    nearByDrivers={this.props.nearByDrivers}
+                                    isSearchAddressLoading={this.props.isSearchAddressLoading}
+                                    closeResultType={this.props.closeResultType}
+                                    directions={this.props.directions}
+                                />
+                            }
 
-                        {this.props.region.latitude &&
-                            <MapContainer 
-                                region={this.props.region} 
-                                getInputData={this.props.getInputData} 
-                                toggleSearchResultmodal={this.props.toggleSearchResultmodal}
-                                getAddressPredictions={this.props.getAddressPredictions}
-                                resultTypes={this.props.resultTypes}
-                                predictions={this.props.predictions}
-                                getSelectedAddress={this.props.getSelectedAddress}
-                                selectedAddress={this.props.selectedAddress}
-                                carMarker={carMarker}
-                                nearByDrivers={this.props.nearByDrivers}
-                                isSearchAddressLoading={this.props.isSearchAddressLoading}
-                                closeResultType={this.props.closeResultType}
-                                directions={this.props.directions}
-                            />
-                        }
+                            <Fab onPressAction={() => this.props.bookCar()}/>
 
-                        <Fab onPressAction={() => this.props.bookCar()}/>
-
-                        { this.props.fare &&
-                            <Fare 
-                                fare={this.props.fare}
-                                additionalPrice={this.props.additionalPrice}
-                            />
-                        }
+                            { this.props.fare &&
+                                <Fare 
+                                    fare={this.props.fare}
+                                    additionalPrice={this.props.additionalPrice}
+                                />
+                            }
+                        </Content>
                         <SelectVehicle 
                             getSelectedVehicle={this.props.getSelectedVehicle}
                             selectedVehicle={this.props.selectedVehicle} 
@@ -104,4 +105,4 @@ class Home extends React.Component {
     }
 }
 
-export default Home;
+export default Home; 
