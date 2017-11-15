@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { Container, Content } from "native-base";
 import { Actions } from "react-native-router-flux";
 import MapContainer from "./MapContainer";
@@ -43,15 +43,13 @@ class Home extends React.Component {
         
         return (
             <Container>
-                { (status !== "pending") &&
+                { (status !== "PENDING") &&
                     <View style={{flex:1}}>
                         <HeaderComponent 
                                 logo={justBoxLogo}
-                                showAdditionalModal={this.props.showAdditionalModal}
-                            />
-                        {/* <Content> */}
+                                showAdditionalModal={this.props.showAdditionalModal} /> 
                             <View style={styles.floatView}>
-							    <Spinner style={styles.spinner} isVisible={this.props.showBookingLoader} size={40} type="Wave" color="#ffffff"/>
+                                <Spinner style={styles.spinner} isVisible={ (this.props.isMapReady == false ? true : false ) } size={40} type="Wave" color="#ffffff"/>
                             </View>
                             { (this.props.isMapReady === true) &&
                                 <MapContainer 
@@ -69,25 +67,28 @@ class Home extends React.Component {
                                     closeResultType={this.props.closeResultType}
                                     directions={this.props.directions}
                                 />
+                                ||
+                                <Content />
                             }
 
                             {/* <Fab onPressAction={() => this.props.bookCar()}/> */}
 
-                            { this.props.fare &&
-                                <Fare 
-                                    fare={this.props.fare}
-                                    additionalPrice={this.props.additionalPrice}
-                                />
-                            }
-                        {/* </Content> */}
+                        { this.props.fare &&
+                            <Fare 
+                                fare={this.props.fare}
+                                additionalPrice={this.props.additionalPrice}
+                            />
+                        }
                         <SelectVehicle 
                             getSelectedVehicle={this.props.getSelectedVehicle}
                             selectedVehicle={this.props.selectedVehicle} 
                         />
-                        <BookingFooter
-                                onPressAction={() => this.props.bookCar()}
-                                fare={this.props.fare}
-                            />
+                        { this.props.fare &&
+                            <BookingFooter
+                                    onPressAction={() => this.props.bookCar()}
+                                    fare={this.props.fare}
+                                />
+                        }
                         <AdditionalModal 
                             fare={this.props.fare}
                             additionalPrice={this.props.additionalPrice}
@@ -114,4 +115,18 @@ class Home extends React.Component {
     }
 }
 
+const styles = StyleSheet.create({    
+	spinner: {
+        color: "#E90000",
+        // marginTop: 100,
+        alignSelf: "center"
+    },
+    floatView: {
+        position: 'absolute',
+        width: 100,
+        height: 100,
+        top: 200,
+        alignSelf: "center"
+    },
+});
 export default Home; 

@@ -19,7 +19,7 @@ const styles = {
     },
     spinner: {
         color: "#E90000",
-        marginTop: 50,
+        marginTop: 10,
         alignSelf: "center"
     },
     listWrapper: {
