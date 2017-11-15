@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text } from "react-native";
-import { Container } from "native-base";
+import { Container, Content } from "native-base";
 import { Actions } from "react-native-router-flux";
 import MapContainer from "./MapContainer";
 import HeaderComponent from "../../../components/HeaderComponent";
@@ -9,6 +9,8 @@ import Fare from "./Fare";
 import AdditionalModal from "./AdditionalModal";
 import Fab from "./Fab";
 import FindDriver from "./FindDriver";
+import { BookingFooter } from "./BookingFooter/index";
+var Spinner = require("react-native-spinkit");
 
 const justBoxLogo = require("../../../assets/images/logo.png");
 const carMarker = require("../../../assets/images/carMarker.png");
@@ -30,12 +32,12 @@ class Home extends React.Component {
     }
 
     render() {
-        const region = {
-            latitude: 14.574036,
-            longitude: 121.002582,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421
-        }
+        // const region = {
+        //     latitude: 14.574036,
+        //     longitude: 121.002582,
+        //     latitudeDelta: 0.0922,
+        //     longitudeDelta: 0.0421
+        // }
 
         const { status } = this.props.booking;
         
@@ -47,8 +49,11 @@ class Home extends React.Component {
                                 logo={justBoxLogo}
                                 showAdditionalModal={this.props.showAdditionalModal}
                             />
-                        <Content>
-                            {this.props.region.latitude &&
+                        {/* <Content> */}
+                            <View style={styles.floatView}>
+							    <Spinner style={styles.spinner} isVisible={this.props.showBookingLoader} size={40} type="Wave" color="#ffffff"/>
+                            </View>
+                            { (this.props.isMapReady === true) &&
                                 <MapContainer 
                                     region={this.props.region} 
                                     getInputData={this.props.getInputData} 
@@ -66,7 +71,7 @@ class Home extends React.Component {
                                 />
                             }
 
-                            <Fab onPressAction={() => this.props.bookCar()}/>
+                            {/* <Fab onPressAction={() => this.props.bookCar()}/> */}
 
                             { this.props.fare &&
                                 <Fare 
@@ -74,11 +79,15 @@ class Home extends React.Component {
                                     additionalPrice={this.props.additionalPrice}
                                 />
                             }
-                        </Content>
+                        {/* </Content> */}
                         <SelectVehicle 
                             getSelectedVehicle={this.props.getSelectedVehicle}
                             selectedVehicle={this.props.selectedVehicle} 
                         />
+                        <BookingFooter
+                                onPressAction={() => this.props.bookCar()}
+                                fare={this.props.fare}
+                            />
                         <AdditionalModal 
                             fare={this.props.fare}
                             additionalPrice={this.props.additionalPrice}
