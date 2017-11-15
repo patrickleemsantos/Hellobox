@@ -33,7 +33,8 @@ const { GET_CURRENT_LOCATION,
 		GET_NEARBY_DRIVERS,
 		UPDATE_SEARCH_ADDRESS_LOADING_STATUS,
 		CLOSE_RESULT_TYPE,
-		GET_DIRECTIONS
+		GET_DIRECTIONS,
+		IS_MAP_READY
 	} = constants;
 
 const { width, height } = Dimensions.get("window");
@@ -70,6 +71,11 @@ export function getCurrentLocation(){
 				dispatch({
 					type: GET_CURRENT_LOCATION,
 					payload: position
+				});
+
+				dispatch({
+					type: IS_MAP_READY,
+					payload: true
 				});
 			},
 			(error) => console.log(error.message),
@@ -420,12 +426,22 @@ export function updateAdditionalService(payload) {
 
 //Book Car
 export function bookCar(payload) {
+	var randomize = require('randomatic');
+
 	return (dispatch, store) => {
 		const nearByDrivers = store().home.nearByDrivers;
 		const nearByDriver = nearByDrivers[Math.floor(Math.random() * nearByDrivers.length)];
 		const payload = {
 			data:{
-				username:"patrick",
+				booking_id: randomize('0000'),
+				account:{
+					account_id: store().login.account.account_id,
+					date_of_birth: store().login.account.date_of_birth,
+					first_name: store().login.account.first_name,
+					last_name: store().login.account.last_name,
+					profile_picture: store().login.account.profile_picture,
+					rating: store().login.account.rating
+				},
 				pick_up:{
 					address:store().home.selectedAddress.selectedPickUp.address,
 					name:store().home.selectedAddress.selectedPickUp.name,
@@ -442,7 +458,9 @@ export function bookCar(payload) {
 				fare:store().home.fare,
 				additional_price:store().home.additionalPrice,
 				additional_services:store().home.additionalServices,
-				status:"pending"
+				status:"PENDING",
+				driver_id: nearByDriver.driver_id,
+				timestamp: new Date().toLocaleString()
 			},
 			nearByDriver: {
 				socket_id: nearByDriver.socket_id,
@@ -478,7 +496,6 @@ export function getNearByDrivers(){
 					payload:res.body
 				});
 			}
-
 		});
 	};
 }
@@ -810,6 +827,14 @@ function handleBookingConfirmed(state, action) {
 	});
 }
 
+function handleIsMapReady(state, action) {
+	return update(state, {
+		isMapReady:{
+			$set:action.payload
+		}
+	});
+}
+
 const ACTION_HANDLERS = {
 	GET_CURRENT_LOCATION: handleGetCurrentLocation,
 	GET_INPUT: handleGetInputData,
@@ -835,7 +860,8 @@ const ACTION_HANDLERS = {
 	UPDATE_SEARCH_ADDRESS_LOADING_STATUS:handleUpdateSearchAddressLoadingStatus,
 	CLOSE_RESULT_TYPE:handleCloseResultType,
 	GET_DIRECTIONS:handleGetDirections,
-	BOOKING_CONFIRMED:handleBookingConfirmed
+	BOOKING_CONFIRMED:handleBookingConfirmed,
+	IS_MAP_READY: handleIsMapReady
 }
 
 const initialState = {
@@ -852,7 +878,8 @@ const initialState = {
 	additionalService4: false,
 	additionalService5: false,
 	additionalService6: false,
-	isSearchAddressLoading: false
+	isSearchAddressLoading: false,
+	isMapReady: false
 };
 
 export function HomeReducer (state = initialState, action) {

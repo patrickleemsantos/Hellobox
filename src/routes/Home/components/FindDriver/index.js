@@ -30,7 +30,6 @@ export const FindDriver = ({selectedAddress})=>{
 					<Text style={styles.termsText}>By booking you confirm that you accept our T & C</Text>
 					<Button style={styles.cancelBtn}>
 						<Text style={styles.cancelBtnText}>Cancel</Text>
-
 					</Button>
 				</View>
 				

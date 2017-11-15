@@ -1,7 +1,7 @@
 const styles = {
 	footerContainer:{
         paddingTop: 10,
-		backgroundColor:"#fff",
+		backgroundColor:"#fff"
 	},
 	subText:{
 		fontSize:8

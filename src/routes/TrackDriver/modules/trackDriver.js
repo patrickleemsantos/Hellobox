@@ -159,6 +159,7 @@ function handleGetDistanceFromDriver(state, action){
 			}
 		});
 }
+
 const ACTION_HANDLERS = {
 	GET_CURRENT_LOCATION:handleGetCurrentLocation,
 	GET_DRIVER_INFORMATION:handleGetDriverInfo,
@@ -166,6 +167,7 @@ const ACTION_HANDLERS = {
 	GET_DRIVER_LOCATION:handleGetDriverLocation,
 	GET_DISTANCE_FROM_DRIVER:handleGetDistanceFromDriver
 }
+
 const initialState = {
 	region:{},
 	showDriverFound:true

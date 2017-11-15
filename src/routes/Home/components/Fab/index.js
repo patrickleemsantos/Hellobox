@@ -4,9 +4,9 @@ import { View, Button } from "native-base";
 
 import styles from "./FabStyles.js";
 
-export const Fab = ({onPressAction})=>{
+export const Fab = ({onPressAction, fare})=>{
 	return (
-		<Button style={styles.fabContainer} onPress={onPressAction}>
+		<Button disabled={(fare ? false: true)} style={styles.fabContainer} onPress={onPressAction}>
 			<Text style={styles.btnText}> Book </Text>
 		</Button>
 

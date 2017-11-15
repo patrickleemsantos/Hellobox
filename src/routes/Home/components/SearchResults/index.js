@@ -20,7 +20,7 @@ export const SearchResults = ({isSearchAddressLoading,
             {/* <Button onPress={() => closeResultType()} transparent style={styles.button}>
                 <Icon name="window-close" style={styles.icon} />
             </Button> */}
-            <Spinner style={styles.spinner} isVisible={isSearchAddressLoading} size={40} type="FadingCircleAlt" color="#ffffff"/>
+            <Spinner style={styles.spinner} isVisible={isSearchAddressLoading} size={40} type="Wave" color="#ffffff"/>
             <List 
                 dataArray={predictions}
                 renderRow={(item)=>
