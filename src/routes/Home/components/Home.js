@@ -26,8 +26,14 @@ class Home extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (this.props.booking.status === "confirmed" ){
-            Actions.trackDriver({type: "reset"});
+        if (this.props.booking.status === "CONFIRMED" ){
+            // Actions.trackDriver({type: "reset"});
+            AsyncStorage.getItem('account', (err, result) => {
+                let account = JSON.parse(result);
+                if (account.account_id === this.props.bookingRequest.account.account_id) {                    
+                    Actions.trackDriver({type: "reset"});
+                }
+            });
         }
     }
 

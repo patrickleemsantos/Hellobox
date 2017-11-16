@@ -15,11 +15,13 @@ import {
   ActivityIndicator
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+var Spinner = require("react-native-spinkit");
 
 const helloBoxLogo = require("../../../assets/images/logo.png");
 
 export default class Login extends Component {    
     componentDidMount(){
+        AsyncStorage.setItem('account','');
         AsyncStorage.getItem('account', (err, result) => {
             if (result) {
                 this.props.setAccount(JSON.parse(result));
@@ -53,10 +55,14 @@ export default class Login extends Component {
                 <Text style={styles.title}></Text>
             </View>
 
-            <ActivityIndicator 
+            <View style={styles.floatView}>
+                <Spinner style={styles.spinner} isVisible={ this.props.isLoading } size={40} type="Wave" color="#ffffff"/>
+            </View>
+
+            {/* <ActivityIndicator 
                     animating = {this.props.isLoading}
                     color = '#E90000'
-                    size="large"/>
+                    size="large"/> */}
 
             <View style={styles.formContainer}>
                 <StatusBar
@@ -163,5 +169,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         margin: 20,
         marginBottom: 30,
+    },
+    spinner: {
+        color: "#E90000",
+        // marginTop: 100,
+        alignSelf: "center"
+    },
+    floatView: {
+        position: 'absolute',
+        width: 100,
+        height: 100,
+        top: 350,
+        alignSelf: "center"
     }
   });
