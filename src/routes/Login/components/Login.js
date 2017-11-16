@@ -21,7 +21,6 @@ const helloBoxLogo = require("../../../assets/images/logo.png");
 
 export default class Login extends Component {    
     componentDidMount(){
-        AsyncStorage.setItem('account','');
         AsyncStorage.getItem('account', (err, result) => {
             if (result) {
                 this.props.setAccount(JSON.parse(result));
