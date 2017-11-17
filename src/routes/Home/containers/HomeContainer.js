@@ -22,7 +22,8 @@ import {
     bookCar,
     getNearByDrivers,
     updateSearchAddressLoadingStatus,
-    closeResultType
+    closeResultType,
+    updateBookingStatus
 } from "../modules/home";
 
 const mapStateToProps = (state) => ({   
@@ -45,7 +46,8 @@ const mapStateToProps = (state) => ({
     additionalService6: state.home.additionalService6 || false,
     nearByDrivers: state.home.nearByDrivers || [],
     isSearchAddressLoading: state.home.isSearchAddressLoading || false,
-    directions: state.home.directions || [],
+    account: state.login.account || {},
+    // directions: state.home.directions || [],
     isMapReady: state.home.isMapReady || false
 });
 
@@ -64,7 +66,8 @@ const mapActionCreators = {
     updateAdditionalService,
     bookCar,
     getNearByDrivers,
-    closeResultType
+    closeResultType,
+    updateBookingStatus
 };
 
 export default connect(mapStateToProps, mapActionCreators)(Home);

@@ -19,7 +19,7 @@ export const MapContainer = ({region,
                                 updateSearchAddressLoadingStatus,
                                 isSearchAddressLoading,
                                 closeResultType,
-                                directions
+                                // directions
                             }) => {
 
     const { selectedPickUp, selectedDropOff } = selectedAddress || {};
@@ -45,14 +45,14 @@ export const MapContainer = ({region,
 
                 />	
             }
-            { (selectedPickUp && selectedDropOff) &&
+            {/* { (selectedPickUp && selectedDropOff) &&
                 <MapView.Polyline
                     coordinates={directions}
                     strokeColor="#E90000"
                     strokeOpacity={0.8}
                     strokeWidth={5}
                 />	
-            }
+            } */}
 
             {
                 nearByDrivers.name != "MongoError" && nearByDrivers.map((marker, index)=>

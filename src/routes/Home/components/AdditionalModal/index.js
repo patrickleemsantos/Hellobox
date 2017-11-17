@@ -99,7 +99,7 @@ export const AdditionalModal = ({fare, additionalPrice, isAdditionalModalVisible
                                         onPress={() => handAdditionalService(50, 1, "Goods longer than 6ft", !additionalService1)}
                                     />
                                     <Body>
-                                        <Text>Goods longer than 6ft (₱50)</Text>
+                                        <Text style={styles.additionalText}>Goods longer than 6ft (₱50)</Text>
                                     </Body>
                                 </ListItem>
                                 <ListItem>
@@ -109,7 +109,7 @@ export const AdditionalModal = ({fare, additionalPrice, isAdditionalModalVisible
                                         onPress={() => handAdditionalService(60, 2, "Borrow cart(s)", !additionalService2)}
                                     />
                                     <Body>
-                                        <Text>Borrow cart(s) (₱60)</Text>
+                                        <Text style={styles.additionalText}>Borrow cart(s) (₱60)</Text>
                                     </Body>
                                 </ListItem>
                                 <ListItem>
@@ -119,7 +119,7 @@ export const AdditionalModal = ({fare, additionalPrice, isAdditionalModalVisible
                                         onPress={() => handAdditionalService(100, 3, "Mover", !additionalService3)}
                                     />
                                     <Body>
-                                        <Text>Mover (₱100)</Text>
+                                        <Text style={styles.additionalText}>Mover (₱100)</Text>
                                     </Body>
                                 </ListItem>
                                 <ListItem>
@@ -129,7 +129,7 @@ export const AdditionalModal = ({fare, additionalPrice, isAdditionalModalVisible
                                         onPress={() => handAdditionalService(50, 4, "Pets", !additionalService4)}
                                     />
                                     <Body>
-                                        <Text>Pets (₱50)</Text>
+                                        <Text style={styles.additionalText}>Pets (₱50)</Text>
                                     </Body>
                                 </ListItem>
                                 <ListItem>
@@ -139,7 +139,7 @@ export const AdditionalModal = ({fare, additionalPrice, isAdditionalModalVisible
                                         onPress={() => handAdditionalService(100, 5, "New car", !additionalService5)}
                                     />
                                     <Body>
-                                        <Text>New car (₱100)</Text>
+                                        <Text style={styles.additionalText}>New car (₱100)</Text>
                                     </Body>
                                 </ListItem>
                                 <ListItem>
@@ -149,7 +149,7 @@ export const AdditionalModal = ({fare, additionalPrice, isAdditionalModalVisible
                                         onPress={() => handAdditionalService(65, 6, "Dumper / Construction waste", !additionalService6)}
                                     />
                                     <Body>
-                                        <Text>Dumper / Construction waste (₱65)</Text>
+                                        <Text style={styles.additionalText}>Dumper / Construction waste (₱65)</Text>
                                     </Body>
                                 </ListItem>
                             </Content>

@@ -21,7 +21,8 @@ const styles = {
 		fontSize:18
     },
     title: {
-        color: "#808080"
+        color: "#808080",
+        fontSize: 15
     },
     btnPassenger: {
         flex: 1, 
@@ -41,6 +42,9 @@ const styles = {
         paddingTop:15,
         fontWeight:"bold",
         fontSize: 18,
+    },
+    additionalText: {
+        fontSize: 14
     }
 };
 

@@ -34,7 +34,9 @@ const { GET_CURRENT_LOCATION,
 		UPDATE_SEARCH_ADDRESS_LOADING_STATUS,
 		CLOSE_RESULT_TYPE,
 		GET_DIRECTIONS,
-		IS_MAP_READY
+		IS_MAP_READY,
+		UPDATE_BOOKING_STATUS,
+		REMOVE_BOOKING
 	} = constants;
 
 const { width, height } = Dimensions.get("window");
@@ -177,24 +179,24 @@ export function getSelectedAddress(payload) {
 					});
 				})
 
-				request.get("https://maps.googleapis.com/maps/api/directions/json")
-				.query({
-					origin:store().home.selectedAddress.selectedPickUp.latitude + "," + store().home.selectedAddress.selectedPickUp.longitude,
-					destination:store().home.selectedAddress.selectedDropOff.latitude + "," + store().home.selectedAddress.selectedDropOff.longitude
-				})
-				.finish((error, res)=>{
-					let points = Polyline.decode(res.body.routes[0].overview_polyline.points);
-					let coords = points.map((point, index) => {
-						return  {
-							latitude : point[0],
-							longitude : point[1]
-						}
-					})
-					dispatch({
-						type:GET_DIRECTIONS,
-						payload:coords
-					});
-				})
+				// request.get("https://maps.googleapis.com/maps/api/directions/json")
+				// .query({
+				// 	origin:store().home.selectedAddress.selectedPickUp.latitude + "," + store().home.selectedAddress.selectedPickUp.longitude,
+				// 	destination:store().home.selectedAddress.selectedDropOff.latitude + "," + store().home.selectedAddress.selectedDropOff.longitude
+				// })
+				// .finish((error, res)=>{
+				// 	let points = Polyline.decode(res.body.routes[0].overview_polyline.points);
+				// 	let coords = points.map((point, index) => {
+				// 		return  {
+				// 			latitude : point[0],
+				// 			longitude : point[1]
+				// 		}
+				// 	})
+				// 	dispatch({
+				// 		type:GET_DIRECTIONS,
+				// 		payload:coords
+				// 	});
+				// })
 
 				setTimeout(function() {
 					if(store().home.selectedAddress.selectedPickUp && store().home.selectedAddress.selectedDropOff){
@@ -498,6 +500,30 @@ export function getNearByDrivers(){
 			}
 		});
 	};
+}
+
+// Cancel Booking
+export function updateBookingStatus(payload) {
+	return(dispatch, store) => {
+		request.put("http://52.220.212.6:3121/api/updateBookingStatus")
+		.send({
+			id: store().home.booking._id,
+			status: payload
+		})
+		.finish((error, res)=> {
+			dispatch({
+				type: UPDATE_BOOKING_STATUS,
+				payload: res.body
+			})
+
+			if (payload === "CANCELLED") {
+				dispatch({
+					type: REMOVE_BOOKING,
+					payload: payload
+				})
+			}
+		});
+	}
 }
 
 //------------------------
@@ -810,6 +836,21 @@ function handleBookCar(state, action) {
 	})
 }
 
+// Handle remove booking
+function handleRemoveBooking(state, action) {
+	return update(state, {
+		booking: {
+			$set: {}
+		},
+		selectedAddress: {
+			$set: {}
+		},
+		fare: {
+			$set: null
+		}
+	});
+}
+
 //Handle get nearby drivers
 function handleGetNearbyDrivers(state, action){
 	return update(state, {
@@ -833,6 +874,14 @@ function handleIsMapReady(state, action) {
 			$set:action.payload
 		}
 	});
+}
+
+function handleUpdateBookingStatus(state, action) {
+	return update(state, {
+		booking: {
+			$set: action.payload
+		}
+	})
 }
 
 const ACTION_HANDLERS = {
@@ -861,7 +910,9 @@ const ACTION_HANDLERS = {
 	CLOSE_RESULT_TYPE:handleCloseResultType,
 	GET_DIRECTIONS:handleGetDirections,
 	BOOKING_CONFIRMED:handleBookingConfirmed,
-	IS_MAP_READY: handleIsMapReady
+	IS_MAP_READY: handleIsMapReady,
+	UPDATE_BOOKING_STATUS: handleUpdateBookingStatus,
+	REMOVE_BOOKING: handleRemoveBooking
 }
 
 const initialState = {
