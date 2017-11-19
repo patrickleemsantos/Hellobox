@@ -10,6 +10,7 @@ import request from "../../../util/request";
 const { 
 		SET_CURRENT_BOOKING,
 		UPDATE_BOOKING,
+		UPDATE_BOOKING_HISTORY,
 		UPDATE_LOADER
 	} = constants;
 
@@ -28,6 +29,23 @@ export function setCurrentBooking(payload) {
 	return {
 		type: SET_CURRENT_BOOKING,
 		payload
+	}
+}
+
+export function getBookingHistory(payload) {
+	return(dispatch, store) => {
+		request.get("http://52.220.212.6:3121/api/getBookingHistory")
+		.query({
+			booking_id: payload,
+		})
+		.finish((error, res)=>{
+			if(res){
+				dispatch({
+					type:UPDATE_BOOKING_HISTORY,
+					payload:res.body
+				});
+			}
+		});
 	}
 }
 
@@ -84,14 +102,22 @@ function handleUpdateLoader(state, action) {
 	})
 }
 
+function handleUpdateBookingHistory(state, action) {
+	return update(state, {
+		bookingHistory: {
+			$set: action.payload
+		}
+	})
+}
+
 const ACTION_HANDLERS = {
 	SET_CURRENT_BOOKING: handleSetCurrentBooking,
 	UPDATE_BOOKING: handleUpdateBooking,
+	UPDATE_BOOKING_HISTORY: handleUpdateBookingHistory,
 	UPDATE_LOADER: handleUpdateLoader
 }
 
 const initialState = {
-	currentBooking: {},
 	showLoader: false
 };
 

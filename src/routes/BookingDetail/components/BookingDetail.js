@@ -3,13 +3,14 @@ import { View, Alert, AsyncStorage, StyleSheet } from "react-native";
 import { Container, Content, Body, Left, Right, Text, Header, Button, Title, Footer, FooterTab, Thumbnail, List, ListItem } from "native-base";
 import { Actions } from "react-native-router-flux";
 import Icon from "react-native-vector-icons/FontAwesome";
+
 var Spinner = require("react-native-spinkit");
 
 class BookingDetail extends React.Component {
     
     componentDidMount() {
-        console.log("componentDidMount");
         this.props.setCurrentBooking(this.props.booking);
+        this.props.getBookingHistory(this.props.booking.booking_id);
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -25,9 +26,7 @@ class BookingDetail extends React.Component {
         // }
     }
 
-    render () {
-        console.log("render");
-        console.log(this.props.currentBooking);
+    render () {    
         // const { status } = this.props.currentBooking;
         
         // updateBookingStatus = () => {
@@ -55,80 +54,97 @@ class BookingDetail extends React.Component {
         return (
             <Container>
                 { this.props.currentBooking &&
-                    <Text>MAY LAMAN</Text>
-                    // <View style={{flex:1}}>
-                    //     <Header style={styles.headerColor} iosBarStyle="light-content" androidStatusBarColor="#E90000">
-                    //         <Left>
-                    //             <Button transparent onPress={() => Actions.pop()}>
-                    //                 <Icon name="arrow-left" style={styles.menu} /> 
-                    //             </Button>
-                    //         </Left>
-                    //         <Body>
-                    //             <Title style={styles.job}>JOB ID: {this.props.currentBooking.booking_id}</Title>
-                    //         </Body>
-                    //         <Right>
-                    //         </Right>
-                    //     </Header> 
-                    //     <Content>
-                    //         {/* <View style={styles.floatView}>
-                    //             <Spinner style={styles.spinner} isVisible={this.props.showLoader} size={40} type="Wave" color="#ffffff"/>
-                    //         </View> */}
-                    //         <View style={styles.driverContainer}>
-                    //             <Thumbnail source={{uri: this.props.currentBooking.driver.profile_picture}} />
-                    //             <View style={styles.driverDetailsContainer}>
-                    //                 <Text style={styles.driverName}>{this.props.currentBooking.driver.first_name + " " + this.props.currentBooking.driver.last_name}</Text>
-                    //                 <Text style={styles.driverVehicle}>{this.props.currentBooking.driver.vehicle.body_type + " " + this.props.currentBooking.driver.vehicle.model + " " + this.props.currentBooking.driver.vehicle.plate_number}</Text>
-                    //             </View>
-                    //         </View>
-                    //         <View style={styles.statusContainter}>
-                    //             <Text style={styles.statusValue}>Status: {this.props.currentBooking.status}</Text>
-                    //         </View>
-                    //         <View style={styles.priceContainter}>
-                    //             <Text style={styles.priceValue}>Fare: P {this.props.currentBooking.fare}</Text>
-                    //         </View>
-                    //         <View style={styles.additionalPriceContainter}>
-                    //             <Text style={styles.additionalPriceValue}>Additional Price: P {this.props.currentBooking.additional_price}</Text>
-                    //         </View>
-                    //         <View style={styles.locationContainter}>
-                    //             <View style={styles.timeContainer}>
-                    //                 <Icon style={styles.timeIcon} name="clock-o" />
-                    //                 <View style={styles.locationValueContainer}>
-                    //                     <Text style={styles.locationTime}>{this.props.currentBooking.timestamp}</Text>
-                    //                 </View>
-                    //             </View>
-                    //             <View style={styles.pickUpContainer}>
-                    //                 <Icon style={styles.fromIcon} name="map-marker" />
-                    //                 <View style={styles.locationValueContainer}>
-                    //                     <Text style={styles.locationPickup}>{this.props.currentBooking.pick_up.address}</Text>
-                    //                 </View>
-                    //             </View>
-                    //             <View style={styles.ellipsisContainer}>
-                    //                 <Icon style={styles.ellipsisIcon} name="ellipsis-v" />
-                    //             </View>
-                    //             <View style={styles.dropOffContainer}>
-                    //                 <Icon style={styles.destinationIcon} name="location-arrow" />
-                    //                 <View style={styles.locationValueContainer}>
-                    //                     <Text style={styles.locationDropOff}>{this.props.currentBooking.drop_off.address}</Text>
-                    //                 </View>
-                    //             </View>
-                    //         </View>
-                    //         { this.props.currentBooking.additional_services && 
-                    //             <View style={styles.additionalContainer}>
-                    //                 <Text style={styles.additionalHeader}>Additional:</Text>
-                    //                 <List dataArray={this.props.currentBooking.additional_services.value}
-                    //                     renderRow={(item) =>
-                    //                     <View style={styles.additionalListContainer}>
-                    //                         <Icon style={styles.additionalIcon} name="plus" />
-                    //                         <View style={styles.additionalValueContainer}>
-                    //                             <Text style={styles.additionalText}>{item}</Text>
-                    //                         </View>
-                    //                     </View>
-                    //                     }>
-                    //                 </List>
-                    //             </View>
-                    //         }
-                    //     </Content>  
-                    // </View>
+                    <View style={{flex:1}}>
+                        <Header style={styles.headerColor} iosBarStyle="light-content" androidStatusBarColor="#E90000">
+                            <Left>
+                                <Button transparent onPress={() => Actions.pop()}>
+                                    <Icon name="arrow-left" style={styles.menu} /> 
+                                </Button>
+                            </Left>
+                            <Body>
+                                <Title style={styles.job}>JOB ID: {this.props.currentBooking.booking_id}</Title>
+                            </Body>
+                            <Right>
+                                <Button transparent>
+                                    {/* <Text>Live Track</Text>  */}
+                                </Button>
+                            </Right>
+                        </Header> 
+                        <Content>
+                            <View style={styles.driverContainer}>
+                                <Thumbnail source={{uri: this.props.currentBooking.driver.profile_picture}} />
+                                <View style={styles.driverDetailsContainer}>
+                                    <Text style={styles.driverName}>{this.props.currentBooking.driver.first_name + " " + this.props.currentBooking.driver.last_name}</Text>
+                                    <Text style={styles.driverVehicle}>{this.props.currentBooking.driver.vehicle.body_type + " " + this.props.currentBooking.driver.vehicle.model + " " + this.props.currentBooking.driver.vehicle.plate_number}</Text>
+                                </View>
+                            </View>
+                            <View style={styles.statusContainter}>
+                                <Text style={styles.statusValue}>Status: {this.props.currentBooking.status}</Text>
+                            </View>
+                            <View style={styles.priceContainter}>
+                                <Text style={styles.priceValue}>Fare: P {this.props.currentBooking.fare}</Text>
+                            </View>
+                            <View style={styles.additionalPriceContainter}>
+                                <Text style={styles.additionalPriceValue}>Additional Price: P {this.props.currentBooking.additional_price}</Text>
+                            </View>
+                            <View style={styles.locationContainter}>
+                                <View style={styles.timeContainer}>
+                                    <Icon style={styles.timeIcon} name="clock-o" />
+                                    <View style={styles.locationValueContainer}>
+                                        <Text style={styles.locationTime}>{this.props.currentBooking.timestamp}</Text>
+                                    </View>
+                                </View>
+                                <View style={styles.pickUpContainer}>
+                                    <Icon style={styles.fromIcon} name="map-marker" />
+                                    <View style={styles.locationValueContainer}>
+                                        <Text style={styles.locationPickup}>{this.props.currentBooking.pick_up.address}</Text>
+                                    </View>
+                                </View>
+                                <View style={styles.ellipsisContainer}>
+                                    <Icon style={styles.ellipsisIcon} name="ellipsis-v" />
+                                </View>
+                                <View style={styles.dropOffContainer}>
+                                    <Icon style={styles.destinationIcon} name="location-arrow" />
+                                    <View style={styles.locationValueContainer}>
+                                        <Text style={styles.locationDropOff}>{this.props.currentBooking.drop_off.address}</Text>
+                                    </View>
+                                </View>
+                            </View>
+                            { this.props.currentBooking.additional_services && 
+                                <View style={styles.additionalContainer}>
+                                    <Text style={styles.additionalHeader}>Additional:</Text>
+                                    <List dataArray={this.props.currentBooking.additional_services.value}
+                                        renderRow={(item) =>
+                                        <View style={styles.additionalListContainer}>
+                                            <Icon style={styles.additionalIcon} name="plus" />
+                                            <View style={styles.additionalValueContainer}>
+                                                <Text style={styles.additionalText}>{item}</Text>
+                                            </View>
+                                        </View>
+                                        }>
+                                    </List>
+                                </View>
+                            }
+                            { this.props.bookingHistory && 
+                                <View style={styles.historyContainer}>
+                                    <Text style={styles.historyHeader}>History:</Text>
+                                    <List dataArray={this.props.bookingHistory}
+                                        renderRow={(item) =>
+                                        <View style={styles.historyListContainer}>
+                                            <Icon style={styles.historyIcon} name="history" />
+                                            <View style={styles.historyValueContainer}>
+                                                <Text style={styles.historyText}>{item.status}</Text>
+                                            </View>
+                                            <View style={styles.historyTimeContainer}>
+                                                <Text style={styles.historyTimeText}>{item.timestamp}</Text>
+                                            </View>
+                                        </View>
+                                        }>
+                                    </List>
+                                </View>
+                            }
+                        </Content>  
+                    </View>
                     ||
                     <View style={styles.floatView}>
                         <Spinner style={styles.spinner} isVisible={true} size={40} type="Wave" color="#ffffff"/>
@@ -270,6 +286,10 @@ const styles = StyleSheet.create({
         fontSize:10,
         color:"#3498DB",
     },
+    historyIcon:{
+        fontSize:20,
+        color:"#E90000",
+	},
     additionalContainer: {
         flex: 1,
         backgroundColor: "#FBFCFC",
@@ -290,6 +310,40 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         marginBottom: 11
+    },
+    historyContainer: {
+        flex: 1,
+        backgroundColor: "#FFFFFF",
+        paddingLeft: 10,
+        paddingTop: 10,
+        paddingBottom: 10
+    },
+    historyText: {
+        flex: 1,
+        fontSize: 13,
+    },
+    historyTimeText: {
+        flex: 1,
+        fontSize: 10,
+        textAlign: 'right'
+    },
+    historyHeader: {
+        fontSize: 13,
+        fontWeight: "bold",
+        marginBottom: 15
+    },
+    historyListContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        marginBottom: 11
+    },
+    historyValueContainer: {
+        flex: 1,
+        paddingLeft: 10
+    },
+    historyTimeContainer: {
+        flex: 1,
+        paddingRight: 10
     },
     spinner: {
         color: "#E90000",
