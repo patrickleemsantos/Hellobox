@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, AsyncStorage } from "react-native";
 import { Container, Content, Drawer } from "native-base";
 import { Actions } from "react-native-router-flux";
 import MapContainer from "./MapContainer";
@@ -27,11 +27,10 @@ class Home extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (this.props.booking.status === "CONFIRMED" ){ 
+        if (this.props.booking.status === "APPROVED" ){ 
             AsyncStorage.getItem('account', (err, result) => {
                 let account = JSON.parse(result);
-                if (account.account_id === this.props.bookingRequest.account.account_id) {                    
-                    // Actions.trackDriver({type: "reset"});
+                if (account.account_id === this.props.booking.account.account_id) {                    
                     Actions.bookings();
                 }
             });

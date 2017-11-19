@@ -4,6 +4,7 @@ import LoginContainer from "./Login/containers/LoginContainer";
 import HomeContainer from "./Home/containers/HomeContainer";
 import TrackDriverContainer from "./TrackDriver/containers/TrackDriverContainer";
 import BookingsContainer from "./Bookings/containers/BookingsContainer";
+import BookingDetailContainer from "./BookingDetail/containers/BookingDetailContainer";
 
 const scenes = Actions.create(
     <Scene key="root" hideNavBar>
@@ -11,6 +12,7 @@ const scenes = Actions.create(
         <Scene duration={0} key="home" panHandlers={null} component={HomeContainer} title="home" type={ActionConst.RESET} />
         <Scene key="trackDriver" panHandlers={null} component={TrackDriverContainer} title="trackDriver" />
         <Scene key="bookings" panHandlers={null} component={BookingsContainer} title="bookings" />
+        <Scene key="bookingDetail" panHandlers={null} component={BookingDetailContainer} title="bookingDetail" />
     </Scene>
 );
 

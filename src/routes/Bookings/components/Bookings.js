@@ -42,7 +42,7 @@ class Bookings extends React.Component{
 							<List dataArray={this.props.bookings}
 								renderRow={(booking) =>
 								<TouchableOpacity
-									// onPress={() => Actions.bookingDetail({booking: booking})}
+									onPress={() => Actions.bookingDetail({booking: booking})}
 									activeOpacity={1}>
 									<Card>
 										<CardItem header>
@@ -50,12 +50,12 @@ class Bookings extends React.Component{
 												<Icon style={styles.bookingIcon} name="truck" />
 												<Body>
 													<Text style={ styles.job }>JOB ID: {booking.booking_id}</Text>
-													<Text style={ styles.note }>{booking.account.first_name.toUpperCase() + " " + booking.account.last_name.toUpperCase()}</Text>
+													<Text style={ styles.note }>DRIVER: {booking.driver.first_name.toUpperCase() + " " + booking.driver.last_name.toUpperCase()}</Text>
 												</Body>
 											</Left>
 											<Body></Body>
 											<Right>
-												<Text style={ styles.status }>{booking.status.toUpperCase()}</Text>
+												<Text style={ styles.status }>{booking.status}</Text>
 											</Right>
 										</CardItem>
 										<CardItem>
@@ -98,7 +98,7 @@ class Bookings extends React.Component{
 const styles = StyleSheet.create({
 	headerColor: {
         backgroundColor: "#E90000"
-    },
+	},
     job: {
         fontWeight: "bold",
         fontSize: 14
@@ -111,10 +111,10 @@ const styles = StyleSheet.create({
 		fontSize: 20
     },
     pickUp: {
-        fontSize: 13
+		fontSize: 13
     },
     dropOff: {
-        fontSize: 13
+		fontSize: 13
 	},
 	status: {
 		fontSize: 12,

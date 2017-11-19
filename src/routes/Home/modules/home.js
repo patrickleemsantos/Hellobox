@@ -444,6 +444,7 @@ export function bookCar(payload) {
 					profile_picture: store().login.account.profile_picture,
 					rating: store().login.account.rating
 				},
+				driver: nearByDriver.driver,
 				pick_up:{
 					address:store().home.selectedAddress.selectedPickUp.address,
 					name:store().home.selectedAddress.selectedPickUp.name,
@@ -461,7 +462,6 @@ export function bookCar(payload) {
 				additional_price:store().home.additionalPrice,
 				additional_services:store().home.additionalServices,
 				status:"PENDING",
-				driver_id: nearByDriver.driver_id,
 				timestamp: new Date().toLocaleString()
 			},
 			nearByDriver: {
@@ -884,6 +884,14 @@ function handleUpdateBookingStatus(state, action) {
 	})
 }
 
+function handleCustomerBookingApproved(state, action) {
+	return update(state, {
+		booking: {
+			$set: action.payload
+		}
+	})
+}
+
 const ACTION_HANDLERS = {
 	GET_CURRENT_LOCATION: handleGetCurrentLocation,
 	GET_INPUT: handleGetInputData,
@@ -912,7 +920,8 @@ const ACTION_HANDLERS = {
 	BOOKING_CONFIRMED:handleBookingConfirmed,
 	IS_MAP_READY: handleIsMapReady,
 	UPDATE_BOOKING_STATUS: handleUpdateBookingStatus,
-	REMOVE_BOOKING: handleRemoveBooking
+	REMOVE_BOOKING: handleRemoveBooking,
+	CUSTOMER_BOOKING_APPROVED: handleCustomerBookingApproved
 }
 
 const initialState = {
