@@ -2,6 +2,7 @@ import React from "react";
 import { View, Alert, AsyncStorage, StyleSheet } from "react-native";
 import { Container, Content, Body, Left, Right, Text, Header, Button, Title, Footer, FooterTab, Thumbnail, List, ListItem } from "native-base";
 import { Actions } from "react-native-router-flux";
+import StarRating from 'react-native-star-rating';
 import Icon from "react-native-vector-icons/FontAwesome";
 
 var Spinner = require("react-native-spinkit");
@@ -13,43 +14,22 @@ class BookingDetail extends React.Component {
         this.props.getBookingHistory(this.props.booking.booking_id);
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        // if (prevProps.currentBooking !== this.props.currentBooking) {
-        //     if (this.props.currentBooking.status === "approved") {
-        //         AsyncStorage.getItem('driver', (err, result) => {
-        //             let driver = JSON.parse(result);
-        //             if (driver.driver_id === this.props.currentBooking.driver_id) {                    
-        //                 this.props.updateBookingModal(true);
-        //             }
-        //         });
-        //     }
-        // }
-    }
-
     render () {    
-        // const { status } = this.props.currentBooking;
-        
-        // updateBookingStatus = () => {
-        //     if (status === "PENDING") {
-        //         this.props.updateBookingStatus("APPROVED");
-        //     }
-            
-        //     if (status === "APPROVED") {
-        //         this.props.updateBookingStatus("ON MY WAY");
-        //     }
-
-        //     if (status === "ON MY WAY") {
-        //         this.props.updateBookingStatus("LOADED AND DELIVERY STARTED");
-        //     }
-
-        //     if (status === "LOADED AND DELIVERY STARTED") {
-        //         this.props.updateBookingStatus("ARRIVED AT DELIVERY LOCATION");
-        //     }
-
-        //     if (status === "ARRIVED AT DELIVERY LOCATION") {
-        //         this.props.updateBookingStatus("JOB COMPLETED");
-        //     }
-        // }
+        handleBookingUpdate = (value) => {
+            if (this.props.currentBooking.status != "APPROVED") {
+                Alert.alert('Hellobox', 'The status of your booking is alreary ' + this.props.currentBooking.status);
+            } else {
+                Alert.alert(
+                    'Hellobox',
+                    'Are you sure you want to cancel your booking?',
+                    [
+                        {text: 'Cancel', style: 'cancel'},
+                        {text: 'OK', onPress: () => this.props.updateBookingStatus(value)},
+                    ],
+                    { cancelable: false }
+                )
+            }
+        }
 
         return (
             <Container>
@@ -65,9 +45,6 @@ class BookingDetail extends React.Component {
                                 <Title style={styles.job}>JOB ID: {this.props.currentBooking.booking_id}</Title>
                             </Body>
                             <Right>
-                                <Button transparent>
-                                    {/* <Text>Live Track</Text>  */}
-                                </Button>
                             </Right>
                         </Header> 
                         <Content>
@@ -143,7 +120,34 @@ class BookingDetail extends React.Component {
                                     </List>
                                 </View>
                             }
-                        </Content>  
+                            { (this.props.currentBooking.status == "JOB COMPLETED") && 
+                                <View style={styles.ratingContainer}>
+                                    <Text style={styles.ratingHeader}>You rated</Text>
+                                    <View stye={styles.startContainer}>
+                                        <StarRating
+                                            style={styles.starRating}
+                                            disabled={true}
+                                            maxStars={5}
+                                            rating={1}
+                                            selectedStar={(rating) => this.onStarRatingPress(rating)}
+                                            starColor={'red'}
+                                        />
+                                    </View>
+                                </View>
+                            }
+                        </Content> 
+                        { (this.props.currentBooking.status != "JOB COMPLETED") && 
+                            <Footer>
+                                <FooterTab style={styles.footerContainer}>
+                                    <Button info style={styles.button}>
+                                        <Text style={styles.subText}>LIVE TRACK</Text>
+                                    </Button>
+                                    <Button danger style={styles.button} onPress={() => handleBookingUpdate("CANCELLED")}>
+                                        <Text style={styles.subText}>CANCEL</Text>
+                                    </Button>
+                                </FooterTab>
+                            </Footer>
+                        }
                     </View>
                     ||
                     <View style={styles.floatView}>
@@ -344,6 +348,39 @@ const styles = StyleSheet.create({
     historyTimeContainer: {
         flex: 1,
         paddingRight: 10
+    },
+    footerContainer:{
+        // paddingTop: 10,
+		backgroundColor:"#fff",
+    },
+    button: {
+		margin: 5,
+		height: 40
+	},
+	subText:{
+		fontSize:14,
+		fontWeight: "bold",
+		color: "#FFFF"
+    },
+    ratingContainer: {
+        flex: 1,
+        marginTop: 20,
+        marginBottom: 30,
+        marginLeft: 80,
+        marginRight: 80
+    },
+    ratingHeader: {
+        fontSize: 13,
+        fontWeight: "bold",
+        marginBottom: 10,
+        textAlign: "center"
+    },
+    startContainer: {
+        paddingLeft: 30,
+        paddingRight: 30
+    },
+    starRating: {
+        textAlign: "center"
     },
     spinner: {
         color: "#E90000",

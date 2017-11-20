@@ -5,7 +5,7 @@ import { Actions } from "react-native-router-flux";
 import Icon from "react-native-vector-icons/FontAwesome";
 var Spinner = require("react-native-spinkit");
 
-class Bookings extends React.Component{
+class Bookings extends React.Component {
 
 	componentDidMount() {
 		AsyncStorage.getItem('account', (err, result) => {
@@ -35,9 +35,6 @@ class Bookings extends React.Component{
 						</Right>
 					</Header>
 					<Content>
-						<View style={styles.floatView}>
-							<Spinner style={styles.spinner} isVisible={this.props.showBookingLoader} size={40} type="Wave" color="#ffffff"/>
-						</View>
 						{ this.props.bookings && 
 							<List dataArray={this.props.bookings}
 								renderRow={(booking) =>
@@ -45,47 +42,49 @@ class Bookings extends React.Component{
 									onPress={() => Actions.bookingDetail({booking: booking})}
 									activeOpacity={1}>
 									<Card>
-										<CardItem header>
-											<Left style={styles.leftContainer}>
-												<Icon style={styles.bookingIcon} name="truck" />
-												<Body>
-													<Text style={ styles.job }>JOB ID: {booking.booking_id}</Text>
-													<Text style={ styles.note }>DRIVER: {booking.driver.first_name.toUpperCase() + " " + booking.driver.last_name.toUpperCase()}</Text>
-												</Body>
-											</Left>
-											<Body></Body>
-											<Right>
-												<Text style={ styles.status }>{booking.status}</Text>
-											</Right>
-										</CardItem>
 										<CardItem>
-											<Left style={styles.leftContainer}>
-												<Icon style={styles.fromIcon} name="clock-o" />
-												<Body>
-													<Text style={ styles.pickUp }>TIME: {booking.timestamp}</Text>
-												</Body>
-											</Left>
-										</CardItem>
-										<CardItem>
-											<Left style={styles.leftContainer}>
-												<Icon style={styles.fromIcon} name="map-marker" />
-												<Body>
-													<Text style={ styles.pickUp }>PICK UP: {booking.pick_up.address}</Text>
-												</Body>
-											</Left>
-										</CardItem>
-										<CardItem>
-											<Left style={styles.leftContainer}>
-												<Icon style={styles.destinationIcon} name="location-arrow" />
-												<Body>
-													<Text style={ styles.dropOff }>DROP OFF: {booking.drop_off.address}</Text>
-												</Body>
-											</Left>
+											<View style={{flex: 1, flexDirection: 'column'}}>
+												<View style={styles.headerContainer}>
+													<Icon style={styles.bookingIcon} name="truck" />
+													<View style={styles.jobContainer}>
+														<Text style={styles.job}>JOB ID: {booking.booking_id}</Text>
+														<Text style={styles.note}>DRIVER: {booking.driver.first_name.toUpperCase() + " " + booking.driver.last_name.toUpperCase()}</Text>
+													</View>
+													<View style={styles.statusContainer}>
+														<Text style={ styles.status }>{booking.status}</Text>
+													</View>
+												</View>
+												<View style={styles.locationContainter}>
+													<View style={styles.timeContainer}>
+														<Icon style={styles.timeIcon} name="clock-o" />
+														<View style={styles.locationValueContainer}>
+															<Text style={styles.locationTime}>{booking.timestamp}</Text>
+														</View>
+													</View>
+													<View style={styles.pickUpContainer}>
+														<Icon style={styles.fromIcon} name="map-marker" />
+														<View style={styles.locationValueContainer}>
+															<Text style={styles.locationPickup}>{booking.pick_up.address}</Text>
+														</View>
+													</View>
+													<View style={styles.ellipsisContainer}>
+														<Icon style={styles.ellipsisIcon} name="ellipsis-v" />
+													</View>
+													<View style={styles.dropOffContainer}>
+														<Icon style={styles.destinationIcon} name="location-arrow" />
+														<View style={styles.locationValueContainer}>
+															<Text style={styles.locationDropOff}>{booking.drop_off.address}</Text>
+														</View>
+													</View>
+												</View>
+											</View>
 										</CardItem>
 									</Card>
 								</TouchableOpacity>
 								}>
 							</List>
+							||
+							<Spinner style={styles.spinner} isVisible={true} size={40} type="Wave" color="#ffffff"/>
 						}
 					</Content>  
 				</View>
@@ -98,6 +97,10 @@ class Bookings extends React.Component{
 const styles = StyleSheet.create({
 	headerColor: {
         backgroundColor: "#E90000"
+	},
+	headerContainer: {
+		flex: 1,
+		flexDirection: 'row'
 	},
     job: {
         fontWeight: "bold",
@@ -118,6 +121,7 @@ const styles = StyleSheet.create({
 	},
 	status: {
 		fontSize: 12,
+		textAlign: 'right',
 		color: "#1589FF"
     },
     bookingIcon:{
@@ -132,21 +136,68 @@ const styles = StyleSheet.create({
         fontSize:20,
         color:"#999999",
 	},
+	ellipsisIcon: {
+        fontSize:10,
+        color:"#3498DB",
+    },
 	note: {
 		marginTop: 5,
 		fontSize:  13,
 		color: "#999999"
 	},
+	locationContainter: {
+        flex: 1,
+        backgroundColor: "#FFFFFF",
+        flexDirection: 'column',
+        paddingLeft: 10,
+        paddingTop: 15,
+        paddingBottom: 15
+    },
+    locationTime: {
+        fontSize: 13,
+    },
+    locationPickup: {
+        fontSize: 13,
+    },
+    locationDropOff: {
+        fontSize: 13,
+    },
+    locationValueContainer: {
+        flex: 1,
+        paddingLeft: 10
+	},
+	jobContainer: {
+        flex: 1,
+        paddingLeft: 10
+	},
+	statusContainer: {
+		flex: 1
+	},
+	timeIcon:{
+        fontSize:20,
+        color:"#00FF00",
+	},
+	pickUpContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        marginBottom: 2
+    },
+    timeContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        marginBottom: 11
+    },
+    ellipsisContainer: {
+        flex: 1,
+        paddingLeft: 5
+    },
+    dropOffContainer: {
+        flex: 1,
+        flexDirection: 'row'
+    },
 	spinner: {
         color: "#E90000",
-        // marginTop: 100,
-        alignSelf: "center"
-    },
-    floatView: {
-        position: 'absolute',
-        width: 100,
-        height: 100,
-        top: 200,
+        marginTop: 100,
         alignSelf: "center"
     },
   });

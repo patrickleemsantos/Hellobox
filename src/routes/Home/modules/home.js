@@ -526,6 +526,13 @@ export function updateBookingStatus(payload) {
 	}
 }
 
+export function removeBooking() {
+	return (dispatch) => {
+		type: REMOVE_BOOKING,
+		payload
+	}
+}
+
 //------------------------
 //Action Handlers
 //------------------------
@@ -847,6 +854,24 @@ function handleRemoveBooking(state, action) {
 		},
 		fare: {
 			$set: null
+		},
+		additionalService1: {
+			$set: false
+		},
+		additionalService2: {
+			$set: false
+		},
+		additionalService3: {
+			$set: false
+		},
+		additionalService4: {
+			$set: false
+		},
+		additionalService5: {
+			$set: false
+		},
+		additionalService6: {
+			$set: false
 		}
 	});
 }

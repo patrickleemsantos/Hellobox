@@ -8,10 +8,13 @@
   },
   "dependencies": {
     "@mapbox/polyline": "^0.2.0",
+    "moment": "^2.19.2",
+    "moment-timezone": "^0.5.14",
     "prop-types": "^15.6.0",
     "randomatic": "^2.0.0",
     "react": "16.0.0-beta.5",
     "react-addons-update": "^15.6.2",
+    "react-moment": "^0.6.8",
     "react-native": "0.49.1",
     "react-native-check-box": "^2.0.2",
     "react-native-easy-grid": "^0.1.15",

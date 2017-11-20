@@ -30,7 +30,8 @@ class Home extends React.Component {
         if (this.props.booking.status === "APPROVED" ){ 
             AsyncStorage.getItem('account', (err, result) => {
                 let account = JSON.parse(result);
-                if (account.account_id === this.props.booking.account.account_id) {                    
+                if (account.account_id === this.props.booking.account.account_id) {      
+                    this.props.removeBooking();              
                     Actions.bookings();
                 }
             });

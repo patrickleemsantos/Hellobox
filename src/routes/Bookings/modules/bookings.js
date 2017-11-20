@@ -9,7 +9,7 @@ import request from "../../../util/request";
 //--------------------
 const { 
 	GET_BOOKINGS,
-	UPDATE_BOOKING_LOADER,
+	// UPDATE_BOOKING_LOADER,
 	CLEAR_BOOKINGS
 } = constants;
 
@@ -30,10 +30,10 @@ export function getBookings(payload) {
 			payload
 		});
 
-		dispatch({
-			type:UPDATE_BOOKING_LOADER,
-			payload:true
-		});
+		// dispatch({
+		// 	type:UPDATE_BOOKING_LOADER,
+		// 	payload:true
+		// });
 
 		request.get("http://52.220.212.6:3121/api/bookingsByAccount")
 		.query({
@@ -46,10 +46,10 @@ export function getBookings(payload) {
 					payload:res.body
 				});
 
-				dispatch({
-					type:UPDATE_BOOKING_LOADER,
-					payload:false
-				});
+				// dispatch({
+				// 	type:UPDATE_BOOKING_LOADER,
+				// 	payload:false
+				// });
 			}
 		});
 	};
@@ -66,13 +66,13 @@ function handleGetBookings(state, action) {
 	})
 }
 
-function handleBookingLoader(state, action) {
-	return update(state, {
-		showBookingLoader:{
-			$set:action.payload
-		}
-	});
-}
+// function handleBookingLoader(state, action) {
+// 	return update(state, {
+// 		showBookingLoader:{
+// 			$set:action.payload
+// 		}
+// 	});
+// }
 
 function handleClearBookings(state, action) {
 	return update(state, {
@@ -84,13 +84,13 @@ function handleClearBookings(state, action) {
 
 const ACTION_HANDLERS = {
 	GET_BOOKINGS: handleGetBookings,
-	UPDATE_BOOKING_LOADER: handleBookingLoader,
+	// UPDATE_BOOKING_LOADER: handleBookingLoader,
 	CLEAR_BOOKINGS: handleClearBookings
 }
 
 const initialState = {
 	bookings: {},
-	showBookingLoader: false
+	// showBookingLoader: false
 };
 
 export function BookingsReducer (state = initialState, action){

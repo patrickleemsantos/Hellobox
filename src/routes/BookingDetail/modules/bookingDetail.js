@@ -110,10 +110,29 @@ function handleUpdateBookingHistory(state, action) {
 	})
 }
 
+function handleEmitBookingHistory(state, action) {
+	if (state.currentBooking) {
+		if (state.currentBooking.booking_id === action.payload.booking_id) {
+			return update(state, {
+				bookingHistory: {
+					$set: action.payload.booking_history
+				}
+			})
+		}
+	} else {
+		return update(state, {
+			currentBooking: {
+				$set: null
+			}
+		})
+	}
+}
+
 const ACTION_HANDLERS = {
 	SET_CURRENT_BOOKING: handleSetCurrentBooking,
 	UPDATE_BOOKING: handleUpdateBooking,
 	UPDATE_BOOKING_HISTORY: handleUpdateBookingHistory,
+	EMIT_BOOKING_HISTORY: handleEmitBookingHistory,
 	UPDATE_LOADER: handleUpdateLoader
 }
 
