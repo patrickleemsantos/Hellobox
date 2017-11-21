@@ -4,6 +4,7 @@ import { Container, Content, Body, Left, Right, Text, Header, Button, Title, Foo
 import { Actions } from "react-native-router-flux";
 import StarRating from 'react-native-star-rating';
 import Icon from "react-native-vector-icons/FontAwesome";
+import DriverFound from "./DriverFound";
 
 var Spinner = require("react-native-spinkit");
 
@@ -12,6 +13,7 @@ class BookingDetail extends React.Component {
     componentDidMount() {
         this.props.setCurrentBooking(this.props.booking);
         this.props.getBookingHistory(this.props.booking.booking_id);
+        this.props.setShowDriver(this.props.showDriverValue);
     }
 
     render () {    
@@ -30,130 +32,141 @@ class BookingDetail extends React.Component {
                 )
             }
         }
-
         return (
             <Container>
                 { this.props.currentBooking &&
                     <View style={{flex:1}}>
-                        <Header style={styles.headerColor} iosBarStyle="light-content" androidStatusBarColor="#E90000">
-                            <Left>
-                                <Button transparent onPress={() => Actions.pop()}>
-                                    <Icon name="arrow-left" style={styles.menu} /> 
-                                </Button>
-                            </Left>
-                            <Body>
-                                <Title style={styles.job}>JOB ID: {this.props.currentBooking.booking_id}</Title>
-                            </Body>
-                            <Right>
-                            </Right>
-                        </Header> 
-                        <Content>
-                            <View style={styles.driverContainer}>
-                                <Thumbnail source={{uri: this.props.currentBooking.driver.profile_picture}} />
-                                <View style={styles.driverDetailsContainer}>
-                                    <Text style={styles.driverName}>{this.props.currentBooking.driver.first_name + " " + this.props.currentBooking.driver.last_name}</Text>
-                                    <Text style={styles.driverVehicle}>{this.props.currentBooking.driver.vehicle.body_type + " " + this.props.currentBooking.driver.vehicle.model + " " + this.props.currentBooking.driver.vehicle.plate_number}</Text>
-                                </View>
-                            </View>
-                            <View style={styles.statusContainter}>
-                                <Text style={styles.statusValue}>Status: {this.props.currentBooking.status}</Text>
-                            </View>
-                            <View style={styles.priceContainter}>
-                                <Text style={styles.priceValue}>Fare: P {this.props.currentBooking.fare}</Text>
-                            </View>
-                            <View style={styles.additionalPriceContainter}>
-                                <Text style={styles.additionalPriceValue}>Additional Price: P {this.props.currentBooking.additional_price}</Text>
-                            </View>
-                            <View style={styles.locationContainter}>
-                                <View style={styles.timeContainer}>
-                                    <Icon style={styles.timeIcon} name="clock-o" />
-                                    <View style={styles.locationValueContainer}>
-                                        <Text style={styles.locationTime}>{this.props.currentBooking.timestamp}</Text>
+                         { (this.props.showDriver === true) && 
+                            <DriverFound
+                                    driverInfo={this.props.currentBooking.driver}
+                                    setShowDriver={this.props.setShowDriver}
+                                />
+
+                            ||
+                            
+                            <View style={{flex:1}}>
+                                <Header style={styles.headerColor} iosBarStyle="light-content" androidStatusBarColor="#E90000">
+                                    <Left>
+                                        <Button transparent onPress={() => Actions.pop()}>
+                                            <Icon name="arrow-left" style={styles.menu} /> 
+                                        </Button>
+                                    </Left>
+                                    <Body>
+                                        <Title style={styles.job}>BOOKING ID: {this.props.currentBooking.booking_id}</Title>
+                                    </Body>
+                                    <Right>
+                                    </Right>
+                                </Header> 
+                                <Content>
+                                    <View style={styles.driverContainer}>
+                                        <Thumbnail source={{uri: this.props.currentBooking.driver.profile_picture}} />
+                                        <View style={styles.driverDetailsContainer}>
+                                            <Text style={styles.driverName}>{this.props.currentBooking.driver.first_name + " " + this.props.currentBooking.driver.last_name}</Text>
+                                            <Text style={styles.driverVehicle}>{this.props.currentBooking.driver.vehicle.body_type + " " + this.props.currentBooking.driver.vehicle.model + " " + this.props.currentBooking.driver.vehicle.plate_number}</Text>
+                                        </View>
                                     </View>
-                                </View>
-                                <View style={styles.pickUpContainer}>
-                                    <Icon style={styles.fromIcon} name="map-marker" />
-                                    <View style={styles.locationValueContainer}>
-                                        <Text style={styles.locationPickup}>{this.props.currentBooking.pick_up.address}</Text>
+                                    <View style={styles.statusContainter}>
+                                        <Text style={styles.statusValue}>Status: {this.props.currentBooking.status}</Text>
                                     </View>
-                                </View>
-                                <View style={styles.ellipsisContainer}>
-                                    <Icon style={styles.ellipsisIcon} name="ellipsis-v" />
-                                </View>
-                                <View style={styles.dropOffContainer}>
-                                    <Icon style={styles.destinationIcon} name="location-arrow" />
-                                    <View style={styles.locationValueContainer}>
-                                        <Text style={styles.locationDropOff}>{this.props.currentBooking.drop_off.address}</Text>
+                                    <View style={styles.priceContainter}>
+                                        <Text style={styles.priceValue}>Fare: P {this.props.currentBooking.fare}</Text>
                                     </View>
-                                </View>
-                            </View>
-                            { this.props.currentBooking.additional_services && 
-                                <View style={styles.additionalContainer}>
-                                    <Text style={styles.additionalHeader}>Additional:</Text>
-                                    <List dataArray={this.props.currentBooking.additional_services.value}
-                                        renderRow={(item) =>
-                                        <View style={styles.additionalListContainer}>
-                                            <Icon style={styles.additionalIcon} name="plus" />
-                                            <View style={styles.additionalValueContainer}>
-                                                <Text style={styles.additionalText}>{item}</Text>
+                                    <View style={styles.additionalPriceContainter}>
+                                        <Text style={styles.additionalPriceValue}>Additional Price: P {this.props.currentBooking.additional_price}</Text>
+                                    </View>
+                                    <View style={styles.locationContainter}>
+                                        <View style={styles.timeContainer}>
+                                            <Icon style={styles.timeIcon} name="clock-o" />
+                                            <View style={styles.locationValueContainer}>
+                                                <Text style={styles.locationTime}>{this.props.currentBooking.timestamp}</Text>
                                             </View>
                                         </View>
-                                        }>
-                                    </List>
-                                </View>
-                            }
-                            { this.props.bookingHistory && 
-                                <View style={styles.historyContainer}>
-                                    <Text style={styles.historyHeader}>History:</Text>
-                                    <List dataArray={this.props.bookingHistory}
-                                        renderRow={(item) =>
-                                        <View style={styles.historyListContainer}>
-                                            <Icon style={styles.historyIcon} name="history" />
-                                            <View style={styles.historyValueContainer}>
-                                                <Text style={styles.historyText}>{item.status}</Text>
-                                            </View>
-                                            <View style={styles.historyTimeContainer}>
-                                                <Text style={styles.historyTimeText}>{item.timestamp}</Text>
+                                        <View style={styles.pickUpContainer}>
+                                            <Icon style={styles.fromIcon} name="map-marker" />
+                                            <View style={styles.locationValueContainer}>
+                                                <Text style={styles.locationPickup}>{this.props.currentBooking.pick_up.address}</Text>
                                             </View>
                                         </View>
-                                        }>
-                                    </List>
-                                </View>
-                            }
-                            { (this.props.currentBooking.status == "JOB COMPLETED") && 
-                                <View style={styles.ratingContainer}>
-                                    <Text style={styles.ratingHeader}>You rated</Text>
-                                    <View stye={styles.startContainer}>
-                                        <StarRating
-                                            style={styles.starRating}
-                                            disabled={true}
-                                            maxStars={5}
-                                            rating={1}
-                                            selectedStar={(rating) => this.onStarRatingPress(rating)}
-                                            starColor={'red'}
-                                        />
+                                        <View style={styles.ellipsisContainer}>
+                                            <Icon style={styles.ellipsisIcon} name="ellipsis-v" />
+                                        </View>
+                                        <View style={styles.dropOffContainer}>
+                                            <Icon style={styles.destinationIcon} name="location-arrow" />
+                                            <View style={styles.locationValueContainer}>
+                                                <Text style={styles.locationDropOff}>{this.props.currentBooking.drop_off.address}</Text>
+                                            </View>
+                                        </View>
                                     </View>
-                                </View>
-                            }
-                        </Content> 
-                        { (this.props.currentBooking.status != "JOB COMPLETED") && 
-                            <Footer>
-                                <FooterTab style={styles.footerContainer}>
-                                    <Button info style={styles.button}>
-                                        <Text style={styles.subText}>LIVE TRACK</Text>
-                                    </Button>
-                                    <Button danger style={styles.button} onPress={() => handleBookingUpdate("CANCELLED")}>
-                                        <Text style={styles.subText}>CANCEL</Text>
-                                    </Button>
-                                </FooterTab>
-                            </Footer>
+                                    { this.props.currentBooking.additional_services && 
+                                        <View style={styles.additionalContainer}>
+                                            <Text style={styles.additionalHeader}>Additional:</Text>
+                                            <List dataArray={this.props.currentBooking.additional_services.value}
+                                                renderRow={(item) =>
+                                                <View style={styles.additionalListContainer}>
+                                                    <Icon style={styles.additionalIcon} name="plus" />
+                                                    <View style={styles.additionalValueContainer}>
+                                                        <Text style={styles.additionalText}>{item}</Text>
+                                                    </View>
+                                                </View>
+                                                }>
+                                            </List>
+                                        </View>
+                                    }
+                                    { this.props.bookingHistory && 
+                                        <View style={styles.historyContainer}>
+                                            <Text style={styles.historyHeader}>History:</Text>
+                                            <List dataArray={this.props.bookingHistory}
+                                                renderRow={(item) =>
+                                                <View style={styles.historyListContainer}>
+                                                    <Icon style={styles.historyIcon} name="history" />
+                                                    <View style={styles.historyValueContainer}>
+                                                        <Text style={styles.historyText}>{item.status}</Text>
+                                                    </View>
+                                                    <View style={styles.historyTimeContainer}>
+                                                        <Text style={styles.historyTimeText}>{item.timestamp}</Text>
+                                                    </View>
+                                                </View>
+                                                }>
+                                            </List>
+                                        </View>
+                                    }
+                                    { (this.props.currentBooking.status == "JOB COMPLETED") && 
+                                        <View style={styles.ratingContainer}>
+                                            <Text style={styles.ratingHeader}>{(this.props.currentBooking.rating === 0 ? 'Add rating' : 'You rated')}</Text>
+                                            <View stye={styles.startContainer}>
+                                                <StarRating
+                                                    style={styles.starRating}
+                                                    disabled={(this.props.currentBooking.rating === 0 ? false : true)}
+                                                    maxStars={5}
+                                                    rating={(this.props.currentBooking.rating === 0 ? 1 : this.props.currentBooking.rating)}
+                                                    selectedStar={(rating) => this.onStarRatingPress(rating)}
+                                                    starColor={'red'}
+                                                />
+                                            </View>
+                                        </View>
+                                    }
+                                </Content> 
+                                { (this.props.currentBooking.status != "JOB COMPLETED" && this.props.currentBooking.status != "CANCELLED") && 
+                                    <Footer>
+                                        <FooterTab style={styles.footerContainer}>
+                                            <Button info disabled={((this.props.currentBooking.status !== "APPROVED" && this.props.currentBooking.status !== "CANCELLED") ? false : true)} style={styles.button}>
+                                                <Text style={styles.subText}>LIVE TRACK</Text>
+                                            </Button>
+                                            <Button danger disabled={(this.props.currentBooking.status === "CANCELLED" ? true : false)} style={styles.button} onPress={() => handleBookingUpdate("CANCELLED")}>
+                                                <Text style={styles.subText}>CANCEL</Text>
+                                            </Button>
+                                        </FooterTab>
+                                    </Footer>
+                                }
+                            </View>
+                            ||
+                            <View style={styles.floatView}>
+                                <Spinner style={styles.spinner} isVisible={true} size={40} type="Wave" color="#ffffff"/>
+                            </View>
                         }
                     </View>
-                    ||
-                    <View style={styles.floatView}>
-                        <Spinner style={styles.spinner} isVisible={true} size={40} type="Wave" color="#ffffff"/>
-                    </View>
-                }             
+                }    
+                         
             </Container>
         )
     }

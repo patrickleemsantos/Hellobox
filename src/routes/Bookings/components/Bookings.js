@@ -39,7 +39,7 @@ class Bookings extends React.Component {
 							<List dataArray={this.props.bookings}
 								renderRow={(booking) =>
 								<TouchableOpacity
-									onPress={() => Actions.bookingDetail({booking: booking})}
+									onPress={() => Actions.bookingDetail({booking: booking, showDriverValue: false})}
 									activeOpacity={1}>
 									<Card>
 										<CardItem>

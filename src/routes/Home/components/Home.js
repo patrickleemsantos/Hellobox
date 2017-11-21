@@ -27,14 +27,17 @@ class Home extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (this.props.booking.status === "APPROVED" ){ 
-            AsyncStorage.getItem('account', (err, result) => {
-                let account = JSON.parse(result);
-                if (account.account_id === this.props.booking.account.account_id) {      
-                    this.props.removeBooking();              
-                    Actions.bookings();
-                }
-            });
+        if (prevProps.booking.booking_id === this.props.booking.booking_id){
+            if (this.props.booking.status === "APPROVED" ){ 
+                AsyncStorage.getItem('account', (err, result) => {
+                    let account = JSON.parse(result);
+                    if (account.account_id === this.props.booking.account.account_id) {         
+                        // Actions.bookings();
+                        Actions.bookingDetail({booking: this.props.booking, showDriverValue: true});
+                        this.props.removeBooking();
+                    }
+                });
+            }
         }
     }
 

@@ -11,7 +11,8 @@ const {
 		SET_CURRENT_BOOKING,
 		UPDATE_BOOKING,
 		UPDATE_BOOKING_HISTORY,
-		UPDATE_LOADER
+		UPDATE_LOADER,
+		SHOW_DRIVER
 	} = constants;
 
 const { width, height } = Dimensions.get("window");
@@ -28,6 +29,13 @@ const LONGITUDE_DELTA = ASPECT_RATIO * LATITUDE_DELTA;
 export function setCurrentBooking(payload) {
 	return {
 		type: SET_CURRENT_BOOKING,
+		payload
+	}
+}
+
+export function setShowDriver(payload) {
+	return {
+		type: SHOW_DRIVER,
 		payload
 	}
 }
@@ -118,14 +126,28 @@ function handleEmitBookingHistory(state, action) {
 					$set: action.payload.booking_history
 				}
 			})
+		} else {
+			return update(state, {
+				bookingHistory: {
+					$set: {}
+				}
+			})
 		}
 	} else {
 		return update(state, {
-			currentBooking: {
-				$set: null
+			bookingHistory: {
+				$set: {}
 			}
 		})
 	}
+}
+
+function handleShowDriver(state, action) {
+	return update(state, {
+		showDriver: {
+			$set: action.payload
+		}
+	})
 }
 
 const ACTION_HANDLERS = {
@@ -133,11 +155,13 @@ const ACTION_HANDLERS = {
 	UPDATE_BOOKING: handleUpdateBooking,
 	UPDATE_BOOKING_HISTORY: handleUpdateBookingHistory,
 	EMIT_BOOKING_HISTORY: handleEmitBookingHistory,
-	UPDATE_LOADER: handleUpdateLoader
+	UPDATE_LOADER: handleUpdateLoader,
+	SHOW_DRIVER: handleShowDriver
 }
 
 const initialState = {
-	showLoader: false
+	showLoader: false,
+	showDriver: true
 };
 
 export function BookingDetailReducer (state = initialState, action) {

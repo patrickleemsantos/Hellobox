@@ -3,19 +3,22 @@ import BookingDetail from "../components/BookingDetail";
 import {
     setCurrentBooking,
     updateBookingStatus,
-    getBookingHistory
+    getBookingHistory,
+    setShowDriver
 } from "../modules/bookingDetail";
 
 const mapStateToProps = (state) => ({   
     currentBooking: state.bookingDetail.currentBooking,
     bookingHistory: state.bookingDetail.bookingHistory,
-    showLoader: state.bookingDetail.showLoader || false
+    showLoader: state.bookingDetail.showLoader || false,
+    showDriver: state.showDriver || true
 });
 
 const mapActionCreators = {
     setCurrentBooking,
     updateBookingStatus,
-    getBookingHistory
+    getBookingHistory,
+    setShowDriver
 };
 
 export default connect(mapStateToProps, mapActionCreators)(BookingDetail);

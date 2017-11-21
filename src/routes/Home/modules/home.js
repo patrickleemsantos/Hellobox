@@ -66,6 +66,13 @@ export function updateSearchAddressLoadingStatus() {
 	}
 }
 
+export function removeBooking(payload) {
+	return{
+		type: REMOVE_BOOKING,
+		payload
+	}
+}
+
 export function getCurrentLocation(){
 	return(dispatch) => {
 		navigator.geolocation.getCurrentPosition(
@@ -462,6 +469,7 @@ export function bookCar(payload) {
 				additional_price:store().home.additionalPrice,
 				additional_services:store().home.additionalServices,
 				status:"PENDING",
+				rating: 0,
 				timestamp: new Date().toLocaleString()
 			},
 			nearByDriver: {
@@ -523,13 +531,6 @@ export function updateBookingStatus(payload) {
 				})
 			}
 		});
-	}
-}
-
-export function removeBooking() {
-	return (dispatch) => {
-		type: REMOVE_BOOKING,
-		payload
 	}
 }
 
