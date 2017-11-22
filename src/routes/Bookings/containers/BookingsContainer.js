@@ -5,7 +5,7 @@ import {
 } from "../modules/bookings";
 
 const mapStateToProps = (state) => ({
-	bookings: state.bookings.bookings || {},
+	bookings: state.bookings.bookings || [],
 	showBookingLoader: state.bookings.showBookingLoader || false,
 });
 

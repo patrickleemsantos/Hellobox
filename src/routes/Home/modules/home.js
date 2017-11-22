@@ -456,13 +456,13 @@ export function bookCar(payload) {
 					address:store().home.selectedAddress.selectedPickUp.address,
 					name:store().home.selectedAddress.selectedPickUp.name,
 					latitude:store().home.selectedAddress.selectedPickUp.latitude,
-					longitude:store().home.selectedAddress.selectedPickUp.latitude
+					longitude:store().home.selectedAddress.selectedPickUp.longitude
 				},
 				drop_off:{
 					address:store().home.selectedAddress.selectedDropOff.address,
 					name:store().home.selectedAddress.selectedDropOff.name,
 					latitude:store().home.selectedAddress.selectedDropOff.latitude,
-					longitude:store().home.selectedAddress.selectedDropOff.latitude
+					longitude:store().home.selectedAddress.selectedDropOff.longitude
 				},
 				vehicle:store().home.selectedVehicle,
 				fare:store().home.fare,
@@ -910,7 +910,7 @@ function handleUpdateBookingStatus(state, action) {
 	})
 }
 
-function handleCustomerBookingApproved(state, action) {
+function handleBookingApproved(state, action) {
 	return update(state, {
 		booking: {
 			$set: action.payload
@@ -947,7 +947,7 @@ const ACTION_HANDLERS = {
 	IS_MAP_READY: handleIsMapReady,
 	UPDATE_BOOKING_STATUS: handleUpdateBookingStatus,
 	REMOVE_BOOKING: handleRemoveBooking,
-	CUSTOMER_BOOKING_APPROVED: handleCustomerBookingApproved
+	BOOKING_APPROVED: handleBookingApproved
 }
 
 const initialState = {

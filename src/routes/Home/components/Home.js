@@ -32,8 +32,7 @@ class Home extends React.Component {
                 AsyncStorage.getItem('account', (err, result) => {
                     let account = JSON.parse(result);
                     if (account.account_id === this.props.booking.account.account_id) {         
-                        // Actions.bookings();
-                        Actions.bookingDetail({booking: this.props.booking, showDriverValue: true});
+                        Actions.bookingDetail({booking: this.props.booking});
                         this.props.removeBooking();
                     }
                 });

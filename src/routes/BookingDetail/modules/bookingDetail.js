@@ -12,7 +12,11 @@ const {
 		UPDATE_BOOKING,
 		UPDATE_BOOKING_HISTORY,
 		UPDATE_LOADER,
-		SHOW_DRIVER
+		SHOW_RATING_MODAL,
+		SHOW_MAP_TRACK_MODAL,
+		SET_SELECTED_STAR,
+		GET_COMMENT,
+		UPDATE_DRIVER_LOCATION
 	} = constants;
 
 const { width, height } = Dimensions.get("window");
@@ -33,10 +37,68 @@ export function setCurrentBooking(payload) {
 	}
 }
 
-export function setShowDriver(payload) {
+export function setShowRatingModal(payload) {
 	return {
-		type: SHOW_DRIVER,
+		type: SHOW_RATING_MODAL,
 		payload
+	}
+}
+
+export function setShowMapTrackModal(payload) {
+	return {
+		type: SHOW_MAP_TRACK_MODAL,
+		payload
+	}
+}
+
+export function setSelectedStar(payload) {
+	return {
+		type: SET_SELECTED_STAR,
+		payload
+	}
+}
+
+export function getComment(payload) {
+	return {
+		type: GET_COMMENT,
+		payload
+	}
+}
+
+export function saveComment() {
+	return(dispatch, store) => {
+		if (store().bookingDetail.rating !== 0 && store().bookingDetail.comment !== "") {
+			request.put("http://52.220.212.6:3121/api/updateBookingRating")
+			.send({
+				id: store().bookingDetail.currentBooking._id,
+				rating: store().bookingDetail.selectedStar,
+				comment: store().bookingDetail.comment
+			})
+			.finish((error, res)=> {
+				dispatch({
+					type: SET_CURRENT_BOOKING,
+					payload: res.body
+				});
+
+				dispatch({
+					type: SHOW_RATING_MODAL,
+					payload: false
+				});
+			});
+		}
+	}
+}
+
+export function trackDriver() {
+	return (dispatch, store)=>{
+		let id = store().bookingDetail.currentBooking.driver.driver_id;
+		request.get("http://52.220.212.6:3121/api/getCurrentDriverLocation/" + id)
+		.finish((error, res)=>{
+			dispatch({
+				type:UPDATE_DRIVER_LOCATION,
+				payload:res.body
+			});
+		});
 	}
 }
 
@@ -118,6 +180,78 @@ function handleUpdateBookingHistory(state, action) {
 	})
 }
 
+function handleShowRatingModal(state, action) {
+	return update(state, {
+		showRatingModal: {
+			$set: action.payload
+		}
+	})
+}
+
+function handleMapTrackModal(state, action) {
+	return update(state, {
+		showMapTrackModal: {
+			$set: action.payload
+		}
+	})
+}
+
+function handleSelectedStar(state, action) {
+	return update(state, {
+		selectedStar: {
+			$set: action.payload
+		}
+	})
+}
+
+function handleGetComment(state, action) {
+	return update(state, {
+		comment: {
+			$set: action.payload
+		}
+	})
+}
+
+function handleBookingOnMyWay(state, action) {
+	return update(state, {
+		currentBooking: {
+			$set: action.payload
+		}
+	})
+}
+
+function handleBookingLoadedAndDeliveryStarted(state, action) {
+	return update(state, {
+		currentBooking: {
+			$set: action.payload
+		}
+	})
+}
+
+function handleBookingArrivedAtDeliveryLocation(state, action) {
+	return update(state, {
+		currentBooking: {
+			$set: action.payload
+		}
+	})
+}
+
+function handleBookingJobCompleted(state, action) {
+	return update(state, {
+		currentBooking: {
+			$set: action.payload
+		}
+	})
+}
+
+function handleUpdateDriverLocation(state, action) {
+	return update(state, {
+		currentDriverLocation: {
+			$set: action.payload
+		}
+	})
+}
+
 function handleEmitBookingHistory(state, action) {
 	if (state.currentBooking) {
 		if (state.currentBooking.booking_id === action.payload.booking_id) {
@@ -142,26 +276,29 @@ function handleEmitBookingHistory(state, action) {
 	}
 }
 
-function handleShowDriver(state, action) {
-	return update(state, {
-		showDriver: {
-			$set: action.payload
-		}
-	})
-}
-
 const ACTION_HANDLERS = {
 	SET_CURRENT_BOOKING: handleSetCurrentBooking,
 	UPDATE_BOOKING: handleUpdateBooking,
 	UPDATE_BOOKING_HISTORY: handleUpdateBookingHistory,
 	EMIT_BOOKING_HISTORY: handleEmitBookingHistory,
 	UPDATE_LOADER: handleUpdateLoader,
-	SHOW_DRIVER: handleShowDriver
+	SHOW_RATING_MODAL: handleShowRatingModal,
+	SHOW_MAP_TRACK_MODAL: handleMapTrackModal,
+	SET_SELECTED_STAR: handleSelectedStar,
+	GET_COMMENT: handleGetComment,
+	UPDATE_DRIVER_LOCATION: handleUpdateDriverLocation,
+	BOOKING_ON_MY_WAY: handleBookingOnMyWay,
+	BOOKING_LOADED_AND_DELIVERY_STARTED: handleBookingLoadedAndDeliveryStarted,
+	BOOKING_ARRIVED_AT_DELIVERY_LOCATION: handleBookingArrivedAtDeliveryLocation,
+	BOOKING_JOB_COMPLETED: handleBookingJobCompleted
 }
 
 const initialState = {
 	showLoader: false,
-	showDriver: true
+	showRatingModal: false,
+	showMapTrackModal: false,
+	selectedStar: 0,
+	comment: ""
 };
 
 export function BookingDetailReducer (state = initialState, action) {
