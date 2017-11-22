@@ -10,7 +10,8 @@ import request from "../../../util/request";
 const { 
 	GET_BOOKINGS,
 	UPDATE_BOOKING_LOADER,
-	CLEAR_BOOKINGS
+	CLEAR_BOOKINGS,
+	SET_SELECTED_BOOKINGS
 } = constants;
 
 const { width, height } = Dimensions.get("window");
@@ -24,7 +25,7 @@ const LONGITUDE_DELTA = ASPECT_RATIO * LATITUDE_DELTA
 //Actions
 //--------------------
 export function getBookings(payload) {
-	return(dispatch)=>{
+	return(dispatch, store)=>{
 		dispatch({
 			type:CLEAR_BOOKINGS,
 			payload
@@ -38,6 +39,7 @@ export function getBookings(payload) {
 		request.get("http://52.220.212.6:3121/api/bookingsByAccount")
 		.query({
 			account_id: payload,
+			filter: store().bookings.selectedBookings
 		})
 		.finish((error, res)=>{
 			if(res){
@@ -53,6 +55,13 @@ export function getBookings(payload) {
 			}
 		});
 	};
+}
+
+export function setSelectedBookings(payload) {
+	return {
+		type: SET_SELECTED_BOOKINGS,
+		payload
+	}
 }
 
 //--------------------
@@ -82,14 +91,24 @@ function handleClearBookings(state, action) {
 	});
 }
 
+function handleSetSelectedBookings(state, action) {
+	return update(state, {
+		selectedBookings:{
+			$set: action.payload
+		}
+	});
+}
+
 const ACTION_HANDLERS = {
 	GET_BOOKINGS: handleGetBookings,
 	UPDATE_BOOKING_LOADER: handleBookingLoader,
-	CLEAR_BOOKINGS: handleClearBookings
+	CLEAR_BOOKINGS: handleClearBookings,
+	SET_SELECTED_BOOKINGS: handleSetSelectedBookings
 }
 
 const initialState = {
 	showBookingLoader: false,
+	selectedBookings: "current",
 	bookings: []
 };
 

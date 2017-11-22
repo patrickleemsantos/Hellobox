@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Alert, AsyncStorage, StyleSheet, TouchableOpacity } from "react-native";
-import { Container, Content, Card, CardItem, Body, List, Left, Right, Text, Header, Button, Title } from "native-base";
+import { Container, Content, Card, CardItem, Body, List, Left, Right, Text, Header, Button, Title, Segment } from "native-base";
 import { Actions } from "react-native-router-flux";
 import Icon from "react-native-vector-icons/FontAwesome";
 var Spinner = require("react-native-spinkit");
@@ -15,21 +15,47 @@ class Bookings extends React.Component {
 	}
     
 	render () {
+
+		handleSelectBooking = (value) => {
+			this.props.setSelectedBookings(value);
+			
+			AsyncStorage.getItem('account', (err, result) => {
+				let account = JSON.parse(result);           
+				this.props.getBookings(account.account_id);
+			});
+        };
+
         return (
             <Container>
 				<View style={{flex:1}}>
-					<Header style={styles.headerColor} iosBarStyle="light-content" androidStatusBarColor="#E90000">
+					<Header hasTabs style={styles.headerColor} iosBarStyle="light-content" androidStatusBarColor="#E90000">
 						<Left>
 							<Button transparent onPress={() => Actions.pop({ refresh: { bookings: true } })}>
 								<Icon name="arrow-left" style={styles.menu} /> 
 							</Button>
 						</Left>
 						<Body>
-							<Title style={styles.title}>Bookings</Title>
+							<Title style={styles.title}>Bookings</Title>		
 						</Body>
 						<Right>
 						</Right>
 					</Header>
+					<Segment>
+						<Button 
+							first 
+							active={this.props.selectedBookings === "current" ? true : false}
+							onPress={() => handleSelectBooking("current")}
+						>
+							<Text>Current</Text>
+						</Button>
+						<Button 
+							last
+							active={this.props.selectedBookings === "completed" ? true : false}
+							onPress={() => handleSelectBooking("completed")}
+						>
+							<Text>Completed</Text>
+						</Button>
+					</Segment>
 					<Content>
 						<List dataArray={this.props.bookings}
 							renderRow={(booking) =>
