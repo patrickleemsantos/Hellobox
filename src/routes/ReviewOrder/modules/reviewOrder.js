@@ -59,7 +59,7 @@ export function bookCar(payload) {
 				status:"PENDING",
 				rating: 0,
 				pick_up_date: store().additionalServices.pickUpDateTime,
-				note: store().additionalServices.bookinNote,
+				note: store().additionalServices.bookingNote,
 				timestamp: new Date().toLocaleString()
 			},
 			nearByDriver: {

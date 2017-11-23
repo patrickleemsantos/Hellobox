@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import ReviewOrder from "../components/ReviewOrder";
 import {
-
+    bookCar
 } from "../modules/reviewOrder";
 
 const mapStateToProps = (state) => ({   
@@ -26,7 +26,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapActionCreators = {
-
+    bookCar
 };
 
 export default connect(mapStateToProps, mapActionCreators)(ReviewOrder);
