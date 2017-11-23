@@ -4,6 +4,8 @@ import { HomeReducer as home } from "../routes/Home/modules/home";
 import { TrackDriverReducer as trackDriver } from "../routes/TrackDriver/modules/trackDriver"
 import { BookingsReducer as bookings } from "../routes/Bookings/modules/bookings"
 import { BookingDetailReducer as bookingDetail } from "../routes/BookingDetail/modules/bookingDetail"
+import { AdditionalServicesReducer as additionalServices } from "../routes/AdditionalServices/modules/additionalServices"
+import { ReviewOrderReducer as reviewOrder } from "../routes/ReviewOrder/modules/reviewOrder"
 
 export const makeRootReducer = () => {
     return combineReducers({
@@ -11,7 +13,9 @@ export const makeRootReducer = () => {
         home,
         trackDriver,
         bookings,
-        bookingDetail
+        bookingDetail,
+        additionalServices,
+        reviewOrder
     });
 }
 

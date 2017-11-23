@@ -1,15 +1,12 @@
 import React from "react";
 import { View, Text, StyleSheet, AsyncStorage } from "react-native";
-import { Container, Content, Drawer } from "native-base";
+import { Container, Content, Drawer, Footer, FooterTab, Button } from "native-base";
 import { Actions } from "react-native-router-flux";
 import MapContainer from "./MapContainer";
 import HeaderComponent from "../../../components/HeaderComponent";
 import SelectVehicle from "./SelectVehicle";
 import Fare from "./Fare";
-import AdditionalModal from "./AdditionalModal";
 import Fab from "./Fab";
-import FindDriver from "./FindDriver";
-import { BookingFooter } from "./BookingFooter/index";
 import SideBar from '../../../components/SideBar';
 var Spinner = require("react-native-spinkit");
 
@@ -57,7 +54,6 @@ class Home extends React.Component {
                 content={<SideBar navigator={this.navigator} account={this.props.account} />}
                 onClose={() => closeDrawer()} >
                 <Container>
-                    { (status !== "PENDING") &&
                         <View style={{flex:1}}>
                             <HeaderComponent 
                                     logo={justBoxLogo}
@@ -98,33 +94,15 @@ class Home extends React.Component {
                                 selectedVehicle={this.props.selectedVehicle} 
                             />
                             { this.props.fare &&
-                                <BookingFooter
-                                        onPressAction={() => this.props.bookCar()}
-                                        fare={this.props.fare}
-                                    />
+                                <Footer>
+                                    <FooterTab style={styles.btnFooterContainer} iosBarStyle="light-content" androidStatusBarColor="#E90000">
+                                        <Button success style={styles.button} onPress={() => Actions.additionalServices()}>
+                                            <Text style={styles.subText}>Next</Text>
+                                        </Button>
+                                    </FooterTab>
+                                </Footer>
                             }
-                            <AdditionalModal 
-                                fare={this.props.fare}
-                                additionalPrice={this.props.additionalPrice}
-                                isAdditionalModalVisible={this.props.isAdditionalModalVisible}
-                                showAdditionalModal={this.props.showAdditionalModal}
-                                addAdditionalServices={this.props.addAdditionalServices}
-                                removeAdditionalServices={this.props.removeAdditionalServices}
-                                addAdditionalPrice={this.props.addAdditionalPrice}
-                                removeAdditionalPrice={this.props.removeAdditionalPrice}
-                                additionalService1={this.props.additionalService1}
-                                additionalService2={this.props.additionalService2}
-                                additionalService3={this.props.additionalService3}
-                                additionalService4={this.props.additionalService4}
-                                additionalService5={this.props.additionalService5}
-                                additionalService6={this.props.additionalService6}
-                                updateAdditionalService={this.props.updateAdditionalService}
-                            />
                         </View>
-                        ||
-                        <FindDriver selectedAddress={this.props.selectedAddress}
-                                    updateBookingStatus={this.props.updateBookingStatus}/>
-                    }
                 </Container>
             </Drawer>
         );
@@ -144,5 +122,17 @@ const styles = StyleSheet.create({
         top: 200,
         alignSelf: "center"
     },
+    btnFooterContainer:{
+		backgroundColor:"#424949",
+	},
+	button: {
+		margin: 5,
+		height: 40
+	},
+	subText:{
+		fontSize:14,
+		fontWeight: "bold",
+		color: "#FFFF"
+	}
 });
 export default Home; 

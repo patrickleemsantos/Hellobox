@@ -12,7 +12,6 @@ const styles = {
 		fontWeight: "bold",
 		color: "#FFFF"
 	}
-
 };
 
 export default styles;

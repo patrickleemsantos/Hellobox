@@ -17,19 +17,6 @@ const { GET_CURRENT_LOCATION,
 		GET_DISTANCE_MATRIX,
 		GET_FARE,
 		GET_SELECTED_VEHICLE,
-		SHOW_ADDITIONAL_MODAL,
-		ADD_ADDITIONAL_PRICE,
-		REMOVE_ADDITIONAL_PRICE,
-		GET_ADDITIONAL_SERVICES,
-		REMOVE_ADDITIONAL_SERVICES,
-		ADDITIONAL_SERVICE_1,
-		ADDITIONAL_SERVICE_2,
-		ADDITIONAL_SERVICE_3,
-		ADDITIONAL_SERVICE_4,
-		ADDITIONAL_SERVICE_5,
-		ADDITIONAL_SERVICE_6,
-		UPDATE_ADDITIONAL_SERVICE,
-		BOOK_CAR,
 		GET_NEARBY_DRIVERS,
 		UPDATE_SEARCH_ADDRESS_LOADING_STATUS,
 		CLOSE_RESULT_TYPE,
@@ -105,14 +92,6 @@ export function getInputData(payload) {
 export function toggleSearchResultmodal(payload) {
 	return{
 		type: TOGGLE_SEARCH_RESULT,
-		payload
-	}
-}
-
-//Show additional modal
-export function showAdditionalModal(payload) {
-	return{
-		type: SHOW_ADDITIONAL_MODAL,
 		payload
 	}
 }
@@ -257,237 +236,6 @@ export function getSelectedVehicle(payload) {
 				payload: fare
 			})
 		}
-	}
-}
-
-//Add additional services
-export function addAdditionalServices(payload) {
-	return(dispatch, store) => {
-		const arrAdditionalServices = store().home.additionalServices;
-
-		arrAdditionalServices.push(payload);
-
-		dispatch({
-			type: GET_ADDITIONAL_SERVICES,
-			payload: arrAdditionalServices
-		})
-	}
-}
-
-//Remove additional services
-export function removeAdditionalServices(payload) {
-	return(dispatch, store) => {
-		const arrAdditionalServices = store().home.additionalServices;
-		
-		for(var i = 0; i <= arrAdditionalServices.length-1; i++){
-			if (arrAdditionalServices[i].service === payload.service) {
-				arrAdditionalServices.splice(i, 1);
-			}
-		}
-
-		dispatch({
-			type: GET_ADDITIONAL_SERVICES,
-			payload: arrAdditionalServices
-		})
-	}
-}
-
-//Add additional price 
-export function addAdditionalPrice(payload) {
-	return(dispatch, store) => {
-		dispatch({
-			type: ADD_ADDITIONAL_PRICE,
-			payload: store().home.additionalPrice + payload
-		})
-
-		// if (store().home.fare != undefined) {
-		// 	dispatch({
-		// 		type: GET_FARE,
-		// 		payload: store().home.fare + payload
-		// 	})
-		// }
-	}
-}
-
-//Remove additional price
-export function removeAdditionalPrice(payload) {
-	return(dispatch, store) => {
-		dispatch({
-			type: ADD_ADDITIONAL_PRICE,
-			payload: store().home.additionalPrice - payload
-		})
-
-		// if (store().home.fare != undefined) {
-		// 	dispatch({
-		// 		type: GET_FARE,
-		// 		payload: store().home.fare - payload
-		// 	})
-		// }
-	}
-}
-
-//Add additional service 1: Goods longer than 6ft (P50)
-export function additionalService1(payload) {
-	return{
-		type: ADDITIONAL_SERVICE_1,
-		payload
-	}
-}
-
-//Add additional service 2: Borrow cart (P60)
-export function additionalService2(payload) {
-	return{
-		type: ADDITIONAL_SERVICE_2,
-		payload
-	}
-}
-
-//Add additional service 3: Mover (P100)
-export function additionalService3(payload) {
-	return{
-		type: ADDITIONAL_SERVICE_3,
-		payload
-	}
-}
-
-//Add additional service 4: Pets (P50)
-export function additionalService4(payload) {
-	return{
-		type: ADDITIONAL_SERVICE_4,
-		payload
-	}
-}
-
-//Add additional service 5: New Car (P100)
-export function additionalService5(payload) {
-	return{
-		type: ADDITIONAL_SERVICE_5,
-		payload
-	}
-}
-
-//Add additional service 6: Dunpler/Construction waste (P65)
-export function additionalService6(payload) {
-	return{
-		type: ADDITIONAL_SERVICE_6,
-		payload
-	}
-}
-
-export function updateAdditionalService(payload) {
-	const { service, value } = payload;
-
-	if (service == 1) {
-		return(dispatch, store) => {
-			dispatch({
-				type: ADDITIONAL_SERVICE_1,
-				payload: value
-			})
-		}
-	}
-
-	if (service == 2) {
-		return(dispatch, store) => {
-			dispatch({
-				type: ADDITIONAL_SERVICE_2,
-				payload: value
-			})
-		}
-	}
-
-	if (service == 3) {
-		return(dispatch, store) => {
-			dispatch({
-				type: ADDITIONAL_SERVICE_3,
-				payload: value
-			})
-		}
-	}
-
-	if (service == 4) {
-		return(dispatch, store) => {
-			dispatch({
-				type: ADDITIONAL_SERVICE_4,
-				payload: value
-			})
-		}
-	}
-
-	if (service == 5) {
-		return(dispatch, store) => {
-			dispatch({
-				type: ADDITIONAL_SERVICE_5,
-				payload: value
-			})
-		}
-	}
-
-	if (service == 6) {
-		return(dispatch, store) => {
-			dispatch({
-				type: ADDITIONAL_SERVICE_6,
-				payload: value
-			})
-		}
-	}
-
-}
-
-//Book Car
-export function bookCar(payload) {
-	var randomize = require('randomatic');
-
-	return (dispatch, store) => {
-		const nearByDrivers = store().home.nearByDrivers;
-		const nearByDriver = nearByDrivers[Math.floor(Math.random() * nearByDrivers.length)];
-		const payload = {
-			data:{
-				booking_id: randomize('0000'),
-				account:{
-					account_id: store().login.account.account_id,
-					date_of_birth: store().login.account.date_of_birth,
-					first_name: store().login.account.first_name,
-					last_name: store().login.account.last_name,
-					profile_picture: store().login.account.profile_picture,
-					rating: store().login.account.rating
-				},
-				driver: nearByDriver.driver,
-				pick_up:{
-					address:store().home.selectedAddress.selectedPickUp.address,
-					name:store().home.selectedAddress.selectedPickUp.name,
-					latitude:store().home.selectedAddress.selectedPickUp.latitude,
-					longitude:store().home.selectedAddress.selectedPickUp.longitude
-				},
-				drop_off:{
-					address:store().home.selectedAddress.selectedDropOff.address,
-					name:store().home.selectedAddress.selectedDropOff.name,
-					latitude:store().home.selectedAddress.selectedDropOff.latitude,
-					longitude:store().home.selectedAddress.selectedDropOff.longitude
-				},
-				vehicle:store().home.selectedVehicle,
-				fare:store().home.fare,
-				additional_price:store().home.additionalPrice,
-				additional_services:store().home.additionalServices,
-				status:"PENDING",
-				rating: 0,
-				timestamp: new Date().toLocaleString()
-			},
-			nearByDriver: {
-				socket_id: nearByDriver.socket_id,
-				driver_id: nearByDriver.driver_id,
-				latitude: nearByDriver.coordinate.coordinates[1],
-				longitude: nearByDriver.coordinate.coordinates[0]
-			}
-		};
-
-		request.post("http://52.220.212.6:3121/api/bookings")
-		.send(payload)
-		.finish((error, res)=>{
-			dispatch({
-				type:BOOK_CAR,
-				payload:res.body
-			});
-		});
 	}
 }
 
@@ -646,14 +394,6 @@ function handleToggleSearchResult(state, action){
 	}
 }
 
-function handleShowAdditionalModal(state, action) {
-	return update(state, {
-		isAdditionalModalVisible: {
-			$set: action.payload
-		}
-	})
-}
-
 function handleGetAddressPredictions(state, action) {
 	return update(state, {
 		predictions: {
@@ -705,145 +445,6 @@ function handleGetSelectedVehicle(state, action) {
 	})
 }
 
-function handleGetAdditionalServices(state, action) {
-	return update(state, {
-		additionalServices: {
-			$set: action.payload
-		}
-	})
-}
-
-function handleAddAdditionalPrice(state, action) {
-	return update(state, {
-		additionalPrice: {
-			$set: action.payload
-		}
-	})
-}
-
-function handleRemoveAdditionalPrice(state, action) {
-	return update(state, {
-		additionalPrice: {
-			$set: action.payload
-		}
-	})
-}
-
-function handleAdditionalService1(state, action) {
-	return update(state, {
-		additionalService1: {
-			$set: action.payload
-		}
-	})
-}
-
-function handleAdditionalService1(state, action) {
-	return update(state, {
-		additionalService1: {
-			$set: action.payload
-		}
-	})
-}
-
-function handleAdditionalService2(state, action) {
-	return update(state, {
-		additionalService2: {
-			$set: action.payload
-		}
-	})
-}
-
-function handleAdditionalService3(state, action) {
-	return update(state, {
-		additionalService3: {
-			$set: action.payload
-		}
-	})
-}
-
-function handleAdditionalService4(state, action) {
-	return update(state, {
-		additionalService4: {
-			$set: action.payload
-		}
-	})
-}
-
-function handleAdditionalService5(state, action) {
-	return update(state, {
-		additionalService5: {
-			$set: action.payload
-		}
-	})
-}
-
-function handleAdditionalService6(state, action) {
-	return update(state, {
-		additionalService6: {
-			$set: action.payload
-		}
-	})
-}
-
-function handleAdditionalService(state, action) {
-	if (action.payload == 1) {
-		return update(state, {
-			additionalService1: {
-				$set: action.payload
-			}
-		})
-	}
-
-	if (action.payload == 2) {
-		return update(state, {
-			additionalService2: {
-				$set: action.payload
-			}
-		})
-	}
-
-	if (action.payload == 3) {
-		return update(state, {
-			additionalService3: {
-				$set: action.payload
-			}
-		})
-	}
-
-	if (action.payload == 4) {
-		return update(state, {
-			additionalService4: {
-				$set: action.payload
-			}
-		})
-	}
-
-	if (action.payload == 5) {
-		return update(state, {
-			additionalService5: {
-				$set: action.payload
-			}
-		})
-	}
-
-	if (action.payload == 6) {
-		return update(state, {
-			additionalService6: {
-				$set: action.payload
-			}
-		})
-	}
-}
-
-// Handle book car
-function handleBookCar(state, action) {
-	return update(state, {
-		booking: {
-			$set: action.payload
-		}
-	})
-}
-
 // Handle remove booking
 function handleRemoveBooking(state, action) {
 	return update(state, {
@@ -855,24 +456,6 @@ function handleRemoveBooking(state, action) {
 		},
 		fare: {
 			$set: null
-		},
-		additionalService1: {
-			$set: false
-		},
-		additionalService2: {
-			$set: false
-		},
-		additionalService3: {
-			$set: false
-		},
-		additionalService4: {
-			$set: false
-		},
-		additionalService5: {
-			$set: false
-		},
-		additionalService6: {
-			$set: false
 		}
 	});
 }
@@ -927,18 +510,6 @@ const ACTION_HANDLERS = {
 	GET_DISTANCE_MATRIX: handleGetDistanceMatrix,
 	GET_FARE: handleGetFare,
 	GET_SELECTED_VEHICLE: handleGetSelectedVehicle,
-	SHOW_ADDITIONAL_MODAL: handleShowAdditionalModal,
-	GET_ADDITIONAL_SERVICES: handleGetAdditionalServices,
-	ADD_ADDITIONAL_PRICE: handleAddAdditionalPrice,
-	REMOVE_ADDITIONAL_PRICE: handleRemoveAdditionalPrice,
-	ADDITIONAL_SERVICE_1: handleAdditionalService1,
-	ADDITIONAL_SERVICE_2: handleAdditionalService2,
-	ADDITIONAL_SERVICE_3: handleAdditionalService3,
-	ADDITIONAL_SERVICE_4: handleAdditionalService4,
-	ADDITIONAL_SERVICE_5: handleAdditionalService5,
-	ADDITIONAL_SERVICE_6: handleAdditionalService6,
-	UPDATE_ADDITIONAL_SERVICE: handleAdditionalService,
-	BOOK_CAR: handleBookCar,
 	GET_NEARBY_DRIVERS:handleGetNearbyDrivers,
 	UPDATE_SEARCH_ADDRESS_LOADING_STATUS:handleUpdateSearchAddressLoadingStatus,
 	CLOSE_RESULT_TYPE:handleCloseResultType,
@@ -956,14 +527,6 @@ const initialState = {
 	resultTypes: {},
 	selectedAddress: {},
 	selectedVehicle: "motorcycle",
-	additionalServices: [],
-	additionalPrice: 0,
-	additionalService1: false,
-	additionalService2: false,
-	additionalService3: false,
-	additionalService4: false,
-	additionalService5: false,
-	additionalService6: false,
 	isSearchAddressLoading: false,
 	isMapReady: false
 };

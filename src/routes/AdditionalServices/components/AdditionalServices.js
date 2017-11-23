@@ -1,413 +1,271 @@
 import React from "react";
 import { View, Alert, AsyncStorage, StyleSheet } from "react-native";
-import { Container, Content, Body, Left, Right, Text, Header, Button, Title, Footer, FooterTab, Thumbnail, List, ListItem } from "native-base";
+import { Container, Content, Body, Left, Right, Text, Header, Button, Title, Footer, FooterTab, Thumbnail, List, ListItem, Card, CardItem, CheckBox, Item, Input } from "native-base";
 import { Actions } from "react-native-router-flux";
-import StarRating from 'react-native-star-rating';
 import Icon from "react-native-vector-icons/FontAwesome";
-import RatingModal from "./RatingModal";
-import MapTrack from "./MapTrack";
+import DatePicker from 'react-native-datepicker'
+var dateFormat = require('dateformat');
 
-var Spinner = require("react-native-spinkit");
-
-const carMarker = require("../../../assets/images/carMarker.png");
-
-class BookingDetail extends React.Component {
-    
+class AdditionalServices extends React.Component {
     componentDidMount() {
-        this.props.setCurrentBooking(this.props.booking);
-        this.props.getBookingHistory(this.props.booking.booking_id);
-        if (this.props.booking.status === "JOB COMPLETED" && parseInt(this.props.booking.rating) === 0) {
-            this.props.setShowRatingModal(true);
-        }   
-        this.props.trackDriver();
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        { this.props.currentBooking &&
-            AsyncStorage.getItem('account', (err, result) => {
-                let account = JSON.parse(result);
-                if (account.account_id === this.props.currentBooking.account.account_id) {   
-                    if (prevProps.currentBooking !== this.props.currentBooking){
-                        if (this.props.currentBooking.status === "JOB COMPLETED"){ 
-                            if (this.props.currentBooking.status === "JOB COMPLETED" && parseInt(this.props.currentBooking.rating) === 0) {
-                                this.props.setShowRatingModal(true);
-                            }
-                        }
-                    }
-                }
-            });
-        } 
+        
+        this.props.setPickUpDateTime(dateFormat(new Date(), "mmmm, dddd yyyy, h:MM:ss TT"));
+        console.log(dateFormat(new Date(), "mmmm, dddd yyyy, h:MM:ss TT"));
     }
 
     render () {    
-        handleBookingUpdate = (value) => {
-            if (this.props.currentBooking.status != "APPROVED") {
-                Alert.alert('Hellobox', 'The status of your booking is already ' + this.props.currentBooking.status);
-            } else {
-                Alert.alert(
-                    'Hellobox',
-                    'Are you sure you want to cancel your booking?',
-                    [
-                        {text: 'Cancel', style: 'cancel'},
-                        {text: 'OK', onPress: () => this.props.updateBookingStatus(value)},
-                    ],
-                    { cancelable: false }
-                )
+        handAdditionalService = (price, service, description, value) => {
+            this.props.updateAdditionalService({
+                service,
+                value: value
+            });
+    
+            if (value == true) {
+                this.props.addAdditionalPrice(price);
+                this.props.addAdditionalServices({
+                    service,
+                    price,
+                    value: description
+                });
+            } 
+    
+            if (value == false) {
+                this.props.removeAdditionalPrice(price);
+                this.props.removeAdditionalServices({
+                    service,
+                    price,
+                    value: description
+                });
             }
+        }
+
+        handleSetBookingNote = (value) => {
+            this.props.setBookingNote(value);
         }
 
         return (
             <Container>
-                { this.props.currentBooking &&                          
-                    <View style={{flex:1}}>
-                        <Header style={styles.headerColor} iosBarStyle="light-content" androidStatusBarColor="#E90000">
-                            <Left>
-                                <Button transparent onPress={() => Actions.pop()}>
-                                    <Icon name="arrow-left" style={styles.menu} /> 
-                                </Button>
-                            </Left>
-                            <Body>
-                                <Title style={styles.job}>JOB ID: {this.props.currentBooking.booking_id}</Title>
-                            </Body>
-                            <Right>
-                            </Right>
-                        </Header> 
-                        <Content>
-                            <View style={styles.driverContainer}>
-                                <Thumbnail source={{uri: this.props.currentBooking.driver.profile_picture}} />
-                                <View style={styles.driverDetailsContainer}>
-                                    <Text style={styles.driverName}>{this.props.currentBooking.driver.first_name + " " + this.props.currentBooking.driver.last_name}</Text>
-                                    <Text style={styles.driverVehicle}>{this.props.currentBooking.driver.vehicle.body_type + " " + this.props.currentBooking.driver.vehicle.model + " " + this.props.currentBooking.driver.vehicle.plate_number}</Text>
-                                </View>
-                            </View>
-                            <View style={styles.statusContainter}>
-                                <Text style={styles.statusValue}>Status: {this.props.currentBooking.status}</Text>
-                            </View>
-                            <View style={styles.priceContainter}>
-                                <Text style={styles.priceValue}>Fare: P {this.props.currentBooking.fare}</Text>
-                            </View>
-                            <View style={styles.additionalPriceContainter}>
-                                <Text style={styles.additionalPriceValue}>Additional Price: P {this.props.currentBooking.additional_price}</Text>
-                            </View>
-                            <View style={styles.locationContainter}>
-                                <View style={styles.timeContainer}>
-                                    <Icon style={styles.timeIcon} name="clock-o" />
-                                    <View style={styles.locationValueContainer}>
-                                        <Text style={styles.locationTime}>{this.props.currentBooking.timestamp}</Text>
-                                    </View>
-                                </View>
-                                <View style={styles.pickUpContainer}>
-                                    <Icon style={styles.fromIcon} name="map-marker" />
-                                    <View style={styles.locationValueContainer}>
-                                        <Text style={styles.locationPickup}>{this.props.currentBooking.pick_up.address}</Text>
-                                    </View>
-                                </View>
-                                <View style={styles.ellipsisContainer}>
-                                    <Icon style={styles.ellipsisIcon} name="ellipsis-v" />
-                                </View>
-                                <View style={styles.dropOffContainer}>
-                                    <Icon style={styles.destinationIcon} name="location-arrow" />
-                                    <View style={styles.locationValueContainer}>
-                                        <Text style={styles.locationDropOff}>{this.props.currentBooking.drop_off.address}</Text>
-                                    </View>
-                                </View>
-                            </View>
+                <Header style={{backgroundColor: "#E90000"}} iosBarStyle="light-content" androidStatusBarColor="#E90000">
+                <Left>
+                    <Button transparent onPress={() => Actions.pop()}>
+                        <Icon name="arrow-left" style={styles.menu} />
+                    </Button>
+                </Left>
+                <Body>
+                    <Text style={styles.headerText}>Hellobox</Text>
+                </Body>
+                <Right>
+                </Right>
+                </Header>
+                    <Content>
+                        {/* <Card>
+                            <CardItem header>
+                                <Text style={styles.title}>Passenger</Text>
+                            </CardItem>
+                            <CardItem>
+                                <Body>
+                                    <Grid>
+                                        <Col style={styles.btnPassenger}>
+                                            <Button transparent>
+                                                <Icon name="minus" style={styles.btnIcons} /> 
+                                            </Button>
+                                        </Col>
+                                        <Col style={styles.btnPassenger}>
+                                            <Text>
+                                            1 Passenger
+                                            </Text>
+                                        </Col>
+                                        <Col style={styles.btnPassenger}>
+                                            <Button transparent>
+                                                <Icon name="plus" style={styles.btnIcons} /> 
+                                            </Button>
+                                        </Col>
+                                    </Grid>
 
-                            { this.props.currentBooking.additional_services && 
-                                <View style={styles.additionalContainer}>
-                                    <Text style={styles.additionalHeader}>Additional:</Text>
-                                    <List dataArray={this.props.currentBooking.additional_services.value}
-                                        renderRow={(item) =>
-                                        <View style={styles.additionalListContainer}>
-                                            <Icon style={styles.additionalIcon} name="plus" />
-                                            <View style={styles.additionalValueContainer}>
-                                                <Text style={styles.additionalText}>{item}</Text>
-                                            </View>
-                                        </View>
-                                        }>
-                                    </List>
+                                </Body>
+                            </CardItem>
+                            <CardItem footer>
+                            </CardItem>
+                        </Card> */}
+                        <Card>
+                            <CardItem>
+                                <View style={{flex: 1, flexDirection: "column"}}>
+                                    <Text style={styles.title}>Pick-up Time</Text>
+                                    {/* <View style={{flex:1, justifyContent: 'center', alignItems: 'center'}}> */}
+                                        <DatePicker
+                                            style={{width: 300}}
+                                            date={this.props.pickUpDateTime}
+                                            mode="datetime"
+                                            placeholder="select date"
+                                            format="MMMM Do YYYY, h:mm:ss a"
+                                            minDate={this.props.pickUpDateTime}
+                                            // maxDate="2016-06-01"
+                                            confirmBtnText="Confirm"
+                                            cancelBtnText="Cancel"
+                                            showIcon={true}
+                                            customStyles={{
+                                                dateIcon: {
+                                                    position: 'absolute',
+                                                    left: 0,
+                                                    top: 4,
+                                                    marginLeft: 0
+                                                },
+                                                dateInput: {
+                                                    marginLeft: 36,
+                                                    borderWidth: 0
+                                                }
+                                            }}
+                                            onDateChange={(date) => {this.props.setPickUpDateTime(date)}}
+                                            />
+                                    {/* </View> */}
                                 </View>
-                            }
-
-                            { this.props.bookingHistory && 
-                                <View style={styles.historyContainer}>
-                                    <Text style={styles.historyHeader}>History:</Text>
-                                    <List dataArray={this.props.bookingHistory}
-                                        renderRow={(item) =>
-                                        <View style={styles.historyListContainer}>
-                                            <Icon style={styles.historyIcon} name="history" />
-                                            <View style={styles.historyValueContainer}>
-                                                <Text style={styles.historyText}>{item.status}</Text>
-                                            </View>
-                                            <View style={styles.historyTimeContainer}>
-                                                <Text style={styles.historyTimeText}>{item.timestamp}</Text>
-                                            </View>
-                                        </View>
-                                        }>
-                                    </List>
-                                </View>
-                            }
-
-                            { (this.props.currentBooking.status == "JOB COMPLETED") && 
-                                <View style={styles.ratingContainer}>
-                                    <Text style={styles.ratingHeader}>You rated</Text>
-                                    <View stye={styles.startContainer}>
-                                        <StarRating
-                                            style={styles.starRating}                                            
-                                            disabled={true}
-                                            maxStars={5}
-                                            rating={parseInt(this.props.currentBooking.rating)}
-                                            selectedStar={(rating) => this.onStarRatingPress(rating)}
-                                            starColor={'red'}
+                            </CardItem>
+                        </Card>
+                        <Card>
+                            <CardItem>
+                                <View style={{flex: 1, flexDirection: "column"}}>
+                                    <Text style={styles.title}>Extra Requirements</Text>
+                                    <ListItem>
+                                        <CheckBox 
+                                            checked={this.props.additionalService1} 
+                                            color="#E90000"
+                                            onPress={() => handAdditionalService(50, 1, "Goods longer than 6ft", !this.props.additionalService1)}
                                         />
+                                        <Body>
+                                            <Text style={styles.additionalText}>Goods longer than 6ft (₱50)</Text>
+                                        </Body>
+                                    </ListItem>
+                                    <ListItem>
+                                        <CheckBox 
+                                            checked={this.props.additionalService2} 
+                                            color="#E90000"
+                                            onPress={() => handAdditionalService(60, 2, "Borrow cart(s)", !this.props.additionalService2)}
+                                        />
+                                        <Body>
+                                            <Text style={styles.additionalText}>Borrow cart(s) (₱60)</Text>
+                                        </Body>
+                                    </ListItem>
+                                    <ListItem>
+                                        <CheckBox 
+                                            checked={this.props.additionalService3}
+                                            color="#E90000"
+                                            onPress={() => handAdditionalService(100, 3, "Mover", !this.props.additionalService3)}
+                                        />
+                                        <Body>
+                                            <Text style={styles.additionalText}>Mover (₱100)</Text>
+                                        </Body>
+                                    </ListItem>
+                                    <ListItem>
+                                        <CheckBox 
+                                            checked={this.props.additionalService4}
+                                            color="#E90000"
+                                            onPress={() => handAdditionalService(50, 4, "Pets", !this.props.additionalService4)}
+                                        />
+                                        <Body>
+                                            <Text style={styles.additionalText}>Pets (₱50)</Text>
+                                        </Body>
+                                    </ListItem>
+                                    <ListItem>
+                                        <CheckBox 
+                                            checked={this.props.additionalService5} 
+                                            color="#E90000"
+                                            onPress={() => handAdditionalService(100, 5, "New car", !this.props.additionalService5)}
+                                        />
+                                        <Body>
+                                            <Text style={styles.additionalText}>New car (₱100)</Text>
+                                        </Body>
+                                    </ListItem>
+                                    <ListItem>
+                                        <CheckBox 
+                                            checked={this.props.additionalService6}
+                                            color="#E90000"
+                                            onPress={() => handAdditionalService(65, 6, "Dumper / Construction waste", !this.props.additionalService6)}
+                                        />
+                                        <Body>
+                                            <Text style={styles.additionalText}>Dumper / Construction waste (₱65)</Text>
+                                        </Body>
+                                    </ListItem>
+                                </View>
+                            </CardItem>
+                        </Card>
+                        <Card>
+                            <CardItem>
+                                <View style={{flex: 1, flexDirection: "column"}}>
+                                    <Text style={styles.title}>Note</Text>
+                                    <View style={{flex: 1, flexDirection: "column"}}>
+                                        <Item>
+                                            <Input style={{fontSize: 14, marginBottom: 9}} placeholder={"Enter note..."} multiline={true} onChangeText={ handleSetBookingNote.bind(this) }/>
+                                        </Item>
                                     </View>
                                 </View>
-                            }
-                        </Content> 
-                        { (this.props.currentBooking.status != "JOB COMPLETED" && this.props.currentBooking.status != "CANCELLED") && 
-                            <Footer>
-                                <FooterTab style={styles.footerContainer}>
-                                    <Button info disabled={((this.props.currentBooking.status !== "APPROVED" && this.props.currentBooking.status !== "CANCELLED") ? false : true)} style={styles.button} onPress={() => this.props.setShowMapTrackModal(true)}>
-                                        <Text style={styles.subText}>LIVE TRACK</Text>
-                                    </Button>
-                                    <Button danger disabled={(this.props.currentBooking.status === "CANCELLED" ? true : false)} style={styles.button} onPress={() => handleBookingUpdate("CANCELLED")}>
-                                        <Text style={styles.subText}>CANCEL</Text>
-                                    </Button>
-                                </FooterTab>
-                            </Footer>
-                        }
-                    </View>
-            
-                    ||
-                    
-                    <View style={styles.floatView}>
-                        <Spinner style={styles.spinner} isVisible={true} size={40} type="Wave" color="#ffffff"/>
-                    </View>
-                }    
-
-                <RatingModal 
-                    showRatingModal={this.props.showRatingModal}
-                    booking={this.props.booking}
-                    selectedStar={this.props.selectedStar}
-                    setSelectedStar={this.props.setSelectedStar}
-                    getComment={this.props.getComment}  
-                    comment={this.props.comment}
-                    saveComment={this.props.saveComment}
-                />
-                
-                { (this.props.currentBooking && this.props.currentDriverLocation) &&     
-                    <MapTrack
-                        showMapTrackModal={this.props.showMapTrackModal}
-                        trackDriver={this.props.trackDriver}
-                        region={this.props.region}
-                        carMarker={carMarker}
-                        currentDriverLocation={this.props.currentDriverLocation}
-                        dropOff={this.props.currentBooking.drop_off}
-                        pickUp={this.props.currentBooking.pick_up}
-                        driverInfo={this.props.currentBooking.driver}
-                        setShowMapTrackModal={this.props.setShowMapTrackModal}
-                    />
-                }
+                            </CardItem>
+                        </Card>
+                    </Content>
+                    {(this.props.fare == undefined) ? (
+                        <Footer style={styles.footerContainer}>
+                            <Text style={styles.fare}> PRICE: </Text><Text style={styles.amount}>₱ 0</Text>
+                        </Footer>
+                    ) : (
+                        <Footer style={styles.footerContainer}>
+                            <Text style={styles.fare}> PRICE: </Text><Text style={styles.amount}>₱ {this.props.fare + this.props.additionalPrice}</Text>
+                        </Footer>
+                    )}
+                    <Footer>
+                        <FooterTab style={styles.btnFooterContainer} iosBarStyle="light-content" androidStatusBarColor="#E90000">
+                            <Button success style={styles.button} onPress={() => Actions.reviewOrder()}>
+                                <Text style={styles.subText}>Review Order</Text>
+                            </Button>
+                        </FooterTab>
+                    </Footer>
             </Container>
         )
     }
 }
 
-
-const styles = StyleSheet.create({
-    headerColor: {
-        backgroundColor: "#E90000"
-    },
-    job: {
-        fontWeight: "bold",
-        fontSize: 15,
-        color: "#FFFFFF"
-    },
+const styles = StyleSheet.create({    
     menu: {
 		color: "#fff",
 		fontSize: 20
     },
-    driverContainer: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
-        paddingTop: 7,
-        paddingBottom: 7,
-        paddingLeft: 10
+    btnIcons: {
+        color: "#E90000",
+		fontSize: 20
     },
-    driverDetailsContainer: {
-        flex: 1,
-        paddingLeft: 10
+    headerText:{
+		color:"#fff",
+		fontSize:18
     },
-    driverName: {
+    title: {
+        color: "#808080",
         fontSize: 14,
-        fontWeight: "bold"
-    },
-    driverVehicle: {
-        fontSize: 12,
-    },
-    statusContainter: {
-        flex: 1,
-        backgroundColor: "#F4F6F6",
-        paddingLeft: 10,
-        paddingTop: 10,
-        paddingBottom: 10
-    },
-    statusValue: {
-        fontSize: 12,
-        fontWeight: "bold"
-    },
-    priceContainter: {
-        flex: 1,
-        backgroundColor: "#CCD1D1",
-        paddingLeft: 10,
-        paddingTop: 10,
-        paddingBottom: 10
-    },
-    priceValue: {
-        fontSize: 12,
-        fontWeight: "bold"
-    },
-    additionalPriceContainter: {
-        flex: 1,
-        backgroundColor: "#E5E8E8",
-        paddingLeft: 10,
-        paddingTop: 10,
-        paddingBottom: 10
-    },
-    additionalPriceValue: {
-        fontSize: 12,
-        fontWeight: "bold"
-    },
-    locationContainter: {
-        flex: 1,
-        backgroundColor: "#FFFFFF",
-        flexDirection: 'column',
-        paddingLeft: 10,
-        paddingTop: 15,
-        paddingBottom: 15
-    },
-    locationTime: {
-        fontSize: 13,
-    },
-    locationPickup: {
-        fontSize: 13,
-    },
-    locationDropOff: {
-        fontSize: 13,
-    },
-    locationValueContainer: {
-        flex: 1,
-        paddingLeft: 10
-    },
-    additionalValueContainer: {
-        flex: 1,
-        paddingLeft: 10
-    },
-    pickUpContainer: {
-        flex: 1,
-        flexDirection: 'row',
-        marginBottom: 2
-    },
-    timeContainer: {
-        flex: 1,
-        flexDirection: 'row',
-        marginBottom: 11
-    },
-    ellipsisContainer: {
-        flex: 1,
-        paddingLeft: 5
-    },
-    dropOffContainer: {
-        flex: 1,
-        flexDirection: 'row'
-    },
-    timeIcon:{
-        fontSize:20,
-        color:"#00FF00",
-	},
-    fromIcon:{
-        fontSize:20,
-        color:"#E90000",
-	},
-	destinationIcon:{
-        fontSize:20,
-        color:"#999999",
-    },
-    additionalIcon:{
-        fontSize:15,
-        color:"#E90000",
-	},
-    ellipsisIcon: {
-        fontSize:10,
-        color:"#3498DB",
-    },
-    historyIcon:{
-        fontSize:20,
-        color:"#E90000",
-	},
-    additionalContainer: {
-        flex: 1,
-        backgroundColor: "#FBFCFC",
-        paddingLeft: 10,
-        paddingTop: 10,
-        paddingBottom: 10
-    },
-    additionalText: {
-        flex: 1,
-        fontSize: 13,
-    },
-    additionalHeader: {
-        fontSize: 13,
-        fontWeight: "bold",
         marginBottom: 10
     },
-    additionalListContainer: {
-        flex: 1,
-        flexDirection: 'row',
-        marginBottom: 11
+    btnPassenger: {
+        flex: 1, 
+        flexDirection: 'row', 
+        justifyContent: 'center', 
+        alignItems: 'center'
     },
-    historyContainer: {
-        flex: 1,
-        backgroundColor: "#FFFFFF",
-        paddingLeft: 10,
-        paddingTop: 10,
-        paddingBottom: 10
+    footerContainer: {
+        backgroundColor: '#fff'
     },
-    historyText: {
-        flex: 1,
-        fontSize: 13,
+    fare:{
+        paddingTop:15,
+        fontWeight:"bold",
+        fontSize: 18,
     },
-    historyTimeText: {
-        flex: 1,
-        fontSize: 10,
-        textAlign: 'right'
+    amount:{
+        paddingTop:15,
+        fontWeight:"bold",
+        fontSize: 18,
     },
-    historyHeader: {
-        fontSize: 13,
-        fontWeight: "bold",
-        marginBottom: 15
+    additionalText: {
+        fontSize: 13
     },
-    historyListContainer: {
-        flex: 1,
-        flexDirection: 'row',
-        marginBottom: 11
-    },
-    historyValueContainer: {
-        flex: 1,
-        paddingLeft: 10
-    },
-    historyTimeContainer: {
-        flex: 1,
-        paddingRight: 10
-    },
-    footerContainer:{
-        // paddingTop: 10,
-		backgroundColor:"#fff",
-    },
-    button: {
+    btnFooterContainer:{
+		backgroundColor:"#424949",
+	},
+	button: {
 		margin: 5,
 		height: 40
 	},
@@ -415,36 +273,7 @@ const styles = StyleSheet.create({
 		fontSize:14,
 		fontWeight: "bold",
 		color: "#FFFF"
-    },
-    ratingContainer: {
-        flex: 1,
-        marginTop: 20,
-        marginBottom: 30,
-        marginLeft: 80,
-        marginRight: 80
-    },
-    ratingHeader: {
-        fontSize: 13,
-        fontWeight: "bold",
-        marginBottom: 10,
-        textAlign: "center"
-    },
-    startContainer: {
-        paddingLeft: 30,
-        paddingRight: 30
-    },
-    starRating: {
-        textAlign: "center"
-    },
-    spinner: {
-        top: 200,
-        color: "#E90000",
-        alignSelf: "center"
-    },
-    floatView: {
-        justifyContent: 'center',
-        alignItems: 'center',
-    }
-  });
+	}
+});
 
-export default BookingDetail;
+export default AdditionalServices;

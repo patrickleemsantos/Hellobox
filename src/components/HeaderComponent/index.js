@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, Image } from "react-native";
 import { Header, Left, Body, Right, Button, Drawer } from "native-base";
+import { Actions } from "react-native-router-flux";
 import Icon from "react-native-vector-icons/FontAwesome";
 import styles from "./HeaderComponentStyles";
 
@@ -20,7 +21,8 @@ export const HeaderComponent = ({logo, showAdditionalModal}) => {
             </Body>
             <Right>
                 <Button transparent>
-                    {<Icon name="plus" onPress={() => showAdditionalModal(true)} style={styles.menu} /> }
+                    {/* <Icon name="plus" onPress={() => showAdditionalModal(true)} style={styles.menu} /> */}
+                    {/* <Icon name="plus" onPress={() => Actions.additionalServices()} style={styles.menu} /> */}
                 </Button>
             </Right>
         </Header>

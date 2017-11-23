@@ -1,20 +1,8 @@
 import { connect } from "react-redux";
-import AdditionalServices from "../components/AdditionalServices";
+import ReviewOrder from "../components/ReviewOrder";
 import {
-    addAdditionalServices,
-    removeAdditionalServices,
-    addAdditionalPrice,
-    removeAdditionalPrice,
-    additionalService1,
-    additionalService2,
-    additionalService3,
-    additionalService4,
-    additionalService5,
-    additionalService6,
-    updateAdditionalService,
-    setPickUpDateTime,
-    setBookingNote
-} from "../modules/additionalServices";
+
+} from "../modules/reviewOrder";
 
 const mapStateToProps = (state) => ({   
     inputData: state.home.inputData || {},
@@ -37,14 +25,8 @@ const mapStateToProps = (state) => ({
     bookingNote: state.additionalServices.bookingNote || "",
 });
 
-const mapActionCreators = { 
-    addAdditionalServices,
-    removeAdditionalServices,
-    addAdditionalPrice,
-    removeAdditionalPrice,
-    updateAdditionalService,
-    setPickUpDateTime,
-    setBookingNote
+const mapActionCreators = {
+
 };
 
-export default connect(mapStateToProps, mapActionCreators)(AdditionalServices);
+export default connect(mapStateToProps, mapActionCreators)(ReviewOrder);

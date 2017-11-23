@@ -8,7 +8,19 @@ import request from "../../../util/request";
 //Constants
 //------------------------
 const { 
-		
+		ADD_ADDITIONAL_PRICE,
+		REMOVE_ADDITIONAL_PRICE,
+		GET_ADDITIONAL_SERVICES,
+		REMOVE_ADDITIONAL_SERVICES,
+		ADDITIONAL_SERVICE_1,
+		ADDITIONAL_SERVICE_2,
+		ADDITIONAL_SERVICE_3,
+		ADDITIONAL_SERVICE_4,
+		ADDITIONAL_SERVICE_5,
+		ADDITIONAL_SERVICE_6,
+		UPDATE_ADDITIONAL_SERVICE,
+		SET_PICKUP_DATE_TIME,
+		SET_BOOKING_NOTE
 	} = constants;
 
 const { width, height } = Dimensions.get("window");
@@ -21,139 +33,368 @@ const LONGITUDE_DELTA = ASPECT_RATIO * LATITUDE_DELTA;
 //------------------------
 //Actions
 //------------------------
-//Get username
-export function setCurrentBooking(payload) {
+export function setPickUpDateTime(payload) {
 	return {
-		type: SET_CURRENT_BOOKING,
+		type: SET_PICKUP_DATE_TIME,
 		payload
 	}
 }
 
-export function setShowRatingModal(payload) {
+export function setBookingNote(payload) {
 	return {
-		type: SHOW_RATING_MODAL,
+		type: SET_BOOKING_NOTE,
 		payload
 	}
 }
 
-export function setShowMapTrackModal(payload) {
-	return {
-		type: SHOW_MAP_TRACK_MODAL,
+//Add additional service 1: Goods longer than 6ft (P50)
+export function additionalService1(payload) {
+	return{
+		type: ADDITIONAL_SERVICE_1,
 		payload
 	}
 }
 
-export function setSelectedStar(payload) {
-	return {
-		type: SET_SELECTED_STAR,
+//Add additional service 2: Borrow cart (P60)
+export function additionalService2(payload) {
+	return{
+		type: ADDITIONAL_SERVICE_2,
 		payload
 	}
 }
 
-export function getComment(payload) {
-	return {
-		type: GET_COMMENT,
+//Add additional service 3: Mover (P100)
+export function additionalService3(payload) {
+	return{
+		type: ADDITIONAL_SERVICE_3,
 		payload
 	}
 }
 
-export function saveComment() {
-	return(dispatch, store) => {
-		if (store().bookingDetail.rating !== 0 && store().bookingDetail.comment !== "") {
-			request.put("http://52.220.212.6:3121/api/updateBookingRating")
-			.send({
-				id: store().bookingDetail.currentBooking._id,
-				rating: store().bookingDetail.selectedStar,
-				comment: store().bookingDetail.comment
+//Add additional service 4: Pets (P50)
+export function additionalService4(payload) {
+	return{
+		type: ADDITIONAL_SERVICE_4,
+		payload
+	}
+}
+
+//Add additional service 5: New Car (P100)
+export function additionalService5(payload) {
+	return{
+		type: ADDITIONAL_SERVICE_5,
+		payload
+	}
+}
+
+//Add additional service 6: Dunpler/Construction waste (P65)
+export function additionalService6(payload) {
+	return{
+		type: ADDITIONAL_SERVICE_6,
+		payload
+	}
+}
+
+export function updateAdditionalService(payload) {
+	const { service, value } = payload;
+
+	if (service == 1) {
+		return(dispatch, store) => {
+			dispatch({
+				type: ADDITIONAL_SERVICE_1,
+				payload: value
 			})
-			.finish((error, res)=> {
-				dispatch({
-					type: SET_CURRENT_BOOKING,
-					payload: res.body
-				});
-
-				dispatch({
-					type: SHOW_RATING_MODAL,
-					payload: false
-				});
-			});
 		}
 	}
-}
 
-export function trackDriver() {
-	return (dispatch, store)=>{
-		let id = store().bookingDetail.currentBooking.driver.driver_id;
-		request.get("http://52.220.212.6:3121/api/getCurrentDriverLocation/" + id)
-		.finish((error, res)=>{
+	if (service == 2) {
+		return(dispatch, store) => {
 			dispatch({
-				type:UPDATE_DRIVER_LOCATION,
-				payload:res.body
-			});
-		});
+				type: ADDITIONAL_SERVICE_2,
+				payload: value
+			})
+		}
 	}
+
+	if (service == 3) {
+		return(dispatch, store) => {
+			dispatch({
+				type: ADDITIONAL_SERVICE_3,
+				payload: value
+			})
+		}
+	}
+
+	if (service == 4) {
+		return(dispatch, store) => {
+			dispatch({
+				type: ADDITIONAL_SERVICE_4,
+				payload: value
+			})
+		}
+	}
+
+	if (service == 5) {
+		return(dispatch, store) => {
+			dispatch({
+				type: ADDITIONAL_SERVICE_5,
+				payload: value
+			})
+		}
+	}
+
+	if (service == 6) {
+		return(dispatch, store) => {
+			dispatch({
+				type: ADDITIONAL_SERVICE_6,
+				payload: value
+			})
+		}
+	}
+
 }
 
-export function getBookingHistory(payload) {
+//Add additional services
+export function addAdditionalServices(payload) {
 	return(dispatch, store) => {
-		request.get("http://52.220.212.6:3121/api/getBookingHistory")
-		.query({
-			booking_id: payload,
+		const arrAdditionalServices = store().additionalServices.additionalServices;
+
+		arrAdditionalServices.push(payload);
+
+		dispatch({
+			type: GET_ADDITIONAL_SERVICES,
+			payload: arrAdditionalServices
 		})
-		.finish((error, res)=>{
-			if(res){
-				dispatch({
-					type:UPDATE_BOOKING_HISTORY,
-					payload:res.body
-				});
-			}
-		});
 	}
 }
 
-export function updateBookingStatus(payload) {
+//Remove additional services
+export function removeAdditionalServices(payload) {
+	return(dispatch, store) => {
+		const arrAdditionalServices = store().additionalServices.additionalServices;
+		
+		for(var i = 0; i <= arrAdditionalServices.length-1; i++){
+			if (arrAdditionalServices[i].service === payload.service) {
+				arrAdditionalServices.splice(i, 1);
+			}
+		}
+
+		dispatch({
+			type: GET_ADDITIONAL_SERVICES,
+			payload: arrAdditionalServices
+		})
+	}
+}
+
+//Add additional price 
+export function addAdditionalPrice(payload) {
 	return(dispatch, store) => {
 		dispatch({
-			type: UPDATE_LOADER,
-			payload: true
-		});
-		
-		request.put("http://52.220.212.6:3121/api/updateBookingStatus")
-		.send({
-			id: store().bookingDetail.currentBooking._id,
-			status: payload
+			type: ADD_ADDITIONAL_PRICE,
+			payload: store().additionalServices.additionalPrice + payload
 		})
-		.finish((error, res)=> {
-			dispatch({
-				type: UPDATE_BOOKING,
-				payload: res.body
-			});
 
-			dispatch({
-				type: UPDATE_LOADER,
-				payload: false
-			});
-		});
+		// if (store().home.fare != undefined) {
+		// 	dispatch({
+		// 		type: GET_FARE,
+		// 		payload: store().home.fare + payload
+		// 	})
+		// }
+	}
+}
+
+//Remove additional price
+export function removeAdditionalPrice(payload) {
+	return(dispatch, store) => {
+		dispatch({
+			type: ADD_ADDITIONAL_PRICE,
+			payload: store().additionalServices.additionalPrice - payload
+		})
+
+		// if (store().home.fare != undefined) {
+		// 	dispatch({
+		// 		type: GET_FARE,
+		// 		payload: store().home.fare - payload
+		// 	})
+		// }
 	}
 }
 
 //------------------------
 //Action Handlers
 //------------------------
-function handleSetCurrentBooking(state, action) {
+function handleSetPickUpDateTime(state, action) {
 	return update(state, {
-		currentBooking: {
+		pickUpDateTime: {
 			$set: action.payload
 		}
 	})
 }
 
+function handleSetBookingNote(state, action) {
+	return update(state, {
+		bookingNote: {
+			$set: action.payload
+		}
+	})
+}
+
+function handleGetAdditionalServices(state, action) {
+	return update(state, {
+		additionalServices: {
+			$set: action.payload
+		}
+	})
+}
+
+function handleAddAdditionalPrice(state, action) {
+	return update(state, {
+		additionalPrice: {
+			$set: action.payload
+		}
+	})
+}
+
+function handleRemoveAdditionalPrice(state, action) {
+	return update(state, {
+		additionalPrice: {
+			$set: action.payload
+		}
+	})
+}
+
+function handleAdditionalService1(state, action) {
+	return update(state, {
+		additionalService1: {
+			$set: action.payload
+		}
+	})
+}
+
+function handleAdditionalService1(state, action) {
+	return update(state, {
+		additionalService1: {
+			$set: action.payload
+		}
+	})
+}
+
+function handleAdditionalService2(state, action) {
+	return update(state, {
+		additionalService2: {
+			$set: action.payload
+		}
+	})
+}
+
+function handleAdditionalService3(state, action) {
+	return update(state, {
+		additionalService3: {
+			$set: action.payload
+		}
+	})
+}
+
+function handleAdditionalService4(state, action) {
+	return update(state, {
+		additionalService4: {
+			$set: action.payload
+		}
+	})
+}
+
+function handleAdditionalService5(state, action) {
+	return update(state, {
+		additionalService5: {
+			$set: action.payload
+		}
+	})
+}
+
+function handleAdditionalService6(state, action) {
+	return update(state, {
+		additionalService6: {
+			$set: action.payload
+		}
+	})
+}
+
+function handleAdditionalService(state, action) {
+	if (action.payload == 1) {
+		return update(state, {
+			additionalService1: {
+				$set: action.payload
+			}
+		})
+	}
+
+	if (action.payload == 2) {
+		return update(state, {
+			additionalService2: {
+				$set: action.payload
+			}
+		})
+	}
+
+	if (action.payload == 3) {
+		return update(state, {
+			additionalService3: {
+				$set: action.payload
+			}
+		})
+	}
+
+	if (action.payload == 4) {
+		return update(state, {
+			additionalService4: {
+				$set: action.payload
+			}
+		})
+	}
+
+	if (action.payload == 5) {
+		return update(state, {
+			additionalService5: {
+				$set: action.payload
+			}
+		})
+	}
+
+	if (action.payload == 6) {
+		return update(state, {
+			additionalService6: {
+				$set: action.payload
+			}
+		})
+	}
+}
+
 const ACTION_HANDLERS = {
-	
+	GET_ADDITIONAL_SERVICES: handleGetAdditionalServices,
+	ADD_ADDITIONAL_PRICE: handleAddAdditionalPrice,
+	REMOVE_ADDITIONAL_PRICE: handleRemoveAdditionalPrice,
+	ADDITIONAL_SERVICE_1: handleAdditionalService1,
+	ADDITIONAL_SERVICE_2: handleAdditionalService2,
+	ADDITIONAL_SERVICE_3: handleAdditionalService3,
+	ADDITIONAL_SERVICE_4: handleAdditionalService4,
+	ADDITIONAL_SERVICE_5: handleAdditionalService5,
+	ADDITIONAL_SERVICE_6: handleAdditionalService6,
+	UPDATE_ADDITIONAL_SERVICE: handleAdditionalService,
+	SET_PICKUP_DATE_TIME: handleSetPickUpDateTime,
+	SET_BOOKING_NOTE: handleSetBookingNote
 }
 
 const initialState = {
-	
+	additionalServices: [],
+	additionalPrice: 0,
+	additionalService1: false,
+	additionalService2: false,
+	additionalService3: false,
+	additionalService4: false,
+	additionalService5: false,
+	additionalService6: false,
+	pickUpDateTime: "2017-01-01 00:00",
+	bookingNote: ""
 };
 
 export function AdditionalServicesReducer (state = initialState, action) {
