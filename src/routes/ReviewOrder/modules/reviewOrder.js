@@ -8,7 +8,8 @@ import request from "../../../util/request";
 //Constants
 //------------------------
 const { 
-		BOOK_CAR
+		BOOK_CAR,
+		UPDATE_BOOKING_STATUS,
 	} = constants;
 
 const { width, height } = Dimensions.get("window");
@@ -81,6 +82,23 @@ export function bookCar(payload) {
 	}
 }
 
+// Cancel Booking
+export function updateBookingStatus(payload) {
+	return(dispatch, store) => {
+		request.put("http://52.220.212.6:3121/api/updateBookingStatus")
+		.send({
+			id: store().reviewOrder.booking._id,
+			status: payload
+		})
+		.finish((error, res)=> {
+			dispatch({
+				type: UPDATE_BOOKING_STATUS,
+				payload: res.body
+			})
+		});
+	}
+}
+
 //------------------------
 //Action Handlers
 //------------------------
@@ -93,8 +111,26 @@ function handleBookCar(state, action) {
 	})
 }
 
+function handleBookingApproved(state, action) {
+	return update(state, {
+		booking: {
+			$set: action.payload
+		}
+	})
+}
+
+function handleUpdateBookingStatus(state, action) {
+	return update(state, {
+		booking: {
+			$set: action.payload
+		}
+	})
+}
+
 const ACTION_HANDLERS = {
-	BOOK_CAR: handleBookCar
+	BOOK_CAR: handleBookCar,
+	BOOKING_APPROVED: handleBookingApproved,
+	UPDATE_BOOKING_STATUS: handleUpdateBookingStatus
 }
 
 const initialState = {

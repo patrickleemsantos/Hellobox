@@ -12,6 +12,19 @@ const carMarker = require("../../../assets/images/carMarker.png");
 
 class ReviewOrder extends React.Component {
     
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.booking.booking_id === this.props.booking.booking_id){
+            if (this.props.booking.status === "APPROVED" ){ 
+                AsyncStorage.getItem('account', (err, result) => {
+                    let account = JSON.parse(result);
+                    if (account.account_id === this.props.booking.account.account_id) {         
+                        Actions.bookingDetail({booking: this.props.booking, type: "reset"});
+                    }
+                });
+            }
+        }
+    }
+    
     render () {    
         const { selectedPickUp, selectedDropOff } = this.props.selectedAddress;
         const { status } = this.props.booking;

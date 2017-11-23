@@ -22,7 +22,6 @@ const { GET_CURRENT_LOCATION,
 		CLOSE_RESULT_TYPE,
 		GET_DIRECTIONS,
 		IS_MAP_READY,
-		UPDATE_BOOKING_STATUS,
 		REMOVE_BOOKING
 	} = constants;
 
@@ -258,30 +257,6 @@ export function getNearByDrivers(){
 	};
 }
 
-// Cancel Booking
-export function updateBookingStatus(payload) {
-	return(dispatch, store) => {
-		request.put("http://52.220.212.6:3121/api/updateBookingStatus")
-		.send({
-			id: store().home.booking._id,
-			status: payload
-		})
-		.finish((error, res)=> {
-			dispatch({
-				type: UPDATE_BOOKING_STATUS,
-				payload: res.body
-			})
-
-			if (payload === "CANCELLED") {
-				dispatch({
-					type: REMOVE_BOOKING,
-					payload: payload
-				})
-			}
-		});
-	}
-}
-
 //------------------------
 //Action Handlers
 //------------------------
@@ -469,36 +444,12 @@ function handleGetNearbyDrivers(state, action){
 	});
 }
 
-function handleBookingConfirmed(state, action) {
-	return update(state, {
-		booking:{
-			$set:action.payload
-		}
-	});
-}
-
 function handleIsMapReady(state, action) {
 	return update(state, {
 		isMapReady:{
 			$set:action.payload
 		}
 	});
-}
-
-function handleUpdateBookingStatus(state, action) {
-	return update(state, {
-		booking: {
-			$set: action.payload
-		}
-	})
-}
-
-function handleBookingApproved(state, action) {
-	return update(state, {
-		booking: {
-			$set: action.payload
-		}
-	})
 }
 
 const ACTION_HANDLERS = {
@@ -514,11 +465,8 @@ const ACTION_HANDLERS = {
 	UPDATE_SEARCH_ADDRESS_LOADING_STATUS:handleUpdateSearchAddressLoadingStatus,
 	CLOSE_RESULT_TYPE:handleCloseResultType,
 	GET_DIRECTIONS:handleGetDirections,
-	BOOKING_CONFIRMED:handleBookingConfirmed,
 	IS_MAP_READY: handleIsMapReady,
-	UPDATE_BOOKING_STATUS: handleUpdateBookingStatus,
-	REMOVE_BOOKING: handleRemoveBooking,
-	BOOKING_APPROVED: handleBookingApproved
+	REMOVE_BOOKING: handleRemoveBooking
 }
 
 const initialState = {

@@ -1,7 +1,8 @@
 import { connect } from "react-redux";
 import ReviewOrder from "../components/ReviewOrder";
 import {
-    bookCar
+    bookCar,
+    updateBookingStatus
 } from "../modules/reviewOrder";
 
 const mapStateToProps = (state) => ({   
@@ -10,7 +11,6 @@ const mapStateToProps = (state) => ({
     predictions: state.home.predictions || [],
     selectedAddress: state.home.selectedAddress || {},
     fare: state.home.fare || 0,
-    booking: state.home.booking || {},
     selectedVehicle: state.home.selectedVehicle || {},
     nearByDrivers: state.home.nearByDrivers || [],
     additionalServices: state.additionalServices.additionalServices || [],
@@ -23,10 +23,12 @@ const mapStateToProps = (state) => ({
     additionalService6: state.additionalServices.additionalService6 || false,
     pickUpDateTime: state.additionalServices.pickUpDateTime || "2017-01-01 00:00",
     bookingNote: state.additionalServices.bookingNote || "",
+    booking: state.reviewOrder.booking || {},
 });
 
 const mapActionCreators = {
-    bookCar
+    bookCar,
+    updateBookingStatus
 };
 
 export default connect(mapStateToProps, mapActionCreators)(ReviewOrder);

@@ -11,9 +11,6 @@ export const BookingFooter = ({onPressAction, fare}) => {
                 <Button success disabled={(fare ? false: true)} style={styles.button}  onPress={onPressAction}>
                     <Text style={styles.subText}>BOOK NOW</Text>
                 </Button>
-                {/* <Button warning disabled={(fare ? true: true)} style={styles.button} onPress={() => updateDriverStatus("offline")}>
-                    <Text style={styles.subText}>BOOK LATER</Text>
-                </Button> */}
             </FooterTab>
         </Footer>
     );

@@ -23,20 +23,6 @@ class Home extends React.Component {
 		}, 1000);
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        if (prevProps.booking.booking_id === this.props.booking.booking_id){
-            if (this.props.booking.status === "APPROVED" ){ 
-                AsyncStorage.getItem('account', (err, result) => {
-                    let account = JSON.parse(result);
-                    if (account.account_id === this.props.booking.account.account_id) {         
-                        Actions.bookingDetail({booking: this.props.booking});
-                        this.props.removeBooking();
-                    }
-                });
-            }
-        }
-    }
-
     render() {
         closeDrawer = () => {
             this.drawer._root.close()

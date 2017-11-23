@@ -2,6 +2,7 @@ import React from "react";
 import {Text} from "react-native";
 import { View, Button } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { Actions } from "react-native-router-flux";
 
 import styles from "./FindDriverStyles.js";
 
@@ -9,6 +10,14 @@ var Spinner = require("react-native-spinkit");
 export const FindDriver = ({selectedAddress, updateBookingStatus})=>{
 
 	const { selectedPickUp, selectedDropOff }  = selectedAddress || {};
+
+	handleUpdateBookingStatus = (value) => {
+		updateBookingStatus(value);
+		// Actions.home({type: "reset"});
+		Actions.pop(); 
+		setTimeout(()=> Actions.refresh(), 500);
+	}
+
 	return (
 		<View style={styles.findDriverContainer} >
 
@@ -28,7 +37,7 @@ export const FindDriver = ({selectedAddress, updateBookingStatus})=>{
 				<View>
 					
 					<Text style={styles.termsText}>By booking you confirm that you accept our T & C</Text>
-					<Button style={styles.cancelBtn} onPress={ () => updateBookingStatus("CANCELLED") }>
+					<Button style={styles.cancelBtn} onPress={ () => handleUpdateBookingStatus("CANCELLED") }>
 						<Text style={styles.cancelBtnText}>Cancel</Text>
 					</Button>
 				</View>
