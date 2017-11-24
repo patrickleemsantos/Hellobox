@@ -11,11 +11,10 @@ import {
   Navigator,
   TextInput,
   StatusBar,
-  TouchableOpacity,
-  ActivityIndicator
+  TouchableOpacity
 } from 'react-native';
+import { Spinner } from "native-base";
 import Icon from 'react-native-vector-icons/FontAwesome';
-var Spinner = require("react-native-spinkit");
 
 const helloBoxLogo = require("../../../assets/images/logo.png");
 
@@ -30,13 +29,15 @@ export default class Login extends Component {
         });
     }
 
-    render() {
+    componentDidUpdate() {
         const {status, message} = this.props.loginResult;
         
         if (status === true ){
             Actions.home();
         }
-                
+    }
+
+    render() {
         function handleUsername (value) {
             this.props.getUsername(value);
         }
@@ -55,14 +56,9 @@ export default class Login extends Component {
                 <Text style={styles.title}></Text>
             </View>
 
-            <View style={styles.floatView}>
-                <Spinner style={styles.spinner} isVisible={ this.props.isLoading } size={40} type="Wave" color="#ffffff"/>
-            </View>
-
-            {/* <ActivityIndicator 
-                    animating = {this.props.isLoading}
-                    color = '#E90000'
-                    size="large"/> */}
+            { (this.props.isLoading == true) &&
+                <Spinner color='red' />
+            }
 
             <View style={styles.formContainer}>
                 <StatusBar
@@ -106,7 +102,7 @@ export default class Login extends Component {
                     <Text>Forgot Password?</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => navigate("Registration", {})}
+                    onPress={() => Actions.register()}
                     disabled={this.props.isLoading}>
                     <Text>Create an Account</Text>
                 </TouchableOpacity>

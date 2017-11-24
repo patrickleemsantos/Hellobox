@@ -1,9 +1,9 @@
 import React from "react";
 import { View, Alert, AsyncStorage, StyleSheet, TouchableOpacity } from "react-native";
-import { Container, Content, Card, CardItem, Body, List, Left, Right, Text, Header, Button, Title, Segment } from "native-base";
+import { Spinner, Container, Content, Card, CardItem, Body, List, Left, Right, Text, Header, Button, Title, Segment } from "native-base";
 import { Actions } from "react-native-router-flux";
 import Icon from "react-native-vector-icons/FontAwesome";
-var Spinner = require("react-native-spinkit");
+// var Spinner = require("react-native-spinkit");
 
 class Bookings extends React.Component {
 
@@ -79,7 +79,7 @@ class Bookings extends React.Component {
 												<View style={styles.timeContainer}>
 													<Icon style={styles.timeIcon} name="clock-o" />
 													<View style={styles.locationValueContainer}>
-														<Text style={styles.locationTime}>{booking.timestamp}</Text>
+														<Text style={styles.locationTime}>{booking.pick_up_date}</Text>
 													</View>
 												</View>
 												<View style={styles.pickUpContainer}>
@@ -105,7 +105,10 @@ class Bookings extends React.Component {
 							}>
 						</List>
 						<View style={styles.spinnerContainer}>
-							<Spinner style={styles.spinner} isVisible={this.props.showBookingLoader} size={40} type="Wave" />
+							{/* <Spinner style={styles.spinner} isVisible={this.props.showBookingLoader} size={40} type="Wave" /> */}
+                			{(this.props.showBookingLoader == true) &&
+								<Spinner color='red' />
+							}
 						</View>
 					</Content>  
 				</View>

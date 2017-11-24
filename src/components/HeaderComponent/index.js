@@ -20,9 +20,10 @@ export const HeaderComponent = ({logo, showAdditionalModal}) => {
                 {/* <Image resizeMode="contain" style={styles.logo} source={logo} /> */}
             </Body>
             <Right>
-                <Button transparent>
+                <Button transparent onPress={() => window.location.reload()}>
                     {/* <Icon name="plus" onPress={() => showAdditionalModal(true)} style={styles.menu} /> */}
                     {/* <Icon name="plus" onPress={() => Actions.additionalServices()} style={styles.menu} /> */}
+                    <Text>Reset</Text>
                 </Button>
             </Right>
         </Header>

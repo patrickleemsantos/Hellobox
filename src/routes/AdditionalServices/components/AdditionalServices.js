@@ -9,8 +9,8 @@ var dateFormat = require('dateformat');
 class AdditionalServices extends React.Component {
     componentDidMount() {
         
-        this.props.setPickUpDateTime(dateFormat(new Date(), "mmmm, dddd yyyy, h:MM:ss TT"));
-        console.log(dateFormat(new Date(), "mmmm, dddd yyyy, h:MM:ss TT"));
+        this.props.setPickUpDateTime(dateFormat(new Date(), "mmmm do yyyy, h:MM:ss TT"));
+        console.log(dateFormat(new Date(), "mmmm do yyyy, h:MM:ss TT"));
     }
 
     render () {    
@@ -52,7 +52,7 @@ class AdditionalServices extends React.Component {
                     </Button>
                 </Left>
                 <Body>
-                    <Text style={styles.headerText}>Hellobox</Text>
+                    <Text style={styles.headerText}>Additional</Text>
                 </Body>
                 <Right>
                 </Right>
@@ -194,7 +194,7 @@ class AdditionalServices extends React.Component {
                                     <Text style={styles.title}>Note</Text>
                                     <View style={{flex: 1, flexDirection: "column"}}>
                                         <Item>
-                                            <Input style={{fontSize: 14, marginBottom: 9}} placeholder={"Enter note..."} multiline={true} onChangeText={ handleSetBookingNote.bind(this) }/>
+                                            <Input style={{fontSize: 14}} placeholder={"Enter note..."} multiline={true} onChangeText={ handleSetBookingNote.bind(this) }/>
                                         </Item>
                                     </View>
                                 </View>

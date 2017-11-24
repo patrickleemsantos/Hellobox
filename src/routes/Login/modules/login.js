@@ -13,7 +13,8 @@ const { GET_USERNAME,
         GET_LOGIN_STATUS,
         LOGIN,
         UPDATE_LOADING_STATUS,
-        SET_ACCOUNT
+        SET_ACCOUNT,
+        CLEAR_INPUTS
 	} = constants;
 
 const { width, height } = Dimensions.get("window");
@@ -97,6 +98,11 @@ export function login() {
                         payload: res.body
                     });
 
+                    dispatch({
+                        type: CLEAR_INPUTS,
+                        payload
+                    });
+
                     AsyncStorage.setItem('account', JSON.stringify(res.body));
                 }
 
@@ -114,6 +120,17 @@ export function login() {
 //------------------------
 //Action Handlers
 //------------------------
+function handleClearInputs(state, action) {
+    return update(state, {
+		username: {
+			$set: ""
+        },
+        password: {
+			$set: ""
+		}
+	})
+}
+
 function handleGetUsername(state, action) {
 	return update(state, {
 		username: {
@@ -164,7 +181,8 @@ const ACTION_HANDLERS = {
     GET_PASSWORD: handleGetPassword,
     LOGIN: handleLogin,
     SET_ACCOUNT: handleSetAccount,
-    UPDATE_LOADING_STATUS: handleLoadingStatus
+    UPDATE_LOADING_STATUS: handleLoadingStatus,
+    CLEAR_INPUTS: handleClearInputs
 }
 
 const initialState = {

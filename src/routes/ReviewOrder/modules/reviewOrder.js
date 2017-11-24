@@ -10,6 +10,7 @@ import request from "../../../util/request";
 const { 
 		BOOK_CAR,
 		UPDATE_BOOKING_STATUS,
+		// REMOVE_BOOKING
 	} = constants;
 
 const { width, height } = Dimensions.get("window");
@@ -99,6 +100,13 @@ export function updateBookingStatus(payload) {
 	}
 }
 
+// export function removeBooking(payload) {
+// 	return{
+// 		type: REMOVE_BOOKING,
+// 		payload
+// 	}
+// }
+
 //------------------------
 //Action Handlers
 //------------------------
@@ -127,10 +135,26 @@ function handleUpdateBookingStatus(state, action) {
 	})
 }
 
+// Handle remove booking
+// function handleRemoveBooking(state, action) {
+// 	return update(state, {
+// 		booking: {
+// 			$set: {}
+// 		},
+// 		selectedAddress: {
+// 			$set: {}
+// 		},
+// 		fare: {
+// 			$set: null
+// 		}
+// 	});
+// }
+
 const ACTION_HANDLERS = {
 	BOOK_CAR: handleBookCar,
 	BOOKING_APPROVED: handleBookingApproved,
-	UPDATE_BOOKING_STATUS: handleUpdateBookingStatus
+	UPDATE_BOOKING_STATUS: handleUpdateBookingStatus,
+	// REMOVE_BOOKING: handleRemoveBooking
 }
 
 const initialState = {

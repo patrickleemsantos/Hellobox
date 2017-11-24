@@ -13,9 +13,6 @@ export const FindDriver = ({selectedAddress, updateBookingStatus})=>{
 
 	handleUpdateBookingStatus = (value) => {
 		updateBookingStatus(value);
-		// Actions.home({type: "reset"});
-		Actions.pop(); 
-		setTimeout(()=> Actions.refresh(), 500);
 	}
 
 	return (

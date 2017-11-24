@@ -3,6 +3,7 @@ import constants from "./actionConstants";
 import { Dimensions } from "react-native";
 import RNGooglePlaces from "react-native-google-places";
 import request from "../../../util/request";
+var dateFormat = require('dateformat');
 
 //------------------------
 //Constants
@@ -393,7 +394,7 @@ const initialState = {
 	additionalService4: false,
 	additionalService5: false,
 	additionalService6: false,
-	pickUpDateTime: "2017-01-01 00:00",
+	pickUpDateTime: dateFormat(new Date(), "mmmm do yyyy, h:MM:ss TT"),
 	bookingNote: ""
 };
 

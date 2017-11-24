@@ -1,13 +1,11 @@
 import React from "react";
 import { View, Alert, AsyncStorage, StyleSheet } from "react-native";
-import { Container, Content, Body, Left, Right, Text, Header, Button, Title, Footer, FooterTab, Thumbnail, List, ListItem } from "native-base";
+import { Spinner, Container, Content, Body, Left, Right, Text, Header, Button, Title, Footer, FooterTab, Thumbnail, List, ListItem } from "native-base";
 import { Actions } from "react-native-router-flux";
 import StarRating from 'react-native-star-rating';
 import Icon from "react-native-vector-icons/FontAwesome";
 import RatingModal from "./RatingModal";
 import MapTrack from "./MapTrack";
-
-var Spinner = require("react-native-spinkit");
 
 const carMarker = require("../../../assets/images/carMarker.png");
 
@@ -93,7 +91,7 @@ class BookingDetail extends React.Component {
                                 <View style={styles.timeContainer}>
                                     <Icon style={styles.timeIcon} name="clock-o" />
                                     <View style={styles.locationValueContainer}>
-                                        <Text style={styles.locationTime}>{this.props.currentBooking.timestamp}</Text>
+                                        <Text style={styles.locationTime}>{this.props.currentBooking.pick_up_date}</Text>
                                     </View>
                                 </View>
                                 <View style={styles.pickUpContainer}>
@@ -126,6 +124,18 @@ class BookingDetail extends React.Component {
                                         </View>
                                         }>
                                     </List>
+                                </View>
+                            }
+
+                            { (this.props.currentBooking.note && this.props.currentBooking.note !== "") && 
+                                <View style={styles.noteContainer}>
+                                    <Text style={styles.additionalHeader}>Note:</Text>
+                                    <View style={styles.additionalListContainer}>
+                                        <Icon style={styles.additionalIcon} name="sticky-note" />
+                                        <View style={styles.additionalValueContainer}>
+                                            <Text style={styles.additionalText}>{this.props.currentBooking.note}</Text>
+                                        </View>
+                                    </View>
                                 </View>
                             }
 
@@ -181,7 +191,7 @@ class BookingDetail extends React.Component {
                     ||
                     
                     <View style={styles.floatView}>
-                        <Spinner style={styles.spinner} isVisible={true} size={40} type="Wave" color="#ffffff"/>
+                        <Spinner color='red' />
                     </View>
                 }    
 
@@ -351,6 +361,13 @@ const styles = StyleSheet.create({
     additionalContainer: {
         flex: 1,
         backgroundColor: "#FBFCFC",
+        paddingLeft: 10,
+        paddingTop: 10,
+        paddingBottom: 10
+    },
+    noteContainer: {
+        flex: 1,
+        backgroundColor: "#F4F6F6",
         paddingLeft: 10,
         paddingTop: 10,
         paddingBottom: 10

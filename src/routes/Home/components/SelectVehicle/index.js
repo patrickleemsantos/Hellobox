@@ -5,22 +5,22 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import styles from "./SelectVehicleStyles";
 
 export const SelectVehicle = ({getSelectedVehicle, selectedVehicle}) => {
-    //tab bar items
+
     const tabs = [{
-            title: "Motorcycle",
-            vehicle: "motorcycle",
-            subTitle: "",
-            icon: "motorcycle"
-        },
-        {
             title: "Van",
             vehicle: "van",
             subTitle: "",
             icon: "bus"
         },
         {
-            title: "L300",
-            vehicle: "l300",
+            title: "Van w/ helper",
+            vehicle: "van-helper",
+            subTitle: "",
+            icon: "bus"
+        },
+        {
+            title: "Truck",
+            vehicle: "truck",
             subTitle: "",
             icon: "truck"
         }];
@@ -35,12 +35,6 @@ export const SelectVehicle = ({getSelectedVehicle, selectedVehicle}) => {
                 {
                     tabs.map((obj, index) => {
                         return (
-                            // <Button key={index} onPress={() => handleSelectedVehicle(obj.vehicle)}>
-                            //     <Icon size={20} name={obj.icon} color={(index === 0) ? "#E90000" : "grey"} />
-                            //     <Text style={{fontSize:12, color:(index === 0) ? "#E90000" : "grey"}}>{obj.title}</Text>
-                            //     <Text style={styles.subText}>{obj.subTitle}</Text>
-                            // </Button>
-
                             <Button key={index} onPress={() => handleSelectedVehicle(obj.vehicle)}>
                                 <Icon size={20} name={obj.icon} color={(selectedVehicle === obj.vehicle) ? "#E90000" : "grey"} />
                                 <Text style={{fontSize:12, color:(selectedVehicle === obj.vehicle) ? "#E90000" : "grey"}}>{obj.title}</Text>

@@ -7,14 +7,14 @@ import Icon from "react-native-vector-icons/FontAwesome";
 const routes = ["Home", "Chat", "Profile"];
 
 export const SideBar = ({ account }) => {
-
+    
     bookings = () => {
         Actions.bookings();
     }
 
     logout = () => {
         AsyncStorage.setItem('account', '');
-        Actions.login({type: "reset"});
+        Actions.login();
     };    
     
     return (
@@ -23,17 +23,17 @@ export const SideBar = ({ account }) => {
                     backgroundColor: "#FFFFFF"
                 }}>
                 <View style={{
-                        height: 200,
+                        height: 100,
                         alignSelf: "stretch",
                         justifyContent: "center",
                         alignItems: "center",
                         backgroundColor: "#E90000"
                     }}>
-                     <Image
+                     {/* <Image
                         circle
                         style={{ height: 90, width: 90, borderRadius: 50 }}
                         source={{ uri: account.profile_picture }}
-                        />
+                        /> */}
                     <Text
                         style={{
                             marginTop: 10,
@@ -43,35 +43,6 @@ export const SideBar = ({ account }) => {
                         }}
                         >{account.first_name + " " + account.last_name}</Text>
                 </View>
-                {/* <Image
-                    source={{
-                    uri: "http://designstacks.net/content_images/AdobePhotoshop/ART-D/tutorial598/3.jpg"
-                    }}
-                    style={{
-                        height: 120,
-                        alignSelf: "stretch",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        backgroundColor: "#E90000"
-                    }}>
-                    <Image
-                    square
-                    style={{ height: 80, width: 70 }}
-                    source={profilePicture}
-                    />
-                </Image> */}
-                {/* <List
-                    dataArray={routes}
-                    renderRow={data => {
-                    return (
-                        <ListItem
-                        button
-                        onPress={() => this.props.navigation.navigate(data)}>
-                        <Text>{data}</Text>
-                        </ListItem>
-                    );
-                    }}
-                /> */}
                 <List>
                     <ListItem icon onPress={() => this.bookings()}>
                         <Left>

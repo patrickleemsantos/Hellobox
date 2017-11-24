@@ -21,8 +21,7 @@ const { GET_CURRENT_LOCATION,
 		UPDATE_SEARCH_ADDRESS_LOADING_STATUS,
 		CLOSE_RESULT_TYPE,
 		GET_DIRECTIONS,
-		IS_MAP_READY,
-		REMOVE_BOOKING
+		IS_MAP_READY
 	} = constants;
 
 const { width, height } = Dimensions.get("window");
@@ -48,13 +47,6 @@ export function closeResultType(payload) {
 export function updateSearchAddressLoadingStatus() {
 	return (dispatch) => {
 		type: UPDATE_SEARCH_ADDRESS_LOADING_STATUS,
-		payload
-	}
-}
-
-export function removeBooking(payload) {
-	return{
-		type: REMOVE_BOOKING,
 		payload
 	}
 }
@@ -132,12 +124,12 @@ export function getAddressPredictions() {
 
 //Get selected address
 export function getSelectedAddress(payload) {
-	const dummyNumbers = {
-		baseFare: 0.4,
-		timeRate: 0.14,
-		distanceRate: 0.97,
-		surge: 1
-	}
+	// const dummyNumbers = {
+	// 	baseFare: 0.4,
+	// 	timeRate: 0.14,
+	// 	distanceRate: 0.97,
+	// 	surge: 1
+	// }
 
 	return (dispatch, store) => {
 		RNGooglePlaces.lookUpPlaceByID(payload)
@@ -185,15 +177,22 @@ export function getSelectedAddress(payload) {
 
 				setTimeout(function() {
 					if(store().home.selectedAddress.selectedPickUp && store().home.selectedAddress.selectedDropOff){
+						// const fare = calculateFare(
+						// 	dummyNumbers.baseFare,
+						// 	dummyNumbers.timeRate,
+						// 	store().home.distanceMatrix.rows[0].elements[0].duration.value,
+						// 	dummyNumbers.distanceRate,
+						// 	store().home.distanceMatrix.rows[0].elements[0].distance.value,
+						// 	dummyNumbers.surge,
+						// 	store().home.selectedVehicle
+						// );
+
 						const fare = calculateFare(
-							dummyNumbers.baseFare,
-							dummyNumbers.timeRate,
 							store().home.distanceMatrix.rows[0].elements[0].duration.value,
-							dummyNumbers.distanceRate,
 							store().home.distanceMatrix.rows[0].elements[0].distance.value,
-							dummyNumbers.surge,
 							store().home.selectedVehicle
 						);
+
 						dispatch({
 							type: GET_FARE,
 							payload: fare
@@ -207,12 +206,12 @@ export function getSelectedAddress(payload) {
 }
 
 export function getSelectedVehicle(payload) {
-	const dummyNumbers = {
-		baseFare: 0.4,
-		timeRate: 0.14,
-		distanceRate: 0.97,
-		surge: 1
-	}
+	// const dummyNumbers = {
+	// 	baseFare: 0.4,
+	// 	timeRate: 0.14,
+	// 	distanceRate: 0.97,
+	// 	surge: 1
+	// }
 
 	return(dispatch, store) => {
 		dispatch({
@@ -221,15 +220,22 @@ export function getSelectedVehicle(payload) {
 		})
 
 		if(store().home.selectedAddress.selectedPickUp && store().home.selectedAddress.selectedDropOff){
+			// const fare = calculateFare(
+			// 	dummyNumbers.baseFare,
+			// 	dummyNumbers.timeRate,
+			// 	store().home.distanceMatrix.rows[0].elements[0].duration.value,
+			// 	dummyNumbers.distanceRate,
+			// 	store().home.distanceMatrix.rows[0].elements[0].distance.value,
+			// 	dummyNumbers.surge,
+			// 	store().home.selectedVehicle
+			// );
+
 			const fare = calculateFare(
-				dummyNumbers.baseFare,
-				dummyNumbers.timeRate,
 				store().home.distanceMatrix.rows[0].elements[0].duration.value,
-				dummyNumbers.distanceRate,
 				store().home.distanceMatrix.rows[0].elements[0].distance.value,
-				dummyNumbers.surge,
 				store().home.selectedVehicle
 			);
+
 			dispatch({
 				type: GET_FARE,
 				payload: fare
@@ -420,21 +426,6 @@ function handleGetSelectedVehicle(state, action) {
 	})
 }
 
-// Handle remove booking
-function handleRemoveBooking(state, action) {
-	return update(state, {
-		booking: {
-			$set: {}
-		},
-		selectedAddress: {
-			$set: {}
-		},
-		fare: {
-			$set: null
-		}
-	});
-}
-
 //Handle get nearby drivers
 function handleGetNearbyDrivers(state, action){
 	return update(state, {
@@ -465,8 +456,7 @@ const ACTION_HANDLERS = {
 	UPDATE_SEARCH_ADDRESS_LOADING_STATUS:handleUpdateSearchAddressLoadingStatus,
 	CLOSE_RESULT_TYPE:handleCloseResultType,
 	GET_DIRECTIONS:handleGetDirections,
-	IS_MAP_READY: handleIsMapReady,
-	REMOVE_BOOKING: handleRemoveBooking
+	IS_MAP_READY: handleIsMapReady
 }
 
 const initialState = {
@@ -474,7 +464,7 @@ const initialState = {
 	inputData: {},
 	resultTypes: {},
 	selectedAddress: {},
-	selectedVehicle: "motorcycle",
+	selectedVehicle: "van",
 	isSearchAddressLoading: false,
 	isMapReady: false
 };

@@ -31,8 +31,6 @@ class Home extends React.Component {
         openDrawer = () => {
             this.drawer._root.open()
         }; 
-
-        const { status } = this.props.booking;
         
         return (
             <Drawer
@@ -61,13 +59,10 @@ class Home extends React.Component {
                                         nearByDrivers={this.props.nearByDrivers}
                                         isSearchAddressLoading={this.props.isSearchAddressLoading}
                                         closeResultType={this.props.closeResultType}
-                                        // directions={this.props.directions}
                                     />
                                     ||
                                     <Content />
                                 }
-
-                                {/* <Fab onPressAction={() => this.props.bookCar()}/> */}
 
                             { this.props.fare &&
                                 <Fare 
@@ -83,7 +78,7 @@ class Home extends React.Component {
                                 <Footer>
                                     <FooterTab style={styles.btnFooterContainer} iosBarStyle="light-content" androidStatusBarColor="#E90000">
                                         <Button success style={styles.button} onPress={() => Actions.additionalServices()}>
-                                            <Text style={styles.subText}>Next</Text>
+                                            <Text style={styles.subText}>PROCEED</Text>
                                         </Button>
                                     </FooterTab>
                                 </Footer>
@@ -98,7 +93,6 @@ class Home extends React.Component {
 const styles = StyleSheet.create({    
 	spinner: {
         color: "#E90000",
-        // marginTop: 100,
         alignSelf: "center"
     },
     floatView: {

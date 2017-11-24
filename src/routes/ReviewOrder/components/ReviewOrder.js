@@ -40,7 +40,7 @@ class ReviewOrder extends React.Component {
                                 </Button>
                             </Left>
                             <Body>
-                                <Title style={styles.headerText}>Hellobox</Title>
+                                <Title style={styles.headerText}>Review</Title>
                             </Body>
                             <Right>
                             </Right>
@@ -114,7 +114,7 @@ class ReviewOrder extends React.Component {
                 ||
 
                 <FindDriver selectedAddress={this.props.selectedAddress}
-                        updateBookingStatus={this.props.updateBookingStatus}/>
+                        updateBookingStatus={this.props.updateBookingStatus} />
 
                 }
             </Container>

@@ -2,7 +2,8 @@ import { connect } from "react-redux";
 import ReviewOrder from "../components/ReviewOrder";
 import {
     bookCar,
-    updateBookingStatus
+    updateBookingStatus,
+    // removeBooking
 } from "../modules/reviewOrder";
 
 const mapStateToProps = (state) => ({   
@@ -28,7 +29,8 @@ const mapStateToProps = (state) => ({
 
 const mapActionCreators = {
     bookCar,
-    updateBookingStatus
+    updateBookingStatus,
+    // removeBooking
 };
 
 export default connect(mapStateToProps, mapActionCreators)(ReviewOrder);

@@ -15,6 +15,7 @@ import {
     setPickUpDateTime,
     setBookingNote
 } from "../modules/additionalServices";
+var dateFormat = require('dateformat');
 
 const mapStateToProps = (state) => ({   
     inputData: state.home.inputData || {},
@@ -33,7 +34,7 @@ const mapStateToProps = (state) => ({
     additionalService4: state.additionalServices.additionalService4 || false,
     additionalService5: state.additionalServices.additionalService5 || false,
     additionalService6: state.additionalServices.additionalService6 || false,
-    pickUpDateTime: state.additionalServices.pickUpDateTime || "2017-01-01 00:00",
+    pickUpDateTime: state.additionalServices.pickUpDateTime || dateFormat(new Date(), "mmmm do yyyy, h:MM:ss TT"),
     bookingNote: state.additionalServices.bookingNote || "",
 });
 
