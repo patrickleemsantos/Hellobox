@@ -4,7 +4,8 @@ import {
     getUsername,
     getPassword,
     setAccount,
-    login
+    login,
+    setLoginPreference
 } from "../modules/login";
 
 const mapStateToProps = (state) => ({   
@@ -12,14 +13,16 @@ const mapStateToProps = (state) => ({
     password: state.login.password || "",
     loginResult: state.login.loginResult || {},
     account: state.login.account || {},
-    isLoading: state.login.isLoading || false
+    isLoading: state.login.isLoading || false,
+    loginPreference: state.login.loginPreference || "mobile"
 });
 
 const mapActionCreators = {
     getUsername,
     getPassword,
     setAccount,
-    login
+    login,
+    setLoginPreference
 };
 
 export default connect(mapStateToProps, mapActionCreators)(Login);

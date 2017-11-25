@@ -5,7 +5,8 @@ import {
   View,
   Image,
   Alert,
-  AsyncStorage
+  AsyncStorage,
+  KeyboardAvoidingView
 } from 'react-native';
 import { Spinner, Container, Content, Body, Left, Right, Text, Header, Button, Title, Footer, FooterTab, Item, Input, Form, Label, Card, CardItem } from "native-base";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -44,90 +45,96 @@ export default class Register extends Component {
         }
         
         return (
-            <Container>
-            <Header style={{backgroundColor: "#E90000"}} iosBarStyle="light-content" androidStatusBarColor="#E90000">
-                <Left>
-                    <Button transparent onPress={() => Actions.pop()}>
-                        <Icon name="arrow-left" style={styles.menu} />
-                    </Button>
-                </Left>
-                <Body>
-                    <Text style={styles.headerText}>Register</Text>
-                </Body>
-                <Right>
-                </Right>
-            </Header>
-            <Content>
-                <Card>
-                    <Form>
-                        <Item inlineLabel>
-                            <Label style={styles.labelText}>First Name *</Label>
-                            <Input style={styles.inputText} 
-                                    onChangeText={ handleFirstName.bind(this) }
-                                    value={this.props.firstName }
-                                    autoCorrect={false} 
-                                    onSubmitEditing={() => this.lastNameInput.focus()}
-                                    returnKeyType="next" />
-                        </Item>
-                        <Item inlineLabel>
-                            <Label style={styles.labelText}>Last Name *</Label>
-                            <Input style={styles.inputText} 
-                                    onChangeText={ handleLastName.bind(this) } 
-                                    value={this.props.lastName }
-                                    autoCorrect={false} 
-                                    ref={(input) => this.lastNameInput = input}
-                                    onSubmitEditing={() => this.mobileNumberInput.focus()}
-                                    returnKeyType="next" />
-                        </Item>
-                        <Item inlineLabel>
-                            <Label style={styles.labelText}>Mobile +63 *</Label>
-                            <Input style={styles.inputText} 
-                                    placeholder={"(9182122041)"} 
-                                    maxLength={10}
-                                    keyboardType = 'numeric'
-                                    onChangeText={ handleMobileNumber.bind(this) }
-                                    value={this.props.mobileNumber } 
-                                    ref={(input) => this.mobileNumberInput = input}
-                                    onSubmitEditing={() => this.emailInput.focus()}
-                                    returnKeyType="next" />
-                        </Item>
-                        <Item inlineLabel>
-                            <Label style={styles.labelText}>Email *</Label>
-                            <Input style={styles.inputText} 
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                    onChangeText={ handleEmail.bind(this) }
-                                    value={this.props.email } 
-                                    ref={(input) => this.emailInput = input} 
-                                    onSubmitEditing={() => this.passwordInput.focus()}
-                                    returnKeyType="next" />
-                        </Item>
-                        <Item inlineLabel last>
-                            <Label style={styles.labelText}>Password *</Label>
-                            <Input style={styles.inputText} 
-                                    onChangeText={ handlePassword.bind(this) }
-                                    value={this.props.password } 
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                    returnKeyType="go"
-                                    secureTextEntry 
-                                    ref={(input) => this.passwordInput = input} />
-                        </Item>
-                        <Button disabled={this.props.loadingStatus} onPress={() => this.props.addAccount()} full success>
-                            <Text style={styles.buttonText}>SUBMIT</Text>
-                            { (this.props.loadingStatus == true) &&
-                                <Spinner color='white' />
-                            }
+            <KeyboardAvoidingView behavior="padding" style={styles.container}>
+                <Container>
+                <Header style={{backgroundColor: "#E90000"}} iosBarStyle="light-content" androidStatusBarColor="#E90000">
+                    <Left>
+                        <Button transparent onPress={() => Actions.pop()}>
+                            <Icon name="arrow-left" style={styles.menu} />
                         </Button>
-                    </Form>
-                </Card>
-            </Content>
-          </Container>
+                    </Left>
+                    <Body>
+                        <Text style={styles.headerText}>Register</Text>
+                    </Body>
+                    <Right>
+                    </Right>
+                </Header>
+                <Content>
+                    <Card>
+                        <Form>
+                            <Item inlineLabel>
+                                <Label style={styles.labelText}>First Name *</Label>
+                                <Input style={styles.inputText} 
+                                        onChangeText={ handleFirstName.bind(this) }
+                                        value={this.props.firstName }
+                                        autoCorrect={false} 
+                                        onSubmitEditing={() => this.lastNameInput.focus()}
+                                        returnKeyType="next" />
+                            </Item>
+                            <Item inlineLabel>
+                                <Label style={styles.labelText}>Last Name *</Label>
+                                <Input style={styles.inputText} 
+                                        onChangeText={ handleLastName.bind(this) } 
+                                        value={this.props.lastName }
+                                        autoCorrect={false} 
+                                        ref={(input) => this.lastNameInput = input}
+                                        onSubmitEditing={() => this.mobileNumberInput.focus()}
+                                        returnKeyType="next" />
+                            </Item>
+                            <Item inlineLabel>
+                                <Label style={styles.labelText}>Mobile +63 *</Label>
+                                <Input style={styles.inputText} 
+                                        placeholder={"(9081234567)"} 
+                                        maxLength={10}
+                                        keyboardType = 'numeric'
+                                        onChangeText={ handleMobileNumber.bind(this) }
+                                        value={this.props.mobileNumber } 
+                                        ref={(input) => this.mobileNumberInput = input}
+                                        onSubmitEditing={() => this.emailInput.focus()}
+                                        returnKeyType="next" />
+                            </Item>
+                            <Item inlineLabel>
+                                <Label style={styles.labelText}>Email *</Label>
+                                <Input style={styles.inputText} 
+                                        autoCapitalize="none"
+                                        autoCorrect={false}
+                                        onChangeText={ handleEmail.bind(this) }
+                                        value={this.props.email } 
+                                        ref={(input) => this.emailInput = input} 
+                                        onSubmitEditing={() => this.passwordInput.focus()}
+                                        returnKeyType="next" />
+                            </Item>
+                            <Item inlineLabel last>
+                                <Label style={styles.labelText}>Password *</Label>
+                                <Input style={styles.inputText} 
+                                        onChangeText={ handlePassword.bind(this) }
+                                        value={this.props.password } 
+                                        autoCapitalize="none"
+                                        autoCorrect={false}
+                                        returnKeyType="go"
+                                        secureTextEntry 
+                                        ref={(input) => this.passwordInput = input} />
+                            </Item>
+                            <Button style={{backgroundColor:"#E90000"}} disabled={this.props.loadingStatus} onPress={() => this.props.addAccount()} full success>
+                                <Text style={styles.buttonText}>SUBMIT</Text>
+                                { (this.props.loadingStatus == true) &&
+                                    <Spinner color='white' />
+                                }
+                            </Button>
+                        </Form>
+                    </Card>
+                </Content>
+            </Container>
+          </KeyboardAvoidingView>
         );
     }
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fff'
+    },
     menu: {
 		color: "#fff",
 		fontSize: 20

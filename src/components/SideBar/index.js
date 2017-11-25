@@ -17,7 +17,7 @@ export const SideBar = ({ account }) => {
     }
 
     logout = () => {
-        AsyncStorage.setItem('account', '');
+        AsyncStorage.setItem('account', "");
         Actions.login();
     };    
     

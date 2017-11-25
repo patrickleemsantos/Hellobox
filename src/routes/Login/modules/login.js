@@ -14,7 +14,8 @@ const { GET_USERNAME,
         LOGIN,
         UPDATE_LOADING_STATUS,
         SET_ACCOUNT,
-        CLEAR_INPUTS
+        CLEAR_INPUTS,
+        SET_LOGIN_PREFERENCE
 	} = constants;
 
 const { width, height } = Dimensions.get("window");
@@ -50,6 +51,13 @@ export function setAccount(payload) {
 	}
 }
 
+export function setLoginPreference(payload) {
+    return{
+		type: SET_LOGIN_PREFERENCE,
+		payload
+	}
+}
+
 export function login() {
     return(dispatch, store)=>{
 
@@ -67,7 +75,8 @@ export function login() {
             request.get("http://52.220.212.6:3121/api/accountLogin")
             .query({
                 username: store().login.username,
-                password:store().login.password
+                password: store().login.password,
+                login_preference: store().login.loginPreference
             })
             .finish((error, res)=>{
                 if (res.body.error) {
@@ -176,13 +185,22 @@ function handleSetAccount(state, action) {
     })
 }
 
+function handleSetLoginPreference(state, action) {
+    return update(state, {
+        loginPreference: {
+            $set: action.payload
+        }
+    })
+}
+
 const ACTION_HANDLERS = {
 	GET_USERNAME: handleGetUsername,
     GET_PASSWORD: handleGetPassword,
     LOGIN: handleLogin,
     SET_ACCOUNT: handleSetAccount,
     UPDATE_LOADING_STATUS: handleLoadingStatus,
-    CLEAR_INPUTS: handleClearInputs
+    CLEAR_INPUTS: handleClearInputs,
+    SET_LOGIN_PREFERENCE: handleSetLoginPreference
 }
 
 const initialState = {
@@ -190,7 +208,8 @@ const initialState = {
     password: "",
     loginResult: {},
     isLoading: false,
-    account: {}
+    account: {},
+    loginPreference: "mobile"
 };
 
 export function LoginReducer (state = initialState, action) {

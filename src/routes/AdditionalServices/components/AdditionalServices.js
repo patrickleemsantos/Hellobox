@@ -149,10 +149,10 @@ class AdditionalServices extends React.Component {
                                         <CheckBox 
                                             checked={this.props.additionalService3}
                                             color="#E90000"
-                                            onPress={() => handAdditionalService(100, 3, "Mover", !this.props.additionalService3)}
+                                            onPress={() => handAdditionalService(0, 3, "Mover", !this.props.additionalService3)}
                                         />
                                         <Body>
-                                            <Text style={styles.additionalText}>Mover (₱100)</Text>
+                                            <Text style={styles.additionalText}>Mover (₱0)</Text>
                                         </Body>
                                     </ListItem>
                                     <ListItem>
