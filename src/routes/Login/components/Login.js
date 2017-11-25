@@ -4,7 +4,6 @@ import {
   StyleSheet,
   View,
   Image,
-  Text,
   KeyboardAvoidingView,
   Alert,
   AsyncStorage,
@@ -13,7 +12,7 @@ import {
   StatusBar,
   TouchableOpacity
 } from 'react-native';
-import { Spinner } from "native-base";
+import { Spinner, ListItem, CheckBox, Body, Text } from "native-base";
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const helloBoxLogo = require("../../../assets/images/logo.png");
@@ -33,11 +32,19 @@ export default class Login extends Component {
         const {status, message} = this.props.loginResult;
         
         if (status === true ){
-            Actions.home();
+            AsyncStorage.getItem('account', (err, result) => {
+                if (result) {
+                    Actions.home();
+                }
+            });
         }
     }
 
     render() {
+        handleLoginPreference = (value) => {
+            this.props.setLoginPreference(value);
+        }
+
         function handleUsername (value) {
             this.props.getUsername(value);
         }
@@ -50,8 +57,8 @@ export default class Login extends Component {
             <KeyboardAvoidingView behavior="padding" style={styles.container}>
             <View style={styles.logoContainer}>
                 <Image
-                style={styles.logo}
-                source={helloBoxLogo}
+                    style={styles.logo}
+                    source={helloBoxLogo}
                 />
                 <Text style={styles.title}></Text>
             </View>
@@ -60,17 +67,35 @@ export default class Login extends Component {
                 <Spinner color='red' />
             }
 
+            <View style={styles.loginPreference}>
+                <View style={styles.loginPreferenceMobileNo}>
+                    <CheckBox 
+                        checked={this.props.loginPreference == "mobile" ? true : false}
+                        onPress={() => handleLoginPreference("mobile")} />
+                    <Body>
+                        <Text stlye={styles.cbMobileNoText}>Mobile Number</Text>
+                    </Body>
+                </View>
+                <View style={styles.loginPreferenceEmail}>
+                    <CheckBox 
+                        checked={this.props.loginPreference == "email" ? true : false}
+                        onPress={() => handleLoginPreference("email")} />
+                    <Body>
+                        <Text stlye={styles.cbEmailText}>E-mail</Text>
+                    </Body>
+                </View>
+            </View>
             <View style={styles.formContainer}>
                 <StatusBar
                 barStyle="light-content"
                 />
                 <TextInput
                     onChangeText={ handleUsername.bind(this) }
-                    placeholder="Account ID"
+                    placeholder={this.props.loginPreference == "mobile" ? "Mobile number (9081234567)" : "E-mail address" }
                     placeholderTextColor="rgba(255,255,255,0.7)"
                     returnKeyType="next"
                     onSubmitEditing={() => this.passwordInput.focus()}
-                    keyboardType="email-address"
+                    // keyboardType="email-address"
                     autoCapitalize="none"
                     autoCorrect={false}
                     underlineColorAndroid='transparent'
@@ -107,6 +132,18 @@ export default class Login extends Component {
                     <Text>Create an Account</Text>
                 </TouchableOpacity>
             </View>
+            {/* <View style={styles.oAuthbuttons}>
+                <Icon.Button
+                    name="facebook"
+                    backgroundColor="#3b5998">
+                    Login via Facebook
+                </Icon.Button>
+                <Icon.Button
+                    name="google"
+                    backgroundColor="#DD4B39">
+                    Login via Google
+                </Icon.Button>
+            </View> */}
             </KeyboardAvoidingView>
         );
     }
@@ -127,7 +164,10 @@ const styles = StyleSheet.create({
       height: 250
     },
     formContainer: {
-      padding: 20
+      paddingTop: 5,
+      paddingLeft: 20,
+      paddingBottom: 20,
+      paddingRight: 20
     },
     title: {
       color: '#FFF',
@@ -152,6 +192,33 @@ const styles = StyleSheet.create({
       textAlign: 'center',
       color: '#FFFFFF',
       fontWeight: '700'
+    },
+    loginPreference: {
+        flex: 1,
+        flexDirection: "row",
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 20
+    },
+    loginPreferenceMobileNo: {
+        flex: 1,
+        flexDirection: "row",
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    loginPreferenceEmail: {
+        flex: 1,
+        flexDirection: "row",
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    cbEmailText: {
+        fontSize: 14,
+        color: "#000",
+    },
+    cbMobileNoText: {
+        fontSize: 14,
+        color: "#000",
     },
     loginOptions: {
         justifyContent: 'space-between',
