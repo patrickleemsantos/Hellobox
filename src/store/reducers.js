@@ -7,6 +7,7 @@ import { BookingDetailReducer as bookingDetail } from "../routes/BookingDetail/m
 import { AdditionalServicesReducer as additionalServices } from "../routes/AdditionalServices/modules/additionalServices"
 import { ReviewOrderReducer as reviewOrder } from "../routes/ReviewOrder/modules/reviewOrder"
 import { RegisterReducer as register } from "../routes/Register/modules/register"
+import { AccountInformationReducer as accountInformation } from "../routes/AccountInformation/modules/accountInformation"
 
 export const makeRootReducer = () => {
     return combineReducers({
@@ -17,7 +18,8 @@ export const makeRootReducer = () => {
         bookingDetail,
         additionalServices,
         reviewOrder,
-        register
+        register,
+        accountInformation
     });
 }
 

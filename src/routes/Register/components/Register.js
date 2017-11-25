@@ -16,7 +16,7 @@ export default class Register extends Component {
         if (this.props.registerStatus == true) {
             AsyncStorage.getItem('account', (err, result) => {
                 if (result) {
-                    Actions.home();
+                    Actions.login();
                 }
             });
         }
@@ -65,14 +65,19 @@ export default class Register extends Component {
                             <Input style={styles.inputText} 
                                     onChangeText={ handleFirstName.bind(this) }
                                     value={this.props.firstName }
-                                    autoCorrect={false} />
+                                    autoCorrect={false} 
+                                    onSubmitEditing={() => this.lastNameInput.focus()}
+                                    returnKeyType="next" />
                         </Item>
                         <Item inlineLabel>
                             <Label style={styles.labelText}>Last Name *</Label>
                             <Input style={styles.inputText} 
                                     onChangeText={ handleLastName.bind(this) } 
                                     value={this.props.lastName }
-                                    autoCorrect={false} />
+                                    autoCorrect={false} 
+                                    ref={(input) => this.lastNameInput = input}
+                                    onSubmitEditing={() => this.mobileNumberInput.focus()}
+                                    returnKeyType="next" />
                         </Item>
                         <Item inlineLabel>
                             <Label style={styles.labelText}>Mobile +63 *</Label>
@@ -81,7 +86,10 @@ export default class Register extends Component {
                                     maxLength={10}
                                     keyboardType = 'numeric'
                                     onChangeText={ handleMobileNumber.bind(this) }
-                                    value={this.props.mobileNumber } />
+                                    value={this.props.mobileNumber } 
+                                    ref={(input) => this.mobileNumberInput = input}
+                                    onSubmitEditing={() => this.emailInput.focus()}
+                                    returnKeyType="next" />
                         </Item>
                         <Item inlineLabel>
                             <Label style={styles.labelText}>Email *</Label>
@@ -89,7 +97,10 @@ export default class Register extends Component {
                                     autoCapitalize="none"
                                     autoCorrect={false}
                                     onChangeText={ handleEmail.bind(this) }
-                                    value={this.props.email } />
+                                    value={this.props.email } 
+                                    ref={(input) => this.emailInput = input} 
+                                    onSubmitEditing={() => this.passwordInput.focus()}
+                                    returnKeyType="next" />
                         </Item>
                         <Item inlineLabel last>
                             <Label style={styles.labelText}>Password *</Label>
@@ -99,7 +110,8 @@ export default class Register extends Component {
                                     autoCapitalize="none"
                                     autoCorrect={false}
                                     returnKeyType="go"
-                                    secureTextEntry />
+                                    secureTextEntry 
+                                    ref={(input) => this.passwordInput = input} />
                         </Item>
                         <Button disabled={this.props.loadingStatus} onPress={() => this.props.addAccount()} full success>
                             <Text style={styles.buttonText}>SUBMIT</Text>
@@ -129,7 +141,7 @@ const styles = StyleSheet.create({
         fontSize: 14
     },
     inputText: {
-        fontSize: 14
+        // fontSize: 14
     },
     buttonText: {
         fontWeight: "bold"

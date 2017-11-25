@@ -8,6 +8,7 @@ import BookingDetailContainer from "./BookingDetail/containers/BookingDetailCont
 import AdditionalServicesContainer from "./AdditionalServices/containers/AdditionalServicesContainer";
 import ReviewOrderContainer from "./ReviewOrder/containers/ReviewOrderContainer";
 import RegisterContainer from "./Register/containers/RegisterContainer";
+import AccountInformationContainer from "./AccountInformation/containers/AccountInformationContainer";
 
 const scenes = Actions.create(
     <Scene key="root" hideNavBar>
@@ -19,6 +20,7 @@ const scenes = Actions.create(
         <Scene key="additionalServices" panHandlers={null} component={AdditionalServicesContainer} title="additionalServices" />
         <Scene key="reviewOrder" panHandlers={null} component={ReviewOrderContainer} title="reviewOrder" />
         <Scene key="register" panHandlers={null} component={RegisterContainer} title="register" />
+        <Scene key="accountInformation" panHandlers={null} component={AccountInformationContainer} title="accountInformation" />
     </Scene>
 );
 

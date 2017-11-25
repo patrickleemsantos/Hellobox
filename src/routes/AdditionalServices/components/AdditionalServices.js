@@ -213,7 +213,7 @@ class AdditionalServices extends React.Component {
                     <Footer>
                         <FooterTab style={styles.btnFooterContainer} iosBarStyle="light-content" androidStatusBarColor="#E90000">
                             <Button success style={styles.button} onPress={() => Actions.reviewOrder()}>
-                                <Text style={styles.subText}>Review Order</Text>
+                                <Text style={styles.subText}>REVIEW ORDER</Text>
                             </Button>
                         </FooterTab>
                     </Footer>

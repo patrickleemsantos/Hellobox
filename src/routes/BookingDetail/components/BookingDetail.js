@@ -127,7 +127,7 @@ class BookingDetail extends React.Component {
                                 </View>
                             }
 
-                            { (this.props.currentBooking.note && this.props.currentBooking.note !== "") && 
+                            { (this.props.currentBooking.note || this.props.currentBooking.note !== "") && 
                                 <View style={styles.noteContainer}>
                                     <Text style={styles.additionalHeader}>Note:</Text>
                                     <View style={styles.additionalListContainer}>

@@ -8,6 +8,10 @@ const routes = ["Home", "Chat", "Profile"];
 
 export const SideBar = ({ account }) => {
     
+    accountInformation = () => {
+        Actions.accountInformation();
+    }
+
     bookings = () => {
         Actions.bookings();
     }
@@ -22,18 +26,13 @@ export const SideBar = ({ account }) => {
             <Content style={{
                     backgroundColor: "#FFFFFF"
                 }}>
-                <View style={{
+                {/* <View style={{
                         height: 100,
                         alignSelf: "stretch",
                         justifyContent: "center",
                         alignItems: "center",
                         backgroundColor: "#E90000"
                     }}>
-                     {/* <Image
-                        circle
-                        style={{ height: 90, width: 90, borderRadius: 50 }}
-                        source={{ uri: account.profile_picture }}
-                        /> */}
                     <Text
                         style={{
                             marginTop: 10,
@@ -42,8 +41,18 @@ export const SideBar = ({ account }) => {
                             fontWeight: "bold"
                         }}
                         >{account.first_name + " " + account.last_name}</Text>
-                </View>
+                </View> */}
                 <List>
+                    <ListItem icon onPress={() => this.accountInformation()}>
+                        <Left>
+                            <Icon name="user" size={15} />
+                        </Left>
+                        <Body>
+                            <Text>Account</Text>
+                        </Body>
+                        <Right>
+                        </Right>
+                    </ListItem>
                     <ListItem icon onPress={() => this.bookings()}>
                         <Left>
                             <Icon name="book" size={15} />

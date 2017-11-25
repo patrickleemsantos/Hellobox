@@ -40,76 +40,84 @@ class Bookings extends React.Component {
 						<Right>
 						</Right>
 					</Header>
-					<Segment>
+					<Segment style={{backgroundColor: "#FFFFFF"}}>
 						<Button 
+							style={{
+								backgroundColor: this.props.selectedBookings === "current" ? "#E90000" : "#FFFFFF",
+								borderColor: "#E90000",
+							}}
 							first 
 							active={this.props.selectedBookings === "current" ? true : false}
 							onPress={() => handleSelectBooking("current")}
 						>
-							<Text>Current</Text>
+							<Text style={{ color: this.props.selectedBookings === "current" ? "#FFFFFF" : "#E90000" }}>Current</Text>
 						</Button>
 						<Button 
+							style={{
+								backgroundColor: this.props.selectedBookings === "completed" ? "#E90000" : "#FFFFFF",
+								borderColor: "#E90000",
+							}}
 							last
 							active={this.props.selectedBookings === "completed" ? true : false}
 							onPress={() => handleSelectBooking("completed")}
 						>
-							<Text>Completed</Text>
+							<Text style={{ color: this.props.selectedBookings === "completed" ? "#FFFFFF" : "#E90000" }}>Completed</Text>
 						</Button>
 					</Segment>
 					<Content>
-						<List dataArray={this.props.bookings}
-							renderRow={(booking) =>
-							<TouchableOpacity
-								onPress={() => Actions.bookingDetail({booking: booking})}
-								activeOpacity={1}>
-								<Card>
-									<CardItem>
-										<View style={{flex: 1, flexDirection: 'column'}}>
-											<View style={styles.headerContainer}>
-												<Icon style={styles.bookingIcon} name="truck" />
-												<View style={styles.jobContainer}>
-													<Text style={styles.job}>JOB ID: {booking.booking_id}</Text>
-													<Text style={styles.note}>DRIVER: {booking.driver.first_name.toUpperCase() + " " + booking.driver.last_name.toUpperCase()}</Text>
+						{ (this.props.showBookingLoader == true) &&
+							<Spinner color='#E90000' />
+
+							||
+
+							<List dataArray={this.props.bookings}
+								renderRow={(booking) =>
+								<TouchableOpacity
+									onPress={() => Actions.bookingDetail({booking: booking})}
+									activeOpacity={1}>
+									<Card>
+										<CardItem>
+											<View style={{flex: 1, flexDirection: 'column'}}>
+												<View style={styles.headerContainer}>
+													<Icon style={styles.bookingIcon} name="truck" />
+													<View style={styles.jobContainer}>
+														<Text style={styles.job}>JOB ID: {booking.booking_id}</Text>
+														<Text style={styles.note}>DRIVER: {booking.driver.first_name.toUpperCase() + " " + booking.driver.last_name.toUpperCase()}</Text>
+													</View>
+													<View style={styles.statusContainer}>
+														<Text style={ styles.status }>{booking.status}</Text>
+													</View>
 												</View>
-												<View style={styles.statusContainer}>
-													<Text style={ styles.status }>{booking.status}</Text>
+												<View style={styles.locationContainter}>
+													<View style={styles.timeContainer}>
+														<Icon style={styles.timeIcon} name="clock-o" />
+														<View style={styles.locationValueContainer}>
+															<Text style={styles.locationTime}>{booking.pick_up_date}</Text>
+														</View>
+													</View>
+													<View style={styles.pickUpContainer}>
+														<Icon style={styles.fromIcon} name="map-marker" />
+														<View style={styles.locationValueContainer}>
+															<Text style={styles.locationPickup}>{booking.pick_up.address}</Text>
+														</View>
+													</View>
+													<View style={styles.ellipsisContainer}>
+														<Icon style={styles.ellipsisIcon} name="ellipsis-v" />
+													</View>
+													<View style={styles.dropOffContainer}>
+														<Icon style={styles.destinationIcon} name="location-arrow" />
+														<View style={styles.locationValueContainer}>
+															<Text style={styles.locationDropOff}>{booking.drop_off.address}</Text>
+														</View>
+													</View>
 												</View>
 											</View>
-											<View style={styles.locationContainter}>
-												<View style={styles.timeContainer}>
-													<Icon style={styles.timeIcon} name="clock-o" />
-													<View style={styles.locationValueContainer}>
-														<Text style={styles.locationTime}>{booking.pick_up_date}</Text>
-													</View>
-												</View>
-												<View style={styles.pickUpContainer}>
-													<Icon style={styles.fromIcon} name="map-marker" />
-													<View style={styles.locationValueContainer}>
-														<Text style={styles.locationPickup}>{booking.pick_up.address}</Text>
-													</View>
-												</View>
-												<View style={styles.ellipsisContainer}>
-													<Icon style={styles.ellipsisIcon} name="ellipsis-v" />
-												</View>
-												<View style={styles.dropOffContainer}>
-													<Icon style={styles.destinationIcon} name="location-arrow" />
-													<View style={styles.locationValueContainer}>
-														<Text style={styles.locationDropOff}>{booking.drop_off.address}</Text>
-													</View>
-												</View>
-											</View>
-										</View>
-									</CardItem>
-								</Card>
-							</TouchableOpacity>
-							}>
-						</List>
-						<View style={styles.spinnerContainer}>
-							{/* <Spinner style={styles.spinner} isVisible={this.props.showBookingLoader} size={40} type="Wave" /> */}
-                			{(this.props.showBookingLoader == true) &&
-								<Spinner color='red' />
-							}
-						</View>
+										</CardItem>
+									</Card>
+								</TouchableOpacity>
+								}>
+							</List>
+						}
 					</Content>  
 				</View>
                   
