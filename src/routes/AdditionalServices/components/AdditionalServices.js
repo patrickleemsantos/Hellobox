@@ -8,9 +8,7 @@ var dateFormat = require('dateformat');
 
 class AdditionalServices extends React.Component {
     componentDidMount() {
-        
         this.props.setPickUpDateTime(dateFormat(new Date(), "mmmm do yyyy, h:MM:ss TT"));
-        console.log(dateFormat(new Date(), "mmmm do yyyy, h:MM:ss TT"));
     }
 
     render () {    

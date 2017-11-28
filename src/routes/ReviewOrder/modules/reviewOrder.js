@@ -3,6 +3,7 @@ import constants from "./actionConstants";
 import { Dimensions } from "react-native";
 import RNGooglePlaces from "react-native-google-places";
 import request from "../../../util/request";
+var dateFormat = require('dateformat');
 
 //------------------------
 //Constants
@@ -41,7 +42,7 @@ export function bookCar(payload) {
 					profile_picture: store().login.account.profile_picture,
 					rating: store().login.account.rating
 				},
-				driver: nearByDriver.driver,
+				driver: nearByDriver,
 				pick_up:{
 					address:store().home.selectedAddress.selectedPickUp.address,
 					name:store().home.selectedAddress.selectedPickUp.name,
@@ -62,7 +63,7 @@ export function bookCar(payload) {
 				rating: 0,
 				pick_up_date: store().additionalServices.pickUpDateTime,
 				note: store().additionalServices.bookingNote,
-				timestamp: new Date().toLocaleString()
+				timestamp: dateFormat(new Date(), "mmmm do yyyy, h:MM:ss TT")
 			},
 			nearByDriver: {
 				socket_id: nearByDriver.socket_id,

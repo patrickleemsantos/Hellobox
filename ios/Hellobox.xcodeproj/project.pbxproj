@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -12,7 +13,6 @@
 		00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302DC1ABCB9D200DB3ED1 /* libRCTNetwork.a */; };
 		00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */; };
 		00E356F31AD99517003FC87E /* HelloboxTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* HelloboxTests.m */; };
-		0C1E4C914CB213FC3192B217 /* libPods-Hellobox.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 90B68E69051A6D4E5BE7F0B6 /* libPods-Hellobox.a */; };
 		12E2E354A984405693B94703 /* libRNSpinkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9982AEDE170C4405832CBD5B /* libRNSpinkit.a */; };
 		133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
 		139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139105C11AF99BAD00B5F7CC /* libRCTSettings.a */; };
@@ -22,7 +22,6 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		140ED2AC1D01E1AD002B40FF /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
-		1694125348A04CDC812DB312 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26E96637D74644A39AE4C693 /* MaterialIcons.ttf */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -35,13 +34,7 @@
 		2D02E4C81E0B4AEC006451C7 /* libRCTWebSocket-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3E991DF850E9000B6D8A /* libRCTWebSocket-tvOS.a */; };
 		2D02E4C91E0B4AEC006451C7 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* HelloboxTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* HelloboxTests.m */; };
-		370C5210635F4F3CAA7FED37 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D11A5BA361A242A095838D82 /* Foundation.ttf */; };
-		4CC26CAEE32649CEAF034AB7 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DBCDC2DABC354A2499A42C74 /* Ionicons.ttf */; };
-		4D0F25651B054BA681BDFEC1 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7F66DD0D78E48B0A5791640 /* MaterialCommunityIcons.ttf */; };
-		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		7BF88890092A459AA7FD99B6 /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 553CC52B43EE4478B8BE9BB7 /* libAirMaps.a */; };
-		7C322E4302BE4914A82DC49C /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 15859A1C829F4327B9927A26 /* Zocial.ttf */; };
-		8284F16F77184F8AB1109C0F /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B5B596FF5B514290BBF38202 /* EvilIcons.ttf */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		942F21CB1F88C4120041A7B6 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 942F21C01F88C4120041A7B6 /* Entypo.ttf */; };
 		942F21CC1F88C4120041A7B6 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 942F21C11F88C4120041A7B6 /* EvilIcons.ttf */; };
@@ -54,6 +47,7 @@
 		942F21D31F88C4120041A7B6 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 942F21C81F88C4120041A7B6 /* Octicons.ttf */; };
 		942F21D41F88C4120041A7B6 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 942F21C91F88C4120041A7B6 /* SimpleLineIcons.ttf */; };
 		942F21D51F88C4120041A7B6 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 942F21CA1F88C4120041A7B6 /* Zocial.ttf */; };
+		9439C5F71FC998890096D497 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		9470769F1F931A41005E3F0E /* AIRGMSMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = 9470767A1F931A41005E3F0E /* AIRGMSMarker.m */; };
 		947076A01F931A41005E3F0E /* AIRGMSPolygon.m in Sources */ = {isa = PBXBuildFile; fileRef = 9470767C1F931A41005E3F0E /* AIRGMSPolygon.m */; };
 		947076A11F931A41005E3F0E /* AIRGMSPolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = 9470767E1F931A41005E3F0E /* AIRGMSPolyline.m */; };
@@ -73,14 +67,9 @@
 		947076AF1F931A42005E3F0E /* AIRGoogleMapURLTileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9470769A1F931A41005E3F0E /* AIRGoogleMapURLTileManager.m */; };
 		947076B01F931A42005E3F0E /* DummyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9470769C1F931A41005E3F0E /* DummyView.m */; };
 		947076B11F931A42005E3F0E /* RCTConvert+GMSMapViewType.m in Sources */ = {isa = PBXBuildFile; fileRef = 9470769E1F931A41005E3F0E /* RCTConvert+GMSMapViewType.m */; };
-		9926753E7AF64FC8ABD03EFA /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22C86FADE6EF4B4F84185EF0 /* Feather.ttf */; };
-		9B2DF3E1B92D467DB1EA7702 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3611A42F68644CE5B7350BBA /* Octicons.ttf */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
-		BF0439633A7A439B88D48A5C /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AF734DF575A2421B8553B8EC /* FontAwesome.ttf */; };
 		C4FBCD4A0BD2445AAA685179 /* libRNGooglePlaces.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 47BB672977B04AB2AEA52A53 /* libRNGooglePlaces.a */; };
 		D6B514A02A3D4AEBBDC909BD /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CC70304A00149B081E49EB2 /* libRNVectorIcons.a */; };
-		F219285362274AB9AE9195D5 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0579023C0CD44FB6820210FC /* Entypo.ttf */; };
-		F24D324D3CAD436A9564E219 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8E752E6CC2104A5B8C93D876 /* SimpleLineIcons.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -478,9 +467,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
-				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
+				9439C5F71FC998890096D497 /* libRCTAnimation.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
-				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
 				00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */,
 				00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */,
@@ -492,7 +480,6 @@
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				7BF88890092A459AA7FD99B6 /* libAirMaps.a in Frameworks */,
 				D6B514A02A3D4AEBBDC909BD /* libRNVectorIcons.a in Frameworks */,
-				0C1E4C914CB213FC3192B217 /* libPods-Hellobox.a in Frameworks */,
 				C4FBCD4A0BD2445AAA685179 /* libRNGooglePlaces.a in Frameworks */,
 				12E2E354A984405693B94703 /* libRNSpinkit.a in Frameworks */,
 			);
@@ -819,7 +806,6 @@
 				1CC70304A00149B081E49EB2 /* libRNVectorIcons.a */,
 				47BB672977B04AB2AEA52A53 /* libRNGooglePlaces.a */,
 				9982AEDE170C4405832CBD5B /* libRNSpinkit.a */,
-				033499D5B4EF478FAEDC813C /* libRCTFBSDK.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -952,7 +938,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 610;
+				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -961,6 +947,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = VQ6UXXMPA4;
+						ProvisioningStyle = Automatic;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -1353,17 +1340,6 @@
 				942F21CD1F88C4120041A7B6 /* Feather.ttf in Resources */,
 				942F21D11F88C4120041A7B6 /* MaterialCommunityIcons.ttf in Resources */,
 				942F21CB1F88C4120041A7B6 /* Entypo.ttf in Resources */,
-				F219285362274AB9AE9195D5 /* Entypo.ttf in Resources */,
-				8284F16F77184F8AB1109C0F /* EvilIcons.ttf in Resources */,
-				9926753E7AF64FC8ABD03EFA /* Feather.ttf in Resources */,
-				BF0439633A7A439B88D48A5C /* FontAwesome.ttf in Resources */,
-				370C5210635F4F3CAA7FED37 /* Foundation.ttf in Resources */,
-				4CC26CAEE32649CEAF034AB7 /* Ionicons.ttf in Resources */,
-				4D0F25651B054BA681BDFEC1 /* MaterialCommunityIcons.ttf in Resources */,
-				1694125348A04CDC812DB312 /* MaterialIcons.ttf in Resources */,
-				9B2DF3E1B92D467DB1EA7702 /* Octicons.ttf in Resources */,
-				F24D324D3CAD436A9564E219 /* SimpleLineIcons.ttf in Resources */,
-				7C322E4302BE4914A82DC49C /* Zocial.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1557,13 +1533,12 @@
 				INFOPLIST_FILE = HelloboxTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hellobox.app/Hellobox";
 			};
@@ -1585,13 +1560,12 @@
 				INFOPLIST_FILE = HelloboxTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hellobox.app/Hellobox";
 			};
@@ -1603,9 +1577,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = VQ6UXXMPA4;
+				ENABLE_BITCODE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/../node_modules/react-native-maps/lib/ios/AirMaps/**",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
@@ -1620,7 +1597,10 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.hellobox.user;
 				PRODUCT_NAME = Hellobox;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				STRIP_INSTALLED_PRODUCT = NO;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1631,8 +1611,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VQ6UXXMPA4;
+				ENABLE_BITCODE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/../node_modules/react-native-maps/lib/ios/AirMaps/**",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
@@ -1647,7 +1630,10 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.hellobox.user;
 				PRODUCT_NAME = Hellobox;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				STRIP_INSTALLED_PRODUCT = NO;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -1674,9 +1660,7 @@
 				);
 				INFOPLIST_FILE = "Hellobox-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1711,9 +1695,7 @@
 				);
 				INFOPLIST_FILE = "Hellobox-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1739,9 +1721,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "Hellobox-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.Hellobox-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
@@ -1763,9 +1743,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "Hellobox-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.Hellobox-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
@@ -1782,20 +1760,30 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1823,13 +1811,21 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1837,6 +1833,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;

@@ -58,6 +58,8 @@ export function setPassword(payload) {
 }
 
 export function addAccount(payload) {
+    var randomize = require('randomatic');
+    
     return (dispatch, store) => {
         if (store().register.firstName == "") {
             Alert.alert("Hellobox", "Please enter first name");
@@ -75,7 +77,7 @@ export function addAccount(payload) {
                             Alert.alert("Hellobox", "Please enter password");
                         } else {
                             const payload = {
-                                account_id: store().register.mobileNumber,
+                                account_id: randomize('000000'),
                                 email: store().register.email,
                                 first_name: store().register.firstName,
                                 last_name: store().register.lastName,
