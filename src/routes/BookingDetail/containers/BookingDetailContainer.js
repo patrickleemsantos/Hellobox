@@ -9,7 +9,8 @@ import {
     setSelectedStar,
     getComment,
     saveComment,
-    trackDriver
+    trackDriver,
+    setTrackTimer
 } from "../modules/bookingDetail";
 
 const mapStateToProps = (state) => ({   
@@ -22,6 +23,7 @@ const mapStateToProps = (state) => ({
     selectedStar: state.bookingDetail.selectedStar || 0,
     comment: state.bookingDetail.comment || "",
     currentDriverLocation: state.bookingDetail.currentDriverLocation,
+    trackTimer: state.bookingDetail.trackTimer
 });
 
 const mapActionCreators = {
@@ -33,7 +35,8 @@ const mapActionCreators = {
     setSelectedStar,
     getComment,
     saveComment,
-    trackDriver
+    trackDriver,
+    setTrackTimer
 };
 
 export default connect(mapStateToProps, mapActionCreators)(BookingDetail);

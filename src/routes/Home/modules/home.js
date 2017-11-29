@@ -1,6 +1,6 @@
 import update from "react-addons-update";
 import constants from "./actionConstants";
-import { Dimensions } from "react-native";
+import { Dimensions, NetInfo } from "react-native";
 import RNGooglePlaces from "react-native-google-places";
 import Polyline from '@mapbox/polyline';
 import request from "../../../util/request";
@@ -142,63 +142,69 @@ export function getSelectedAddress(payload) {
 		.then(() => {
 			//Get the distance and time
 			if(store().home.selectedAddress.selectedPickUp && store().home.selectedAddress.selectedDropOff){
-				request.get("https://maps.googleapis.com/maps/api/distancematrix/json")
-				.query({
-					origins:store().home.selectedAddress.selectedPickUp.latitude + "," + store().home.selectedAddress.selectedPickUp.longitude,
-					destinations:store().home.selectedAddress.selectedDropOff.latitude + "," + store().home.selectedAddress.selectedDropOff.longitude,
-					mode: "driving",
-					key: "AIzaSyBNDEF41tmSDitm8r73vTGbUviVpKC1XiM"
-				})
-				.finish((error, res)=>{
-					dispatch({
-						type:GET_DISTANCE_MATRIX,
-						payload:res.body
-					});
-				})
-
-				// request.get("https://maps.googleapis.com/maps/api/directions/json")
-				// .query({
-				// 	origin:store().home.selectedAddress.selectedPickUp.latitude + "," + store().home.selectedAddress.selectedPickUp.longitude,
-				// 	destination:store().home.selectedAddress.selectedDropOff.latitude + "," + store().home.selectedAddress.selectedDropOff.longitude
-				// })
-				// .finish((error, res)=>{
-				// 	let points = Polyline.decode(res.body.routes[0].overview_polyline.points);
-				// 	let coords = points.map((point, index) => {
-				// 		return  {
-				// 			latitude : point[0],
-				// 			longitude : point[1]
-				// 		}
-				// 	})
-				// 	dispatch({
-				// 		type:GET_DIRECTIONS,
-				// 		payload:coords
-				// 	});
-				// })
-
-				setTimeout(function() {
-					if(store().home.selectedAddress.selectedPickUp && store().home.selectedAddress.selectedDropOff){
-						// const fare = calculateFare(
-						// 	dummyNumbers.baseFare,
-						// 	dummyNumbers.timeRate,
-						// 	store().home.distanceMatrix.rows[0].elements[0].duration.value,
-						// 	dummyNumbers.distanceRate,
-						// 	store().home.distanceMatrix.rows[0].elements[0].distance.value,
-						// 	dummyNumbers.surge,
-						// 	store().home.selectedVehicle
-						// );
-
-						const fare = calculateFare(
-							store().home.distanceMatrix.rows[0].elements[0].duration.value,
-							store().home.distanceMatrix.rows[0].elements[0].distance.value,
-							store().home.selectedVehicle
-						);
-
-						dispatch({
-							type: GET_FARE,
-							payload: fare
+				NetInfo.isConnected.fetch().then(isConnected => {
+					if(isConnected) {
+						request.get("https://maps.googleapis.com/maps/api/distancematrix/json")
+						.query({
+							origins:store().home.selectedAddress.selectedPickUp.latitude + "," + store().home.selectedAddress.selectedPickUp.longitude,
+							destinations:store().home.selectedAddress.selectedDropOff.latitude + "," + store().home.selectedAddress.selectedDropOff.longitude,
+							mode: "driving",
+							key: "AIzaSyBNDEF41tmSDitm8r73vTGbUviVpKC1XiM"
 						})
+						.finish((error, res)=>{
+							dispatch({
+								type:GET_DISTANCE_MATRIX,
+								payload:res.body
+							});
+						})
+
+						// request.get("https://maps.googleapis.com/maps/api/directions/json")
+						// .query({
+						// 	origin:store().home.selectedAddress.selectedPickUp.latitude + "," + store().home.selectedAddress.selectedPickUp.longitude,
+						// 	destination:store().home.selectedAddress.selectedDropOff.latitude + "," + store().home.selectedAddress.selectedDropOff.longitude
+						// })
+						// .finish((error, res)=>{
+						// 	let points = Polyline.decode(res.body.routes[0].overview_polyline.points);
+						// 	let coords = points.map((point, index) => {
+						// 		return  {
+						// 			latitude : point[0],
+						// 			longitude : point[1]
+						// 		}
+						// 	})
+						// 	dispatch({
+						// 		type:GET_DIRECTIONS,
+						// 		payload:coords
+						// 	});
+						// })
+
+						setTimeout(function() {
+							if(store().home.selectedAddress.selectedPickUp && store().home.selectedAddress.selectedDropOff){
+								// const fare = calculateFare(
+								// 	dummyNumbers.baseFare,
+								// 	dummyNumbers.timeRate,
+								// 	store().home.distanceMatrix.rows[0].elements[0].duration.value,
+								// 	dummyNumbers.distanceRate,
+								// 	store().home.distanceMatrix.rows[0].elements[0].distance.value,
+								// 	dummyNumbers.surge,
+								// 	store().home.selectedVehicle
+								// );
+
+								const fare = calculateFare(
+									store().home.distanceMatrix.rows[0].elements[0].duration.value,
+									store().home.distanceMatrix.rows[0].elements[0].distance.value,
+									store().home.selectedVehicle
+								);
+
+								dispatch({
+									type: GET_FARE,
+									payload: fare
+								})
+							}
+						}, 2000)
+					} else {
+						Alert.alert('Error', "Please connect to the internet");
 					}
-				}, 2000)
+				});
 			}
 		})
 		.catch((error) => console.log(error.message));
@@ -247,17 +253,23 @@ export function getSelectedVehicle(payload) {
 // Get nearby drivers
 export function getNearByDrivers(){
 	return(dispatch, store)=>{
-		request.get("http://52.220.212.6:3121/api/driverLocation")
-		.query({
-			latitude:store().home.region.latitude,
-			longitude:store().home.region.longitude	
-		})
-		.finish((error, res)=>{
-			if(res){
-				dispatch({
-					type:GET_NEARBY_DRIVERS,
-					payload:res.body
+		NetInfo.isConnected.fetch().then(isConnected => {
+			if(isConnected) {
+				request.get("http://52.220.212.6:3121/api/driverLocation")
+				.query({
+					latitude:store().home.region.latitude,
+					longitude:store().home.region.longitude	
+				})
+				.finish((error, res)=>{
+					if(res){
+						dispatch({
+							type:GET_NEARBY_DRIVERS,
+							payload:res.body
+						});
+					}
 				});
+			} else {
+				Alert.alert('Error', "Please connect to the internet");
 			}
 		});
 	};
@@ -466,7 +478,7 @@ const initialState = {
 	selectedAddress: {},
 	selectedVehicle: "van",
 	isSearchAddressLoading: false,
-	isMapReady: false
+	isMapReady: false,
 };
 
 export function HomeReducer (state = initialState, action) {

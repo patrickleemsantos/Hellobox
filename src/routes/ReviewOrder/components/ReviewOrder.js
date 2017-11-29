@@ -22,6 +22,17 @@ class ReviewOrder extends React.Component {
                     }
                 });
             }
+
+            if (this.props.booking.status === "REJECTED") {
+                AsyncStorage.getItem('account', (err, result) => {
+                    let account = JSON.parse(result);
+                    if (account.account_id === this.props.booking.account.account_id) {  
+                        if (this.props.retryBooking == true) {
+                            this.props.bookCar()
+                        }
+                    }
+                });
+            }
         }
     }
     

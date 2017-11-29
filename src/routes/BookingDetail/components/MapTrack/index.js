@@ -5,6 +5,7 @@ import Modal from 'react-native-modalbox';
 import DriverFooterProfile from "../DriverFooterProfile";
 import Icon from "react-native-vector-icons/FontAwesome";
 import styles from "./MapTrackStyles.js";
+import { Dimensions } from "react-native";
 
 export const MapTrack = ({ 
 		region,
@@ -12,17 +13,16 @@ export const MapTrack = ({
 		dropOff,
 		pickUp,
 		carMarker,
-		showMapTrackModal,
 		trackDriver,
 		driverInfo,
-		setShowMapTrackModal
+		setShowMapTrackModal,
+		showMapTrackModal
 	})=>{
 
-	if (showMapTrackModal === true) {
-		setTimeout(function(){
-			trackDriver();
-		}, 2000);
-	}
+	const { width, height } = Dimensions.get("window");
+	const ASPECT_RATIO = width / height;
+	const LATITUDE_DELTA = 0.0922;
+	const LONGITUDE_DELTA = ASPECT_RATIO * LATITUDE_DELTA;
 
 	return(
 		<Modal 
@@ -49,7 +49,12 @@ export const MapTrack = ({
 				<MapView
 					provider={MapView.PROVIDER_GOOGLE}
 					style={styles.map}
-					region={region}
+					region={{
+						latitude: currentDriverLocation.coordinate.coordinates[1],
+						longitude: currentDriverLocation.coordinate.coordinates[0],
+						latitudeDelta: LATITUDE_DELTA,
+						longitudeDelta: LONGITUDE_DELTA
+					  }}
 					>
 
 					<MapView.Marker

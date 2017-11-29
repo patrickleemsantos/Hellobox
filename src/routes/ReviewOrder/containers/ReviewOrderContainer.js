@@ -25,6 +25,7 @@ const mapStateToProps = (state) => ({
     pickUpDateTime: state.additionalServices.pickUpDateTime || "2017-01-01 00:00",
     bookingNote: state.additionalServices.bookingNote || "",
     booking: state.reviewOrder.booking || {},
+    retryBooking: state.reviewOrder.retryBooking || false
 });
 
 const mapActionCreators = {

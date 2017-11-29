@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, AsyncStorage } from "react-native";
+import { ToastAndroid, Platform, View, Text, StyleSheet, AsyncStorage, BackHandler } from "react-native";
 import { Container, Content, Drawer, Footer, FooterTab, Button } from "native-base";
 import { Actions } from "react-native-router-flux";
 import MapContainer from "./MapContainer";
@@ -8,6 +8,7 @@ import SelectVehicle from "./SelectVehicle";
 import Fare from "./Fare";
 import Fab from "./Fab";
 import SideBar from '../../../components/SideBar';
+import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
 var Spinner = require("react-native-spinkit");
 
 const justBoxLogo = require("../../../assets/images/logo.png");
@@ -16,14 +17,37 @@ const carMarker = require("../../../assets/images/carMarker.png");
 class Home extends React.Component {
 
     componentDidMount() {
-        var rx = this;
-		this.props.getCurrentLocation();
-		setTimeout(function(){
-			rx.props.getNearByDrivers();
-		}, 1000);
+        LocationServicesDialogBox.checkLocationServicesIsEnabled({
+            message: "<h2>Use Location?</h2>This app wants to change your device settings:<br/><br/>Use GPS, Wi-Fi, and cell network for location<br/><br/><a href='#'>Learn more</a>",
+            ok: "YES",
+            cancel: "NO",
+            enableHighAccuracy: true, // true => GPS AND NETWORK PROVIDER, false => ONLY GPS PROVIDER
+            showDialog: true, // false => Opens the Location access page directly
+            openLocationServices: true // false => Directly catch method is called if location services are turned off
+        }).then(function(success) {
+            var rx = this;
+            // this.props.getCurrentLocation();
+            setInterval(function(){
+                // if (Platform.OS === 'android') {
+                //     ToastAndroid.show('Location updated', ToastAndroid.SHORT);
+                // }
+                rx.props.getCurrentLocation();
+                rx.props.getNearByDrivers();
+            }, 5000);
+
+        }.bind(this)
+        ).catch((error) => {
+            console.log(error.message);
+        });
+        
+        BackHandler.addEventListener('hardwareBackPress', () => {
+            LocationServicesDialogBox.forceCloseDialog();
+        });
     }
 
     render() {
+        const initialRegion = this.props.region;
+
         closeDrawer = () => {
             this.drawer._root.close()
         };
@@ -47,6 +71,7 @@ class Home extends React.Component {
                                 </View>
                                 { (this.props.isMapReady === true) &&
                                     <MapContainer 
+                                        initialRegion={initialRegion}
                                         region={this.props.region} 
                                         getInputData={this.props.getInputData} 
                                         toggleSearchResultmodal={this.props.toggleSearchResultmodal}

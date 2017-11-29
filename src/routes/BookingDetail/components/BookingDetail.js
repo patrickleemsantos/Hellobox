@@ -16,8 +16,7 @@ class BookingDetail extends React.Component {
         this.props.getBookingHistory(this.props.booking.booking_id);
         if (this.props.booking.status === "JOB COMPLETED" && parseInt(this.props.booking.rating) === 0) {
             this.props.setShowRatingModal(true);
-        }   
-        this.props.trackDriver();
+        }  
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -30,6 +29,21 @@ class BookingDetail extends React.Component {
                             if (this.props.currentBooking.status === "JOB COMPLETED" && parseInt(this.props.currentBooking.rating) === 0) {
                                 this.props.setShowRatingModal(true);
                             }
+                        }
+                    }
+
+                    if (prevProps.showMapTrackModal !== this.props.showMapTrackModal) {
+                        var rx = this;
+                        var trackTimer;
+                        if (this.props.showMapTrackModal === true) {
+                            trackTimer = setInterval(function(){
+                                rx.props.trackDriver();
+                            }, 5000);
+                            this.props.setTrackTimer(trackTimer);
+                            console.log("trackTimer true: " + this.props.trackTimer);
+                        } else {
+                            console.log("trackTimer false: " + this.props.trackTimer);
+                            clearInterval(this.props.trackTimer);
                         }
                     }
                 }
@@ -208,14 +222,14 @@ class BookingDetail extends React.Component {
                 { (this.props.currentBooking && this.props.currentDriverLocation) &&     
                     <MapTrack
                         showMapTrackModal={this.props.showMapTrackModal}
-                        trackDriver={this.props.trackDriver}
+                        setShowMapTrackModal={this.props.setShowMapTrackModal}
                         region={this.props.region}
                         carMarker={carMarker}
                         currentDriverLocation={this.props.currentDriverLocation}
                         dropOff={this.props.currentBooking.drop_off}
                         pickUp={this.props.currentBooking.pick_up}
                         driverInfo={this.props.currentBooking.driver}
-                        setShowMapTrackModal={this.props.setShowMapTrackModal}
+                        trackDriver={this.props.trackDriver}
                     />
                 }
             </Container>
