@@ -3,7 +3,6 @@ import Bookings from "../components/Bookings";
 import {
 	getBookings,
 	setSelectedBookings
-	
 } from "../modules/bookings";
 
 const mapStateToProps = (state) => ({

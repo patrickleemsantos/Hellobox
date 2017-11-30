@@ -20,7 +20,6 @@ export const MapContainer = ({region,
                                 isSearchAddressLoading,
                                 closeResultType,
                                 initialRegion
-                                // directions
                             }) => {
 
     const { selectedPickUp, selectedDropOff } = selectedAddress || {};

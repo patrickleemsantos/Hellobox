@@ -27,8 +27,7 @@ const mapStateToProps = (state) => ({
     nearByDrivers: state.home.nearByDrivers || [],
     isSearchAddressLoading: state.home.isSearchAddressLoading || false,
     account: state.login.account || {},
-    isMapReady: state.home.isMapReady || false,
-    // directions: state.home.directions || []
+    isMapReady: state.home.isMapReady || false
 });
 
 const mapActionCreators = {

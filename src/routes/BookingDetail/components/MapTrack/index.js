@@ -70,7 +70,6 @@ export const MapTrack = ({
 					<MapView.Marker
 						coordinate={{latitude:currentDriverLocation.coordinate.coordinates[1], longitude:currentDriverLocation.coordinate.coordinates[0]}}
 						image={carMarker}
-
 					/>	
 
 				</MapView>

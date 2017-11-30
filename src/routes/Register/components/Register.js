@@ -141,9 +141,6 @@ const styles = StyleSheet.create({
     labelText: {
         fontSize: 14
     },
-    inputText: {
-        // fontSize: 14
-    },
     buttonText: {
         fontWeight: "bold"
     }

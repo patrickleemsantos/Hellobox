@@ -30,9 +30,7 @@ export const FindDriver = ({selectedAddress, updateBookingStatus})=>{
 				<View style={styles.dropoff}>
 					<Text>{ selectedDropOff.name}</Text>
 				</View>
-
 				<View>
-					
 					<Text style={styles.termsText}>By booking you confirm that you accept our T & C</Text>
 					<Button style={styles.cancelBtn} onPress={ () => handleUpdateBookingStatus("CANCELLED") }>
 						<Text style={styles.cancelBtnText}>Cancel</Text>

@@ -1,14 +1,7 @@
 import update from "react-addons-update";
-import constants from "./actionConstants";
 import RNGooglePlaces from "react-native-google-places";
 import Polyline from '@mapbox/polyline';
 
-//------------------------
-//Constants
-//------------------------
-const { 
-    } = constants;
-    
 //------------------------
 //Actions
 //------------------------
@@ -31,12 +24,10 @@ function handleSetFirstName(state, action) {
 }
 
 const ACTION_HANDLERS = {
+	SET_FIRSTNAME: handleSetFirstName
 }
 
-const initialState = {
-};
-
-export function AccountInformationReducer (state = initialState, action) {
+export function AccountInformationReducer (state = {}, action) {
     const handler = ACTION_HANDLERS[action.type];
 
     return handler ? handler(state, action) : state;
