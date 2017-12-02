@@ -21,7 +21,8 @@ const { GET_CURRENT_LOCATION,
 		UPDATE_SEARCH_ADDRESS_LOADING_STATUS,
 		CLOSE_RESULT_TYPE,
 		GET_DIRECTIONS,
-		IS_MAP_READY
+		IS_MAP_READY,
+		RESET_BOOKING
 	} = constants;
 
 const { width, height } = Dimensions.get("window");
@@ -34,6 +35,13 @@ const LONGITUDE_DELTA = ASPECT_RATIO * LATITUDE_DELTA;
 //------------------------
 //Actions
 //------------------------
+export function resetBooking(payload) {
+	return {
+		type: RESET_BOOKING,
+		payload
+	}
+}
+
 export function closeResultType(payload) {
 	return(dispatch, store) => {
 		dispatch({
@@ -455,6 +463,29 @@ function handleIsMapReady(state, action) {
 	});
 }
 
+function handleResetBooking(state, action) {
+	return update(state, {
+		inputData:{
+			$set: {}
+		},
+		resultTypes:{
+			$set: {}
+		},
+		selectedAddress:{
+			$set: {}
+		},
+		selectedVehicle:{
+			$set: "motorcycle"
+		},
+		fare: {
+			$set: null
+		},
+		resetStatus: {
+			$set: true
+		}
+	});
+}
+
 const ACTION_HANDLERS = {
 	GET_CURRENT_LOCATION: handleGetCurrentLocation,
 	GET_INPUT: handleGetInputData,
@@ -468,7 +499,8 @@ const ACTION_HANDLERS = {
 	UPDATE_SEARCH_ADDRESS_LOADING_STATUS:handleUpdateSearchAddressLoadingStatus,
 	CLOSE_RESULT_TYPE:handleCloseResultType,
 	GET_DIRECTIONS:handleGetDirections,
-	IS_MAP_READY: handleIsMapReady
+	IS_MAP_READY: handleIsMapReady,
+	RESET_BOOKING: handleResetBooking
 }
 
 const initialState = {
@@ -476,9 +508,10 @@ const initialState = {
 	inputData: {},
 	resultTypes: {},
 	selectedAddress: {},
-	selectedVehicle: "van",
+	selectedVehicle: "motorcycle",
 	isSearchAddressLoading: false,
 	isMapReady: false,
+	resetStatus: false
 };
 
 export function HomeReducer (state = initialState, action) {

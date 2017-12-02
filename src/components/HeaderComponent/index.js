@@ -5,7 +5,7 @@ import { Actions } from "react-native-router-flux";
 import Icon from "react-native-vector-icons/FontAwesome";
 import styles from "./HeaderComponentStyles";
 
-export const HeaderComponent = ({logo, showAdditionalModal}) => {
+export const HeaderComponent = ({logo, showAdditionalModal, resetBooking}) => {
     return (
         <Header style={{backgroundColor: "#E90000"}} iosBarStyle="light-content" androidStatusBarColor="#E90000">
             <Left>
@@ -15,14 +15,10 @@ export const HeaderComponent = ({logo, showAdditionalModal}) => {
             </Left>
             <Body>
                 <Text style={styles.headerText}>Hellobox</Text>
-                {/* ||
-                <Text style={styles.headerText}>Driver on the way</Text> */}
-                {/* <Image resizeMode="contain" style={styles.logo} source={logo} /> */}
             </Body>
             <Right>
-                <Button transparent onPress={() => Actions.refresh()}>
-                    {/* <Icon name="plus" onPress={() => showAdditionalModal(true)} style={styles.menu} /> */}
-                    {/* <Icon name="plus" onPress={() => Actions.additionalServices()} style={styles.menu} /> */}
+                <Button transparent onPress={() => resetBooking()}>
+                    <Icon name="refresh" style={styles.menu} /> 
                 </Button>
             </Right>
         </Header>

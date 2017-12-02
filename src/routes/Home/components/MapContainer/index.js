@@ -28,15 +28,17 @@ export const MapContainer = ({region,
             <MapView
                 provider={MapView.PROVIDER_GOOGLE}
                 style={styles.map}
-                region={initialRegion}
+                initialRegion={initialRegion}
+                showsUserLocation={true}
+                showsMyLocationButton={true}
             >
-            { region &&
+            {/* { region &&
                 <MapView.Marker
                     coordinate={{latitude:region.latitude, longitude:region.longitude}}
                     pinColor="red"
 
                 />	
-            }
+            } */}
             { selectedPickUp &&
                 <MapView.Marker
                     coordinate={{latitude:selectedPickUp.latitude, longitude:selectedPickUp.longitude}}

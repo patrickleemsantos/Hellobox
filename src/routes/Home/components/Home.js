@@ -69,7 +69,8 @@ class Home extends React.Component {
                         <View style={{flex:1}}>
                             <HeaderComponent 
                                     logo={justBoxLogo}
-                                    showAdditionalModal={this.props.showAdditionalModal} /> 
+                                    showAdditionalModal={this.props.showAdditionalModal}
+                                    resetBooking={this.props.resetBooking} /> 
                                 <View style={styles.floatView}>
                                     <Spinner style={styles.spinner} isVisible={ (this.props.isMapReady == false ? true : false ) } size={40} type="Wave" color="#ffffff"/>
                                 </View>
@@ -132,11 +133,12 @@ const styles = StyleSheet.create({
         alignSelf: "center"
     },
     btnFooterContainer:{
-		backgroundColor:"#424949",
+		backgroundColor:"#ECF0F1",
 	},
 	button: {
 		margin: 5,
-		height: 40
+        height: 40,
+        backgroundColor: "#E90000"
 	},
 	subText:{
 		fontSize:14,

@@ -7,19 +7,19 @@ import styles from "./SelectVehicleStyles";
 export const SelectVehicle = ({getSelectedVehicle, selectedVehicle}) => {
 
     const tabs = [{
+            title: "Motorcycle",
+            vehicle: "motorcycle",
+            subTitle: "",
+            icon: "motorcycle"
+        },
+        {
             title: "Van",
             vehicle: "van",
             subTitle: "",
             icon: "bus"
         },
         {
-            title: "Van w/ helper",
-            vehicle: "van-helper",
-            subTitle: "",
-            icon: "bus"
-        },
-        {
-            title: "Truck",
+            title: "Moving Service",
             vehicle: "truck",
             subTitle: "",
             icon: "truck"

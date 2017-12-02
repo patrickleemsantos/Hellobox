@@ -9,7 +9,7 @@ export const Fare = ({fare})=>{
 		<View style={styles.fareContainer}>
 			<Grid>
 				<Col style={styles.colFare}>
-					<Text style={styles.fareText}> FARE: ₱</Text><Text style={styles.amountText}>{fare}</Text>
+					<Text style={styles.fareText}> PRICE: ₱</Text><Text style={styles.amountText}>{fare}</Text>
 				</Col>
 				{/* <Col style={styles.colBreakdown}>
 					<Button style={styles.btnBreakdown} transparent>

@@ -31,9 +31,9 @@ const calculateFare = (time,  distance, vehicle)=>{
 	let totalPricePerExceededKm = 0;
 	let totalPricePerExceededMinute = 0;
 
-	if (vehicle == 'van') {
+	if (vehicle == 'motorcycle') {
 		baseFare = 450;
-	} else if (vehicle == 'van-helper') {
+	} else if (vehicle == 'van') {
 		baseFare = 690;
 	} else if (vehicle == 'truck') {
 		baseFare = 2700;

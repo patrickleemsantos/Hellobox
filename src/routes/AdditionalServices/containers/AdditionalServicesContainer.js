@@ -13,7 +13,8 @@ import {
     additionalService6,
     updateAdditionalService,
     setPickUpDateTime,
-    setBookingNote
+    setBookingNote,
+    resetAdditionalServices
 } from "../modules/additionalServices";
 var dateFormat = require('dateformat');
 
@@ -35,7 +36,7 @@ const mapStateToProps = (state) => ({
     additionalService5: state.additionalServices.additionalService5 || false,
     additionalService6: state.additionalServices.additionalService6 || false,
     pickUpDateTime: state.additionalServices.pickUpDateTime || dateFormat(new Date(), "mmmm do yyyy, h:MM:ss TT"),
-    bookingNote: state.additionalServices.bookingNote || "",
+    bookingNote: state.additionalServices.bookingNote || ""
 });
 
 const mapActionCreators = { 
@@ -45,7 +46,8 @@ const mapActionCreators = {
     removeAdditionalPrice,
     updateAdditionalService,
     setPickUpDateTime,
-    setBookingNote
+    setBookingNote,
+    resetAdditionalServices
 };
 
 export default connect(mapStateToProps, mapActionCreators)(AdditionalServices);

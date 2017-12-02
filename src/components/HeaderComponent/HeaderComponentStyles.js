@@ -15,8 +15,10 @@ const styles = StyleSheet.create({
 	logo:{
 		width:50,
 		height:50
+	},
+	resetText:{
+		color: "#FFFFFF"
 	}
-
 });
 
 export default styles;

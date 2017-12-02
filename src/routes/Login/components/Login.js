@@ -32,11 +32,7 @@ export default class Login extends Component {
         const {status, message} = this.props.loginResult;
         
         if (status === true ){
-            AsyncStorage.getItem('account', (err, result) => {
-                if (result) {
-                    Actions.home();
-                }
-            });
+            Actions.home();
         }
     }
 
@@ -124,12 +120,12 @@ export default class Login extends Component {
             <View style={styles.loginOptions}>
                 <TouchableOpacity
                     disabled={this.props.isLoading}>
-                    <Text>Forgot Password?</Text>
+                    <Text style={styles.optionText}>Forgot Password?</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => Actions.register()}
                     disabled={this.props.isLoading}>
-                    <Text>Create an Account</Text>
+                    <Text style={styles.optionText}>Create an Account</Text>
                 </TouchableOpacity>
             </View>
             {/* <View style={styles.oAuthbuttons}>
@@ -191,7 +187,8 @@ const styles = StyleSheet.create({
     buttonText: {
       textAlign: 'center',
       color: '#FFFFFF',
-      fontWeight: '700'
+      fontWeight: '700',
+      fontSize: 15
     },
     loginPreference: {
         flex: 1,
@@ -213,11 +210,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     cbEmailText: {
-        fontSize: 14,
+        fontSize: 13,
         color: "#000",
     },
     cbMobileNoText: {
-        fontSize: 14,
+        fontSize: 13,
         color: "#000",
     },
     loginOptions: {
@@ -244,5 +241,9 @@ const styles = StyleSheet.create({
         height: 100,
         top: 300,
         alignSelf: "center"
+    },
+    optionText: {
+        fontSize: 13,
+        color: "#808080"
     }
   });

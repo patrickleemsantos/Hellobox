@@ -115,7 +115,7 @@ export default class Register extends Component {
                                     ref={(input) => this.passwordInput = input} />
                         </Item>
                         <Button style={{backgroundColor:"#E90000"}} disabled={this.props.loadingStatus} onPress={() => this.props.addAccount()} full success>
-                            <Text style={styles.buttonText}>SUBMIT</Text>
+                            <Text style={styles.buttonText}><Icon name="paper-plane" size={15} color="#FFF" />  SUBMIT</Text>
                             { (this.props.loadingStatus == true) &&
                                 <Spinner color='white' />
                             }
@@ -139,9 +139,15 @@ const styles = StyleSheet.create({
         fontWeight: "bold"
     },
     labelText: {
-        fontSize: 14
+        fontSize: 13,
+        fontWeight: "bold",
+        color: "#808080"
     },
     buttonText: {
-        fontWeight: "bold"
+        fontWeight: "bold",
+        fontSize: 15
+    },
+    inputText: {
+        fontSize: 14
     }
 });

@@ -12,7 +12,8 @@ import {
     updateSearchAddressLoadingStatus,
     closeResultType,
     updateBookingStatus,
-    removeBooking
+    removeBooking,
+    resetBooking
 } from "../modules/home";
 
 const mapStateToProps = (state) => ({   
@@ -41,7 +42,8 @@ const mapActionCreators = {
     getNearByDrivers,
     closeResultType,
     updateBookingStatus,
-    removeBooking
+    removeBooking,
+    resetBooking
 };
 
 export default connect(mapStateToProps, mapActionCreators)(Home);

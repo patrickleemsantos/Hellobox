@@ -21,7 +21,8 @@ const {
 		ADDITIONAL_SERVICE_6,
 		UPDATE_ADDITIONAL_SERVICE,
 		SET_PICKUP_DATE_TIME,
-		SET_BOOKING_NOTE
+		SET_BOOKING_NOTE,
+		RESET_ADDITIONAL_SERVICES
 	} = constants;
 
 const { width, height } = Dimensions.get("window");
@@ -34,6 +35,15 @@ const LONGITUDE_DELTA = ASPECT_RATIO * LATITUDE_DELTA;
 //------------------------
 //Actions
 //------------------------
+export function resetAdditionalServices(payload) {
+	return (dispatch) => {
+		dispatch({
+			type: RESET_ADDITIONAL_SERVICES,
+			payload: payload
+		})
+	}
+}
+
 export function setPickUpDateTime(payload) {
 	return {
 		type: SET_PICKUP_DATE_TIME,
@@ -370,6 +380,41 @@ function handleAdditionalService(state, action) {
 	}
 }
 
+function handleResetAdditionalServices(state, action) {
+	return update(state, {
+		additionalServices:{
+			$set: []
+		},
+		additionalPrice:{
+			$set: 0
+		},
+		additionalService1:{
+			$set: false
+		},
+		additionalService2:{
+			$set: false
+		},
+		additionalService3:{
+			$set: false
+		},
+		additionalService4:{
+			$set: false
+		},
+		additionalService5:{
+			$set: false
+		},
+		additionalService6:{
+			$set: false
+		},
+		pickUpDateTime: {
+			$set: dateFormat(new Date(), "mmmm do yyyy, h:MM:ss TT")
+		},
+		bookingNote: {
+			$set: ""
+		}
+	});
+}
+
 const ACTION_HANDLERS = {
 	GET_ADDITIONAL_SERVICES: handleGetAdditionalServices,
 	ADD_ADDITIONAL_PRICE: handleAddAdditionalPrice,
@@ -382,7 +427,8 @@ const ACTION_HANDLERS = {
 	ADDITIONAL_SERVICE_6: handleAdditionalService6,
 	UPDATE_ADDITIONAL_SERVICE: handleAdditionalService,
 	SET_PICKUP_DATE_TIME: handleSetPickUpDateTime,
-	SET_BOOKING_NOTE: handleSetBookingNote
+	SET_BOOKING_NOTE: handleSetBookingNote,
+	RESET_ADDITIONAL_SERVICES: handleResetAdditionalServices
 }
 
 const initialState = {

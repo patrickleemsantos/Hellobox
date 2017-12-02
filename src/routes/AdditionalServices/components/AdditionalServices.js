@@ -9,6 +9,7 @@ var dateFormat = require('dateformat');
 class AdditionalServices extends React.Component {
     componentDidMount() {
         this.props.setPickUpDateTime(dateFormat(new Date(), "mmmm do yyyy, h:MM:ss TT"));
+        this.props.resetAdditionalServices();
     }
 
     render () {    
@@ -53,6 +54,9 @@ class AdditionalServices extends React.Component {
                     <Text style={styles.headerText}>Additional</Text>
                 </Body>
                 <Right>
+                    <Button transparent onPress={() => this.props.resetAdditionalServices()}>
+                        <Icon name="refresh" style={styles.menu} />
+                    </Button>
                 </Right>
                 </Header>
                     <Content>
@@ -251,26 +255,33 @@ const styles = StyleSheet.create({
         paddingTop:15,
         fontWeight:"bold",
         fontSize: 18,
+        color: "#3A3A3A"
     },
     amount:{
         paddingTop:15,
         fontWeight:"bold",
         fontSize: 18,
+        color: "#E90000"
     },
     additionalText: {
-        fontSize: 13
+        fontSize: 12,
+        color: "#3A3A3A"
     },
     btnFooterContainer:{
-		backgroundColor:"#424949",
+		backgroundColor:"#ECF0F1",
 	},
 	button: {
 		margin: 5,
-		height: 40
+        height: 40,
+        backgroundColor: "#E90000"
 	},
 	subText:{
 		fontSize:14,
 		fontWeight: "bold",
 		color: "#FFFF"
+    },
+	resetText:{
+		color: "#FFFFFF"
 	}
 });
 
