@@ -3,6 +3,7 @@ import { View, Text } from "native-base";
 import MapView from "react-native-maps";
 import SearchBox from "../SearchBox";
 import SearchResults from "../SearchResults";
+// import Polyline from '@mapbox/polyline';
 
 import styles from "./MapContainerStyles.js"
 
@@ -19,7 +20,8 @@ export const MapContainer = ({region,
                                 updateSearchAddressLoadingStatus,
                                 isSearchAddressLoading,
                                 closeResultType,
-                                initialRegion
+                                initialRegion,
+                                directions
                             }) => {
 
     const { selectedPickUp, selectedDropOff } = selectedAddress || {};

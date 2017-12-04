@@ -1,6 +1,6 @@
 import update from "react-addons-update";
 import constants from "./actionConstants";
-import { Dimensions, NetInfo } from "react-native";
+import { Dimensions, NetInfo, Platform } from "react-native";
 import RNGooglePlaces from "react-native-google-places";
 import request from "../../../util/request";
 
@@ -59,27 +59,49 @@ export function setShowMapTrackModal(payload) {
 	// }
 
 	return (dispatch, store)=>{
-		NetInfo.isConnected.fetch().then(isConnected => {
-			console.log("setShowMapTrackModal");
-			if(isConnected) {
-				console.log("isConnected");
-				let id = store().bookingDetail.currentBooking.driver.driver_id;
-				request.get("http://52.220.212.6:3121/api/getCurrentDriverLocation/" + id)
-				.finish((error, res)=>{
-					dispatch({
-						type:UPDATE_DRIVER_LOCATION,
-						payload:res.body
+		if (Platform.OS === 'ios') {
+			// NetInfo.addEventListener('change',
+			// 	(networkType)=> {
+			// 		if (networkType == 'wifi' || networkType == 'cell') {
+						let id = store().bookingDetail.currentBooking.driver.driver_id;
+						request.get("http://52.220.212.6:3121/api/getCurrentDriverLocation/" + id)
+						.finish((error, res)=>{
+							dispatch({
+								type:UPDATE_DRIVER_LOCATION,
+								payload:res.body
+							});
+						});
+		
+						dispatch({
+							type: SHOW_MAP_TRACK_MODAL,
+							payload
+						});
+			// 		} else {
+			// 			Alert.alert('Error', "Please connect to the internet");
+			// 		}
+			// 	}
+			// )
+		} else {
+			NetInfo.isConnected.fetch().then(isConnected => {
+				if(isConnected) {
+					let id = store().bookingDetail.currentBooking.driver.driver_id;
+					request.get("http://52.220.212.6:3121/api/getCurrentDriverLocation/" + id)
+					.finish((error, res)=>{
+						dispatch({
+							type:UPDATE_DRIVER_LOCATION,
+							payload:res.body
+						});
 					});
-				});
-
-				dispatch({
-					type: SHOW_MAP_TRACK_MODAL,
-					payload
-				});
-			} else {
-				Alert.alert('Error', "Please connect to the internet");
-			}
-		});
+	
+					dispatch({
+						type: SHOW_MAP_TRACK_MODAL,
+						payload
+					});
+				} else {
+					Alert.alert('Error', "Please connect to the internet");
+				}
+			});
+		}
 	}
 }
 
@@ -100,23 +122,89 @@ export function getComment(payload) {
 export function saveComment() {
 	return(dispatch, store) => {
 		if (store().bookingDetail.rating !== 0 && store().bookingDetail.comment !== "") {
+			if (Platform.OS === 'ios') {
+				// NetInfo.addEventListener('change',
+				// 	(networkType)=> {
+				// 		if (networkType == 'wifi' || networkType == 'cell') {
+							request.put("http://52.220.212.6:3121/api/updateBookingRating")
+							.send({
+								id: store().bookingDetail.currentBooking._id,
+								rating: store().bookingDetail.selectedStar,
+								comment: store().bookingDetail.comment
+							})
+							.finish((error, res)=> {
+								dispatch({
+									type: SET_CURRENT_BOOKING,
+									payload: res.body
+								});
+		
+								dispatch({
+									type: SHOW_RATING_MODAL,
+									payload: false
+								});
+							});
+				// 		} else {
+				// 			Alert.alert('Error', "Please connect to the internet");
+				// 		}
+				// 	}
+				// )
+			} else {
+				NetInfo.isConnected.fetch().then(isConnected => {
+					if(isConnected) {
+						request.put("http://52.220.212.6:3121/api/updateBookingRating")
+						.send({
+							id: store().bookingDetail.currentBooking._id,
+							rating: store().bookingDetail.selectedStar,
+							comment: store().bookingDetail.comment
+						})
+						.finish((error, res)=> {
+							dispatch({
+								type: SET_CURRENT_BOOKING,
+								payload: res.body
+							});
+	
+							dispatch({
+								type: SHOW_RATING_MODAL,
+								payload: false
+							});
+						});
+					} else {
+						Alert.alert('Error', "Please connect to the internet");
+					}
+				});
+			}
+		}
+	}
+}
+
+export function trackDriver() {
+	return (dispatch, store)=>{
+		if (Platform.OS === 'ios') {
+			// NetInfo.addEventListener('change',
+			// 	(networkType)=> {
+			// 		if (networkType == 'wifi' || networkType == 'cell') {
+						let id = store().bookingDetail.currentBooking.driver.driver_id;
+						request.get("http://52.220.212.6:3121/api/getCurrentDriverLocation/" + id)
+						.finish((error, res)=>{
+							dispatch({
+								type:UPDATE_DRIVER_LOCATION,
+								payload:res.body
+							});
+						});
+			// 		} else {
+			// 			Alert.alert('Error', "Please connect to the internet");
+			// 		}
+			// 	}
+			// )
+		} else {
 			NetInfo.isConnected.fetch().then(isConnected => {
 				if(isConnected) {
-					request.put("http://52.220.212.6:3121/api/updateBookingRating")
-					.send({
-						id: store().bookingDetail.currentBooking._id,
-						rating: store().bookingDetail.selectedStar,
-						comment: store().bookingDetail.comment
-					})
-					.finish((error, res)=> {
+					let id = store().bookingDetail.currentBooking.driver.driver_id;
+					request.get("http://52.220.212.6:3121/api/getCurrentDriverLocation/" + id)
+					.finish((error, res)=>{
 						dispatch({
-							type: SET_CURRENT_BOOKING,
-							payload: res.body
-						});
-
-						dispatch({
-							type: SHOW_RATING_MODAL,
-							payload: false
+							type:UPDATE_DRIVER_LOCATION,
+							payload:res.body
 						});
 					});
 				} else {
@@ -127,45 +215,47 @@ export function saveComment() {
 	}
 }
 
-export function trackDriver() {
-	return (dispatch, store)=>{
-		NetInfo.isConnected.fetch().then(isConnected => {
-			if(isConnected) {
-				let id = store().bookingDetail.currentBooking.driver.driver_id;
-				request.get("http://52.220.212.6:3121/api/getCurrentDriverLocation/" + id)
-				.finish((error, res)=>{
-					dispatch({
-						type:UPDATE_DRIVER_LOCATION,
-						payload:res.body
-					});
-				});
-			} else {
-				Alert.alert('Error', "Please connect to the internet");
-			}
-		});
-	}
-}
-
 export function getBookingHistory(payload) {
 	return(dispatch, store) => {
-		NetInfo.isConnected.fetch().then(isConnected => {
-			if(isConnected) {
-				request.get("http://52.220.212.6:3121/api/getBookingHistory")
-				.query({
-					booking_id: payload,
-				})
-				.finish((error, res)=>{
-					if(res){
-						dispatch({
-							type:UPDATE_BOOKING_HISTORY,
-							payload:res.body
+		if (Platform.OS === 'ios') {
+			// NetInfo.addEventListener('change',
+			// 	(networkType)=> {
+			// 		if (networkType == 'wifi' || networkType == 'cell') {
+						request.get("http://52.220.212.6:3121/api/getBookingHistory")
+						.query({
+							booking_id: payload,
+						})
+						.finish((error, res)=>{
+							if(res){
+								dispatch({
+									type:UPDATE_BOOKING_HISTORY,
+									payload:res.body
+								});
+							}
 						});
-					}
-				});
-			} else {
-				Alert.alert('Error', "Please connect to the internet");
-			}
-		});
+			// 		}
+			// 	}
+			// )
+		} else {
+			NetInfo.isConnected.fetch().then(isConnected => {
+				if(isConnected) {
+					request.get("http://52.220.212.6:3121/api/getBookingHistory")
+					.query({
+						booking_id: payload,
+					})
+					.finish((error, res)=>{
+						if(res){
+							dispatch({
+								type:UPDATE_BOOKING_HISTORY,
+								payload:res.body
+							});
+						}
+					});
+				} else {
+					Alert.alert('Error', "Please connect to the internet");
+				}
+			});
+		}
 	}
 }
 
@@ -176,28 +266,55 @@ export function updateBookingStatus(payload) {
 			payload: true
 		});
 		
-		NetInfo.isConnected.fetch().then(isConnected => {
-			if(isConnected) {
-				request.put("http://52.220.212.6:3121/api/updateBookingStatus")
-				.send({
-					id: store().bookingDetail.currentBooking._id,
-					status: payload
-				})
-				.finish((error, res)=> {
-					dispatch({
-						type: UPDATE_BOOKING,
-						payload: res.body
-					});
-				});
-			} else {
-				Alert.alert('Error', "Please connect to the internet");
-			}
+		if (Platform.OS === 'ios') {
+			// NetInfo.addEventListener('change',
+			// 	(networkType)=> {
+			// 		if (networkType == 'wifi' || networkType == 'cell') {
+						request.put("http://52.220.212.6:3121/api/updateBookingStatus")
+						.send({
+							id: store().bookingDetail.currentBooking._id,
+							status: payload
+						})
+						.finish((error, res)=> {
+							dispatch({
+								type: UPDATE_BOOKING,
+								payload: res.body
+							});
+						});
+					// } else {
+					// 	Alert.alert('Error', "Please connect to the internet");
+					// }
 
-			dispatch({
-				type: UPDATE_LOADER,
-				payload: false
+					dispatch({
+						type: UPDATE_LOADER,
+						payload: false
+					});
+			// 	}
+			// )
+		} else {
+			NetInfo.isConnected.fetch().then(isConnected => {
+				if(isConnected) {
+					request.put("http://52.220.212.6:3121/api/updateBookingStatus")
+					.send({
+						id: store().bookingDetail.currentBooking._id,
+						status: payload
+					})
+					.finish((error, res)=> {
+						dispatch({
+							type: UPDATE_BOOKING,
+							payload: res.body
+						});
+					});
+				} else {
+					Alert.alert('Error', "Please connect to the internet");
+				}
+	
+				dispatch({
+					type: UPDATE_LOADER,
+					payload: false
+				});
 			});
-		});
+		}
 	}
 }
 

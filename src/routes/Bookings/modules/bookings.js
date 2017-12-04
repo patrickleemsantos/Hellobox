@@ -1,6 +1,6 @@
 import update from "react-addons-update";
 import constants from "./actionConstants";
-import { Dimensions, NetInfo } from "react-native"
+import { Dimensions, NetInfo, Platform, Alert } from "react-native"
 
 import request from "../../../util/request";
 
@@ -36,30 +36,57 @@ export function getBookings(payload) {
 			payload:true
 		});
 
-		NetInfo.isConnected.fetch().then(isConnected => {
-			if(isConnected) {
-				request.get("http://52.220.212.6:3121/api/bookingsByAccount")
-				.query({
-					account_id: payload,
-					filter: store().bookings.selectedBookings
-				})
-				.finish((error, res)=>{
-					if(res){
-						dispatch({
-							type:GET_BOOKINGS,
-							payload:res.body
-						});
-					}
-				});
-			} else {
-				Alert.alert('Error', "Please connect to the internet");
-			}
+		if (Platform.OS === 'ios') {
+			// NetInfo.isConnected.fetch().then(isConnected => {
+			// 	if(isConnected) {
+					request.get("http://52.220.212.6:3121/api/bookingsByAccount")
+					.query({
+						account_id: payload,
+						filter: store().bookings.selectedBookings
+					})
+					.finish((error, res)=>{
+						if(res){
+							dispatch({
+								type:GET_BOOKINGS,
+								payload:res.body
+							});
+						}
+					});
+				// } else {
+				// 	Alert.alert('Error', "Please connect to the internet");
+				// }
 
-			dispatch({
-				type:UPDATE_BOOKING_LOADER,
-				payload:false
+				dispatch({
+					type:UPDATE_BOOKING_LOADER,
+					payload:false
+				});
+			// });
+		} else {
+			NetInfo.isConnected.fetch().then(isConnected => {
+				if(isConnected) {
+					request.get("http://52.220.212.6:3121/api/bookingsByAccount")
+					.query({
+						account_id: payload,
+						filter: store().bookings.selectedBookings
+					})
+					.finish((error, res)=>{
+						if(res){
+							dispatch({
+								type:GET_BOOKINGS,
+								payload:res.body
+							});
+						}
+					});
+				} else {
+					Alert.alert('Error', "Please connect to the internet");
+				}
+	
+				dispatch({
+					type:UPDATE_BOOKING_LOADER,
+					payload:false
+				});
 			});
-		});
+		}
 	};
 }
 

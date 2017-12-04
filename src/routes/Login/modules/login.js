@@ -1,6 +1,6 @@
 import update from "react-addons-update";
 import constants from "./actionConstants";
-import { Dimensions, Alert, AsyncStorage, NetInfo } from "react-native";
+import { Dimensions, Alert, AsyncStorage, NetInfo, Platform } from "react-native";
 import RNGooglePlaces from "react-native-google-places";
 import Polyline from '@mapbox/polyline';
 import request from "../../../util/request";
@@ -72,60 +72,119 @@ export function login() {
                 payload: true
             });
 
-            NetInfo.isConnected.fetch().then(isConnected => {
-                if(isConnected) {
-                    request.get("http://52.220.212.6:3121/api/accountLogin")
-                    .query({
-                        username: store().login.username,
-                        password: store().login.password,
-                        login_preference: store().login.loginPreference
-                    })
-                    .finish((error, res)=>{
-                        if (res.body.error) {
-                            const response = {
-                                status: false,
-                                message: res.body.error
-                            }
-                            
-                            dispatch({
-                                type: LOGIN,
-                                payload: response
+            if (Platform.OS === 'ios') {
+                NetInfo.addEventListener('change',
+                    (networkType)=> {
+                        if (networkType == 'wifi' || networkType == 'cell') {
+                            request.get("http://52.220.212.6:3121/api/accountLogin")
+                            .query({
+                                username: store().login.username,
+                                password: store().login.password,
+                                login_preference: store().login.loginPreference
+                            })
+                            .finish((error, res)=>{
+                                if (res.body.error) {
+                                    const response = {
+                                        status: false,
+                                        message: res.body.error
+                                    }
+                                    
+                                    dispatch({
+                                        type: LOGIN,
+                                        payload: response
+                                    });
+                                    
+                                    Alert.alert('Error', res.body.error);
+                                } else {
+                                    const response = {
+                                        status: true,
+                                        message: "Success"
+                                    }
+        
+                                    dispatch({
+                                        type: LOGIN,
+                                        payload: response
+                                    });
+        
+                                    dispatch({
+                                        type: SET_ACCOUNT,
+                                        payload: res.body
+                                    });
+        
+                                    dispatch({
+                                        type: CLEAR_INPUTS,
+                                        payload
+                                    });
+        
+                                    AsyncStorage.setItem('account', JSON.stringify(res.body));
+                                }
                             });
-                            
-                            Alert.alert('Error', res.body.error);
                         } else {
-                            const response = {
-                                status: true,
-                                message: "Success"
-                            }
-
-                            dispatch({
-                                type: LOGIN,
-                                payload: response
-                            });
-
-                            dispatch({
-                                type: SET_ACCOUNT,
-                                payload: res.body
-                            });
-
-                            dispatch({
-                                type: CLEAR_INPUTS,
-                                payload
-                            });
-
-                            AsyncStorage.setItem('account', JSON.stringify(res.body));
+                            Alert.alert('Error', "Please connect to the internet");
                         }
-                    });
-                } else {
-                    Alert.alert('Error', "Please connect to the internet");
-                }
 
-                dispatch({
-                    type: UPDATE_LOADING_STATUS,
-                    payload: false
+                        dispatch({
+                            type: UPDATE_LOADING_STATUS,
+                            payload: false
+                        });
+                    }
+                )
+            } else {
+                NetInfo.isConnected.fetch().then(isConnected => {
+                    if(isConnected) {
+                        request.get("http://52.220.212.6:3121/api/accountLogin")
+                        .query({
+                            username: store().login.username,
+                            password: store().login.password,
+                            login_preference: store().login.loginPreference
+                        })
+                        .finish((error, res)=>{
+                            if (res.body.error) {
+                                const response = {
+                                    status: false,
+                                    message: res.body.error
+                                }
+                                
+                                dispatch({
+                                    type: LOGIN,
+                                    payload: response
+                                });
+                                
+                                Alert.alert('Error', res.body.error);
+                            } else {
+                                const response = {
+                                    status: true,
+                                    message: "Success"
+                                }
+    
+                                dispatch({
+                                    type: LOGIN,
+                                    payload: response
+                                });
+    
+                                dispatch({
+                                    type: SET_ACCOUNT,
+                                    payload: res.body
+                                });
+    
+                                dispatch({
+                                    type: CLEAR_INPUTS,
+                                    payload
+                                });
+    
+                                AsyncStorage.setItem('account', JSON.stringify(res.body));
+                            }
+                        });
+                    } else {
+                        Alert.alert('Error', "Please connect to the internet");
+                    }
+    
+                    dispatch({
+                        type: UPDATE_LOADING_STATUS,
+                        payload: false
+                    });
                 });
-            });
+            }
         } else {
             Alert.alert('Error', "Please enter username/password");
         }

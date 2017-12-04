@@ -1,6 +1,6 @@
 import update from "react-addons-update";
 import constants from "./actionConstants";
-import { Dimensions, Alert, AsyncStorage, NetInfo } from "react-native";
+import { Dimensions, Alert, AsyncStorage, NetInfo, Platform } from "react-native";
 import RNGooglePlaces from "react-native-google-places";
 import Polyline from '@mapbox/polyline';
 import request from "../../../util/request";
@@ -91,36 +91,71 @@ export function addAccount(payload) {
                                 payload: true
                             })
 
-                            NetInfo.isConnected.fetch().then(isConnected => {
-                                if(isConnected) {
-                                    request.post("http://52.220.212.6:3121/api/addAccount")
-                                    .send(payload)
-                                    .finish((error, res)=> {
-                                        if (res.body.error) {
-                                            Alert.alert('Error', res.body.error);
-                                        } else {
-                                            AsyncStorage.setItem('account', JSON.stringify(res.body));
-                                            
-                                            dispatch({
-                                                type: SET_REGISTER_STATUS,
-                                                payload: true
-                                            })
+                            if (Platform.OS === 'ios') {
+                                // NetInfo.addEventListener('change',
+                                //     (networkType)=> {
+                                //         if (networkType == 'wifi' || networkType == 'cell') {
+                                            request.post("http://52.220.212.6:3121/api/addAccount")
+                                            .send(payload)
+                                            .finish((error, res)=> {
+                                                if (res.body.error) {
+                                                    Alert.alert('Error', res.body.error);
+                                                } else {
+                                                    AsyncStorage.setItem('account', JSON.stringify(res.body));
+                                                    
+                                                    dispatch({
+                                                        type: SET_REGISTER_STATUS,
+                                                        payload: true
+                                                    })
+        
+                                                    dispatch({
+                                                        type: CLEAR_INPUT,
+                                                        payload
+                                                    })
+                                                }
+                                            });
+                                        // } else {
+                                        //     Alert.alert('Error', "Please connect to the internet");
+                                        // }
 
-                                            dispatch({
-                                                type: CLEAR_INPUT,
-                                                payload
-                                            })
-                                        }
-                                    });
-                                } else {
-                                    Alert.alert('Error', "Please connect to the internet");
-                                }
-
-                                dispatch({
-                                    type: SET_LOADING_STATUS,
-                                    payload: false
-                                })
-                            });
+                                        dispatch({
+                                            type: SET_LOADING_STATUS,
+                                            payload: false
+                                        })
+                                //     }
+                                // )
+                            } else {
+                                NetInfo.isConnected.fetch().then(isConnected => {
+                                    if(isConnected) {
+                                        request.post("http://52.220.212.6:3121/api/addAccount")
+                                        .send(payload)
+                                        .finish((error, res)=> {
+                                            if (res.body.error) {
+                                                Alert.alert('Error', res.body.error);
+                                            } else {
+                                                AsyncStorage.setItem('account', JSON.stringify(res.body));
+                                                
+                                                dispatch({
+                                                    type: SET_REGISTER_STATUS,
+                                                    payload: true
+                                                })
+    
+                                                dispatch({
+                                                    type: CLEAR_INPUT,
+                                                    payload
+                                                })
+                                            }
+                                        });
+                                    } else {
+                                        Alert.alert('Error', "Please connect to the internet");
+                                    }
+    
+                                    dispatch({
+                                        type: SET_LOADING_STATUS,
+                                        payload: false
+                                    })
+                                });
+                            }
                         }
                     }
                 }

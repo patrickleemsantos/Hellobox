@@ -8,7 +8,7 @@ var dateFormat = require('dateformat');
 
 class AdditionalServices extends React.Component {
     componentDidMount() {
-        this.props.setPickUpDateTime(dateFormat(new Date(), "mmmm do yyyy, h:MM:ss TT"));
+        this.props.setPickUpDateTime(dateFormat(new Date(), "dd mmm yyyy, hh:MM TT"));
         this.props.resetAdditionalServices();
     }
 
@@ -95,11 +95,11 @@ class AdditionalServices extends React.Component {
                                     <Text style={styles.title}>Pick-up Time</Text>
                                     {/* <View style={{flex:1, justifyContent: 'center', alignItems: 'center'}}> */}
                                         <DatePicker
-                                            style={{width: 300}}
+                                            style={{width: 300}} 
                                             date={this.props.pickUpDateTime}
                                             mode="datetime"
                                             placeholder="select date"
-                                            format="MMMM Do YYYY, h:mm:ss a"
+                                            format="DD MMM YYYY, h:mm A"
                                             minDate={this.props.pickUpDateTime}
                                             // maxDate="2016-06-01"
                                             confirmBtnText="Confirm"

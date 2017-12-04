@@ -407,7 +407,7 @@ function handleResetAdditionalServices(state, action) {
 			$set: false
 		},
 		pickUpDateTime: {
-			$set: dateFormat(new Date(), "mmmm do yyyy, h:MM:ss TT")
+			$set: dateFormat(new Date(), "dd mmm yyyy, hh:MM TT")
 		},
 		bookingNote: {
 			$set: ""
@@ -440,7 +440,7 @@ const initialState = {
 	additionalService4: false,
 	additionalService5: false,
 	additionalService6: false,
-	pickUpDateTime: dateFormat(new Date(), "mmmm do yyyy, h:MM:ss TT"),
+	pickUpDateTime: dateFormat(new Date(), "dd mmm yyyy, hh:MM TT"),
 	bookingNote: ""
 };
 
