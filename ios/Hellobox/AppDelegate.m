@@ -15,10 +15,13 @@
 @import GooglePlaces;
 
 @implementation AppDelegate
+@synthesize oneSignal = _oneSignal;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   NSURL *jsCodeLocation;
+  self.oneSignal = [[RCTOneSignal alloc] initWithLaunchOptions:launchOptions
+                                                         appId:@"6a897100-dab6-4b9b-8af8-d222658fa89e"];
   [GMSServices provideAPIKey:@"AIzaSyBNDEF41tmSDitm8r73vTGbUviVpKC1XiM"];
   [GMSPlacesClient provideAPIKey:@"AIzaSyBNDEF41tmSDitm8r73vTGbUviVpKC1XiM"];
   

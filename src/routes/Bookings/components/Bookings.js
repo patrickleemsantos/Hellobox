@@ -1,9 +1,8 @@
 import React from "react";
-import { View, Alert, AsyncStorage, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Alert, AsyncStorage, StyleSheet, TouchableOpacity, Platform, BackHandler } from "react-native";
 import { Spinner, Container, Content, Card, CardItem, Body, List, Left, Right, Text, Header, Button, Title, Segment } from "native-base";
 import { Actions } from "react-native-router-flux";
 import Icon from "react-native-vector-icons/FontAwesome";
-// var Spinner = require("react-native-spinkit");
 
 class Bookings extends React.Component {
 
@@ -11,7 +10,14 @@ class Bookings extends React.Component {
 		AsyncStorage.getItem('account', (err, result) => {
             let account = JSON.parse(result);           
             this.props.getBookings(account.account_id);
-        });
+		});
+		
+		if (Platform.OS === 'android') {
+            BackHandler.addEventListener('hardwareBackPress', function() {
+                Actions.home({ reset: true });
+                return true;
+            });
+        }
 	}
     
 	render () {
@@ -30,17 +36,9 @@ class Bookings extends React.Component {
 				<View style={{flex:1}}>
 					<Header hasTabs style={styles.headerColor} iosBarStyle="light-content" androidStatusBarColor="#E90000">
 						<Left>
-							{ this.props.reset &&
-								<Button transparent onPress={() => Actions.home({ reset: true })}>
-									<Icon name="arrow-left" style={styles.menu} /> 
-								</Button>
-
-								||
-
-								<Button transparent onPress={() => Actions.pop()}>
-									<Icon name="arrow-left" style={styles.menu} /> 
-								</Button>
-							}
+							<Button transparent onPress={() => Actions.home({ reset: true })}>
+								<Icon name="arrow-left" style={styles.menu} /> 
+							</Button>
 						</Left>
 						<Body>
 							<Title style={styles.title}>Bookings</Title>		

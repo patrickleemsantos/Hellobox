@@ -196,7 +196,11 @@ class AdditionalServices extends React.Component {
                                     <Text style={styles.title}>Note</Text>
                                     <View style={{flex: 1, flexDirection: "column"}}>
                                         <Item>
-                                            <Input style={{fontSize: 14}} placeholder={"Enter note..."} multiline={true} onChangeText={ handleSetBookingNote.bind(this) }/>
+                                            <Input style={{fontSize: 14}} 
+                                                    placeholder={"Enter note..."} 
+                                                    multiline={true} 
+                                                    returnKeyType="go"
+                                                    onChangeText={ handleSetBookingNote.bind(this) }/>
                                         </Item>
                                     </View>
                                 </View>

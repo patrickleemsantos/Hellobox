@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Alert, AsyncStorage, StyleSheet } from "react-native";
+import { View, Alert, AsyncStorage, StyleSheet, Platform, BackHandler } from "react-native";
 import { Spinner, Container, Content, Body, Left, Right, Text, Header, Button, Title, Footer, FooterTab, Thumbnail, List, ListItem } from "native-base";
 import { Actions } from "react-native-router-flux";
 import StarRating from 'react-native-star-rating';
@@ -17,6 +17,13 @@ class BookingDetail extends React.Component {
         if (this.props.booking.status === "JOB COMPLETED" && parseInt(this.props.booking.rating) === 0) {
             this.props.setShowRatingModal(true);
         }  
+
+        if (Platform.OS === 'android') {
+            BackHandler.addEventListener('hardwareBackPress', function() {
+                Actions.bookings();
+                return true;
+            });
+        }
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -74,17 +81,9 @@ class BookingDetail extends React.Component {
                     <View style={{flex:1}}>
                         <Header style={styles.headerColor} iosBarStyle="light-content" androidStatusBarColor="#E90000">
                             <Left>
-                                { this.props.reset &&
-                                    <Button transparent onPress={() => Actions.bookings()}>
-                                        <Icon name="arrow-left" style={styles.menu} /> 
-                                    </Button>
-
-                                    ||
-
-                                    <Button transparent onPress={() => Actions.pop()}>
-                                        <Icon name="arrow-left" style={styles.menu} /> 
-                                    </Button>
-                                }
+                                <Button transparent onPress={() => Actions.bookings()}>
+                                    <Icon name="arrow-left" style={styles.menu} /> 
+                                </Button>
                             </Left>
                             <Body>
                                 <Title style={styles.job}>JOB ID: {this.props.currentBooking.booking_id}</Title>
@@ -108,6 +107,9 @@ class BookingDetail extends React.Component {
                             </View>
                             <View style={styles.additionalPriceContainter}>
                                 <Text style={styles.additionalPriceValue}>Additional Price: P {this.props.currentBooking.additional_price}</Text>
+                            </View>
+                            <View style={styles.totalPriceContainter}>
+                                <Text style={styles.priceValue}>Total Price: P {this.props.currentBooking.fare + this.props.currentBooking.additional_price}</Text>
                             </View>
                             <View style={styles.locationContainter}>
                                 <View style={styles.timeContainer}>
@@ -192,6 +194,9 @@ class BookingDetail extends React.Component {
                                             selectedStar={(rating) => this.onStarRatingPress(rating)}
                                             starColor={'red'}
                                         />
+                                    </View>
+                                    <View stye={styles.commentContainer}>
+                                        <Text style={styles.commentText}>{this.props.currentBooking.comment}</Text>
                                     </View>
                                 </View>
                             }
@@ -294,6 +299,13 @@ const styles = StyleSheet.create({
     priceContainter: {
         flex: 1,
         backgroundColor: "#CCD1D1",
+        paddingLeft: 10,
+        paddingTop: 10,
+        paddingBottom: 10
+    },
+    totalPriceContainter: {
+        flex: 1,
+        backgroundColor: "#ECF0F1",
         paddingLeft: 10,
         paddingTop: 10,
         paddingBottom: 10
@@ -473,6 +485,15 @@ const styles = StyleSheet.create({
     },
     starRating: {
         textAlign: "center"
+    },
+    commentContainer: {
+        paddingLeft: 30,
+        paddingRight: 30
+    },
+    commentText: {
+        textAlign: "center",
+        fontSize: 13,
+        marginTop: 7
     },
     spinner: {
         top: 200,
