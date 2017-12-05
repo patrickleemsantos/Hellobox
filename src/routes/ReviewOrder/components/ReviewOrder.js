@@ -18,7 +18,7 @@ class ReviewOrder extends React.Component {
                 AsyncStorage.getItem('account', (err, result) => {
                     let account = JSON.parse(result);
                     if (account.account_id === this.props.booking.account.account_id) {         
-                        Actions.bookingDetail({booking: this.props.booking, type: "reset"});
+                        Actions.bookingDetail({booking: this.props.booking, reset: true, type: "reset"});
                     }
                 });
             }

@@ -107,6 +107,7 @@ android {
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
+        manifestPlaceholders = [onesignal_app_id: "6a897100-dab6-4b9b-8af8-d222658fa89e", onesignal_google_project_number: "663596144908"]
     }
     signingConfigs {
         release {
@@ -149,6 +150,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-onesignal')
     compile project(':react-native-android-location-services-dialog-box')
     compile project(':react-native-spinkit')
     compile project(':react-native-google-places')
@@ -161,8 +163,12 @@ dependencies {
     compile(project(':react-native-maps')){
         exclude group: 'com.google.android.gms', module: 'play-services-base'
         exclude group: 'com.google.android.gms', module: 'play-services-maps'
+        exclude group: 'com.google.android.gms', module: 'play-services-location'
     }
-    compile 'com.google.android.gms:play-services-base:10.0.1'
+    compile 'com.google.android.gms:play-services-base:11.+'
+    compile 'com.google.android.gms:play-services-places:11.+'
+    compile 'com.google.android.gms:play-services-location:11.+'
+    // compile 'com.google.android.gms:play-services-base:10.0.1'
     compile 'com.google.android.gms:play-services-maps:10.0.1'
 }
 

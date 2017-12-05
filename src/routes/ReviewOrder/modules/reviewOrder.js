@@ -110,11 +110,9 @@ export function bookCar(payload) {
 								booking_id: randomize('0000'),
 								account:{
 									account_id: store().login.account.account_id,
-									date_of_birth: store().login.account.date_of_birth,
 									first_name: store().login.account.first_name,
 									last_name: store().login.account.last_name,
-									profile_picture: store().login.account.profile_picture,
-									rating: store().login.account.rating
+									mobile_number: store().login.account.mobile_number,
 								},
 								driver: nearByDriver,
 								pick_up:{

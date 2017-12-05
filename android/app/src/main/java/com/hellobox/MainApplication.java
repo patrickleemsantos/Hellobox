@@ -3,6 +3,7 @@ package com.hellobox;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
 import com.showlocationservicesdialogbox.LocationServicesDialogBoxPackage;
 import com.react.rnspinkit.RNSpinkitPackage;
 import com.arttitude360.reactnative.rngoogleplaces.RNGooglePlacesPackage;
@@ -28,6 +29,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactNativeOneSignalPackage(),
             new LocationServicesDialogBoxPackage(),
             new RNSpinkitPackage(),
             new RNGooglePlacesPackage(),

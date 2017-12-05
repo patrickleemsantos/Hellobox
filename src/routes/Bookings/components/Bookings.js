@@ -30,9 +30,17 @@ class Bookings extends React.Component {
 				<View style={{flex:1}}>
 					<Header hasTabs style={styles.headerColor} iosBarStyle="light-content" androidStatusBarColor="#E90000">
 						<Left>
-							<Button transparent onPress={() => Actions.pop({ refresh: { bookings: true } })}>
-								<Icon name="arrow-left" style={styles.menu} /> 
-							</Button>
+							{ this.props.reset &&
+								<Button transparent onPress={() => Actions.home({ reset: true })}>
+									<Icon name="arrow-left" style={styles.menu} /> 
+								</Button>
+
+								||
+
+								<Button transparent onPress={() => Actions.pop()}>
+									<Icon name="arrow-left" style={styles.menu} /> 
+								</Button>
+							}
 						</Left>
 						<Body>
 							<Title style={styles.title}>Bookings</Title>		

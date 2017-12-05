@@ -27,7 +27,7 @@ export const DriverFooterProfile = ({ driverInfo, getDriverLocation})=>{
 			</View>
 			<View style={styles.iconContainer}>
 				{/* <Icon name="comment-o" size={30} style={styles.icon}/> */}
-				<Button transparent onPress={() => Communications.phonecall('09985326639', true)} >
+				<Button transparent onPress={() => Communications.phonecall(driverInfo.mobile_number, true)} >
 					<Icon name="phone" size={30} style={styles.icon} />
 				</Button>
 			</View>

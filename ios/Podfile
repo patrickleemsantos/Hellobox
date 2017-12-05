@@ -8,6 +8,8 @@ target 'Hellobox' do
     pod 'GoogleMaps'  # <~~ remove this line if you do not want to support GoogleMaps on iOS
     pod 'GooglePlaces'
     pod 'GooglePlacePicker'
+  pod 'react-native-onesignal', :path => '../node_modules/react-native-onesignal'
+
 end
 post_install do |installer|
     installer.pods_project.targets.each do |target|

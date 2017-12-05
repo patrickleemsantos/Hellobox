@@ -9,6 +9,7 @@ import Fare from "./Fare";
 import Fab from "./Fab";
 import SideBar from '../../../components/SideBar';
 import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
+import OneSignal from 'react-native-onesignal';
 var Spinner = require("react-native-spinkit");
 
 const justBoxLogo = require("../../../assets/images/logo.png");
@@ -46,6 +47,17 @@ class Home extends React.Component {
                 rx.props.getCurrentLocation();
                 rx.props.getNearByDrivers();
             }, 5000);
+        }
+
+        OneSignal.configure({});
+        OneSignal.enableSound(true);
+        OneSignal.enableVibrate(true);
+        OneSignal.getPermissionSubscriptionState((status) => {
+          this.props.updatePushNotificationID(status.userId);
+        });
+
+        if (this.props.reset) {
+            this.props.resetBooking(); 
         }
     }
 

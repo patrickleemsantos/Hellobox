@@ -74,9 +74,17 @@ class BookingDetail extends React.Component {
                     <View style={{flex:1}}>
                         <Header style={styles.headerColor} iosBarStyle="light-content" androidStatusBarColor="#E90000">
                             <Left>
-                                <Button transparent onPress={() => Actions.pop()}>
-                                    <Icon name="arrow-left" style={styles.menu} /> 
-                                </Button>
+                                { this.props.reset &&
+                                    <Button transparent onPress={() => Actions.bookings()}>
+                                        <Icon name="arrow-left" style={styles.menu} /> 
+                                    </Button>
+
+                                    ||
+
+                                    <Button transparent onPress={() => Actions.pop()}>
+                                        <Icon name="arrow-left" style={styles.menu} /> 
+                                    </Button>
+                                }
                             </Left>
                             <Body>
                                 <Title style={styles.job}>JOB ID: {this.props.currentBooking.booking_id}</Title>

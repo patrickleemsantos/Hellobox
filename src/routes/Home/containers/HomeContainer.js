@@ -13,7 +13,8 @@ import {
     closeResultType,
     updateBookingStatus,
     removeBooking,
-    resetBooking
+    resetBooking,
+    updatePushNotificationID
 } from "../modules/home";
 
 const mapStateToProps = (state) => ({   
@@ -44,7 +45,8 @@ const mapActionCreators = {
     closeResultType,
     updateBookingStatus,
     removeBooking,
-    resetBooking
+    resetBooking,
+    updatePushNotificationID
 };
 
 export default connect(mapStateToProps, mapActionCreators)(Home);

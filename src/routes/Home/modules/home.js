@@ -42,6 +42,36 @@ export function resetBooking(payload) {
 	}
 }
 
+export function updatePushNotificationID(payload) {
+	return(dispatch, store) => {
+		if (Platform.OS === 'ios') {
+			request.put("http://52.220.212.6:3121/api/updatePushNotificationID")
+			.send({
+				account_id: store().login.account.account_id,
+				notification_id: payload
+			})
+			.finish((error, res)=>{
+				console.log(res);
+			});
+		} else {
+			NetInfo.isConnected.fetch().then(isConnected => {
+				if(isConnected) {
+					request.put("http://52.220.212.6:3121/api/updatePushNotificationID")
+					.send({
+						account_id: store().login.account.account_id,
+						notification_id: payload
+					})
+					.finish((error, res)=>{
+						console.log(res);
+					});
+				} else {
+					Alert.alert('Unable to update notification ID', "Please connect to the internet");
+				}
+			});
+		}
+	}
+}
+
 export function closeResultType(payload) {
 	return(dispatch, store) => {
 		dispatch({
@@ -202,6 +232,31 @@ export function getSelectedAddress(payload) {
 									type:GET_DISTANCE_MATRIX,
 									payload:res.body
 								});
+
+								setTimeout(function() {
+									if(store().home.selectedAddress.selectedPickUp && store().home.selectedAddress.selectedDropOff){
+										// const fare = calculateFare(
+										// 	dummyNumbers.baseFare,
+										// 	dummyNumbers.timeRate,
+										// 	store().home.distanceMatrix.rows[0].elements[0].duration.value,
+										// 	dummyNumbers.distanceRate,
+										// 	store().home.distanceMatrix.rows[0].elements[0].distance.value,
+										// 	dummyNumbers.surge,
+										// 	store().home.selectedVehicle
+										// );
+		
+										const fare = calculateFare(
+											store().home.distanceMatrix.rows[0].elements[0].duration.value,
+											store().home.distanceMatrix.rows[0].elements[0].distance.value,
+											store().home.selectedVehicle
+										);
+		
+										dispatch({
+											type: GET_FARE,
+											payload: fare
+										})
+									}
+								}, 2000)
 							})
 	
 							// request.get("https://maps.googleapis.com/maps/api/directions/json")
@@ -223,30 +278,6 @@ export function getSelectedAddress(payload) {
 							// 	});
 							// })
 	
-							setTimeout(function() {
-								if(store().home.selectedAddress.selectedPickUp && store().home.selectedAddress.selectedDropOff){
-									// const fare = calculateFare(
-									// 	dummyNumbers.baseFare,
-									// 	dummyNumbers.timeRate,
-									// 	store().home.distanceMatrix.rows[0].elements[0].duration.value,
-									// 	dummyNumbers.distanceRate,
-									// 	store().home.distanceMatrix.rows[0].elements[0].distance.value,
-									// 	dummyNumbers.surge,
-									// 	store().home.selectedVehicle
-									// );
-	
-									const fare = calculateFare(
-										store().home.distanceMatrix.rows[0].elements[0].duration.value,
-										store().home.distanceMatrix.rows[0].elements[0].distance.value,
-										store().home.selectedVehicle
-									);
-	
-									dispatch({
-										type: GET_FARE,
-										payload: fare
-									})
-								}
-							}, 2000)
 						} else {
 							Alert.alert('Error', "Please connect to the internet");
 						}
