@@ -127,6 +127,7 @@ class AdditionalServices extends React.Component {
                             <CardItem>
                                 <View style={{flex: 1, flexDirection: "column"}}>
                                     <Text style={styles.title}>Extra Requirements</Text>
+                                    {/* { (this.props.selectedVehicle == "motorcycle") && */}
                                     <ListItem>
                                         <CheckBox 
                                             checked={this.props.additionalService1} 
@@ -137,6 +138,7 @@ class AdditionalServices extends React.Component {
                                             <Text style={styles.additionalText}>Goods longer than 6ft (₱50)</Text>
                                         </Body>
                                     </ListItem>
+                                    {/* } */}
                                     <ListItem>
                                         <CheckBox 
                                             checked={this.props.additionalService2} 

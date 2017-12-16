@@ -22,9 +22,10 @@ export const SearchResults = ({isSearchAddressLoading,
             </Button> */}
             <Spinner style={styles.spinner} isVisible={isSearchAddressLoading} size={40} type="Wave" color="#ffffff"/>
             <List 
+                keyboardShouldPersistTaps='always'
                 dataArray={predictions}
                 renderRow={(item)=>
-                    <ScrollView>
+                    <ScrollView keyboardShouldPersistTaps='always'>
                         <ListItem style={styles.listWrapper} onPress={() => handleSelectedAddress(item.placeID)} button avatar>
                             <Left style={styles.leftContainer}>
                                 <Icon style={styles.leftIcon} name="location-arrow" />

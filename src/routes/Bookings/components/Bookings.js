@@ -72,7 +72,7 @@ class Bookings extends React.Component {
 					</Segment>
 					<Content>
 						{ (this.props.showBookingLoader == true) &&
-							<Spinner color='#E90000' />
+							<Spinner style={styles.spinner} color='#E90000'/>
 
 							||
 
@@ -241,7 +241,6 @@ const styles = StyleSheet.create({
         alignSelf: "center"
 	},
 	spinner: {
-        color: "#E90000",
         marginTop: 100,
         alignSelf: "center"
     },

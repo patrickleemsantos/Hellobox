@@ -109,7 +109,7 @@ class BookingDetail extends React.Component {
                                 <Text style={styles.additionalPriceValue}>Additional Price: P {this.props.currentBooking.additional_price}</Text>
                             </View>
                             <View style={styles.totalPriceContainter}>
-                                <Text style={styles.priceValue}>Total Price: P {this.props.currentBooking.fare + this.props.currentBooking.additional_price}</Text>
+                                <Text style={styles.priceValue}>Total Price: P {parseInt(this.props.currentBooking.fare) + parseInt(this.props.currentBooking.additional_price)}</Text>
                             </View>
                             <View style={styles.locationContainter}>
                                 <View style={styles.timeContainer}>

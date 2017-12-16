@@ -1,9 +1,10 @@
 import React from "react";
-import { Image, TextInput, Alert } from 'react-native';
+import { Image, TextInput, Alert, ScrollView } from 'react-native';
 import { Text, View, Content, Container, Button, Header, Body, Title, Left, Right } from "native-base";
 import Modal from 'react-native-modalbox';
 import Icon from "react-native-vector-icons/FontAwesome";
 import StarRating from 'react-native-star-rating';
+var DismissKeyboard = require('dismissKeyboard');
 
 import styles from "./RatingModalStyles.js"
 
@@ -27,8 +28,10 @@ export const RatingModal = ({ showRatingModal, booking, selectedStar, setSelecte
             position={"center"} 
             isOpen={showRatingModal}
             swipeToClose={false}
-            backdropPressToClose={false}>
-            <View style={{flex: 1, flexDirection: "column"}}>
+            backdropPressToClose={false}
+            coverScreen={true}
+            keyboardShouldPersistTaps={'handled'}>
+            <ScrollView style={{flex: 1, flexDirection: "column"}} keyboardShouldPersistTaps={'handled'} scrollEnabled={false} >
                 <View style={styles.header}>
                     <Text style={styles.title}>RATE YOUR DRIVER</Text>
                 </View>
@@ -63,14 +66,15 @@ export const RatingModal = ({ showRatingModal, booking, selectedStar, setSelecte
                         autoCapitalize="none"
                         autoCorrect={false}
                         underlineColorAndroid='transparent'
-                        returnKeyType="go"
+                        // returnKeyType="go"
                         onChangeText={ (text)=> getComment(text) }
+                        onSubmitEditing={() => handleSaveComment()}
                     />
                 </View>
                 <View style={styles.buttonContainer}>
                     <Button block success style={styles.button} onPress={() => handleSaveComment()}><Text style={styles.subText}>Submit</Text></Button>
                 </View>
-            </View>
+            </ScrollView>
         </Modal>
     )
 }
