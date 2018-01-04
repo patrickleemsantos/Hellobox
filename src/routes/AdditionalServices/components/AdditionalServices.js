@@ -215,7 +215,7 @@ class AdditionalServices extends React.Component {
                         </Footer>
                     ) : (
                         <Footer style={styles.footerContainer}>
-                            <Text style={styles.fare}> PRICE: </Text><Text style={styles.amount}>₱ {this.props.fare + this.props.additionalPrice}</Text>
+                            <Text style={styles.fare}> Price: </Text><Text style={styles.amount}>₱ {(this.props.fare + this.props.additionalPrice).toLocaleString('en')}</Text>
                         </Footer>
                     )}
                     <Footer>
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
     },
     fare:{
         paddingTop:15,
-        fontWeight:"bold",
+        // fontWeight:"bold",
         fontSize: 18,
         color: "#3A3A3A"
     },

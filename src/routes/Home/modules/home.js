@@ -1,6 +1,6 @@
 import update from "react-addons-update";
 import constants from "./actionConstants";
-import { Dimensions, NetInfo, Platform } from "react-native";
+import { Dimensions, NetInfo, Platform, Alert } from "react-native";
 import RNGooglePlaces from "react-native-google-places";
 // import Polyline from '@mapbox/polyline';
 import request from "../../../util/request";
@@ -22,7 +22,10 @@ const { GET_CURRENT_LOCATION,
 		CLOSE_RESULT_TYPE,
 		GET_DIRECTIONS,
 		IS_MAP_READY,
-		RESET_BOOKING
+		RESET_BOOKING,
+		SHOW_EXTRA_DROP_OFF,
+		HIDE_EXTRA_DROP_OFF,
+		SET_LOADING_FARE
 	} = constants;
 
 const { width, height } = Dimensions.get("window");
@@ -38,6 +41,20 @@ const LONGITUDE_DELTA = ASPECT_RATIO * LATITUDE_DELTA;
 export function resetBooking(payload) {
 	return {
 		type: RESET_BOOKING,
+		payload
+	}
+}
+
+export function showExtraDropOff(payload) {
+	return {
+		type: SHOW_EXTRA_DROP_OFF,
+		payload
+	}
+}
+
+export function hideExtraDropOff(payload) {
+	return {
+		type: HIDE_EXTRA_DROP_OFF,
 		payload
 	}
 }
@@ -128,7 +145,22 @@ export function toggleSearchResultmodal(payload) {
 //Get addresses from google place
 export function getAddressPredictions() {
 	return(dispatch, store) => {
-		let userInput = store().home.resultTypes.pickUp ? store().home.inputData.pickUp : store().home.inputData.dropOff;
+		var userInput = "";
+
+		if (store().home.resultTypes.pickUp) {
+			userInput = store().home.inputData.pickUp;
+		} else if (store().home.resultTypes.dropOff) {
+			userInput = store().home.inputData.dropOff;
+		} else if (store().home.resultTypes.extraDropOff1) {
+			userInput = store().home.inputData.extraDropOff1;
+		} else if (store().home.resultTypes.extraDropOff2) {
+			userInput = store().home.inputData.extraDropOff2;
+		} else if (store().home.resultTypes.extraDropOff3) {
+			userInput = store().home.inputData.extraDropOff3;
+		} else if (store().home.resultTypes.extraDropOff4) {
+			userInput = store().home.inputData.extraDropOff4;
+		}
+		
 		if (userInput != "") {
 			dispatch({
 				type: UPDATE_SEARCH_ADDRESS_LOADING_STATUS,
@@ -162,13 +194,6 @@ export function getAddressPredictions() {
 
 //Get selected address
 export function getSelectedAddress(payload) {
-	// const dummyNumbers = {
-	// 	baseFare: 0.4,
-	// 	timeRate: 0.14,
-	// 	distanceRate: 0.97,
-	// 	surge: 1
-	// }
-
 	return (dispatch, store) => {
 		RNGooglePlaces.lookUpPlaceByID(payload)
 		.then((results) => {
@@ -180,14 +205,259 @@ export function getSelectedAddress(payload) {
 		.then(() => {
 			//Get the distance and time
 			if(store().home.selectedAddress.selectedPickUp && store().home.selectedAddress.selectedDropOff){
-				if (Platform.OS === 'ios') {
-					// NetInfo.addEventListener('change',
-                    // 	(networkType)=> {
-					// 		if (networkType == 'wifi' || networkType == 'cell') {
+				var isInternetConnected = false;
+
+				// if (Platform.OS === 'ios') {
+				// 	isInternetConnected = true;
+				// } else {
+				// 	NetInfo.isConnected.fetch().then(isConnected => {
+				// 		if(isConnected) {
+				// 			isInternetConnected = true;
+				// 		}
+				// 	});
+				// }
+
+				isInternetConnected = true;
+
+				if (isInternetConnected) {
+					dispatch({
+						type: SET_LOADING_FARE,
+						payload: true
+					});
+					request.get("https://maps.googleapis.com/maps/api/distancematrix/json")
+					.query({
+						origins:store().home.selectedAddress.selectedPickUp.latitude + "," + store().home.selectedAddress.selectedPickUp.longitude,
+						destinations:store().home.selectedAddress.selectedDropOff.latitude + "," + store().home.selectedAddress.selectedDropOff.longitude,
+						mode: "driving",
+						key: "AIzaSyBNDEF41tmSDitm8r73vTGbUviVpKC1XiM"
+					})
+					.finish((error, res)=>{
+						dispatch({
+							type:GET_DISTANCE_MATRIX,
+							payload:res.body
+						});
+
+						setTimeout(function() {
+							if(store().home.selectedAddress.selectedPickUp && store().home.selectedAddress.selectedDropOff){
+								const fare = calculateFare(
+									store().home.distanceMatrix.rows[0].elements[0].duration.value,
+									store().home.distanceMatrix.rows[0].elements[0].distance.value,
+									store().home.selectedVehicle
+								);
+
+								// Start Calculate of extra drop off 1
+								if (store().home.selectedAddress.selectedExtraDropOff1) {
+									request.get("https://maps.googleapis.com/maps/api/distancematrix/json")
+									.query({
+										origins:store().home.selectedAddress.selectedDropOff.latitude + "," + store().home.selectedAddress.selectedDropOff.longitude,
+										destinations:store().home.selectedAddress.selectedExtraDropOff1.latitude + "," + store().home.selectedAddress.selectedExtraDropOff1.longitude,
+										mode: "driving",
+										key: "AIzaSyBNDEF41tmSDitm8r73vTGbUviVpKC1XiM"
+									})
+									.finish((error, res)=>{
+										dispatch({
+											type:GET_DISTANCE_MATRIX,
+											payload:res.body
+										});
+
+										setTimeout(function() {
+											if(store().home.selectedAddress.selectedDropOff && store().home.selectedAddress.selectedExtraDropOff1){
+												const fare1 = calculateFare(
+													store().home.distanceMatrix.rows[0].elements[0].duration.value,
+													store().home.distanceMatrix.rows[0].elements[0].distance.value,
+													store().home.selectedVehicle
+												);
+			
+												// Start Calculate of extra drop off 2
+												if (store().home.selectedAddress.selectedExtraDropOff2) {
+													request.get("https://maps.googleapis.com/maps/api/distancematrix/json")
+													.query({
+														origins:store().home.selectedAddress.selectedExtraDropOff1.latitude + "," + store().home.selectedAddress.selectedExtraDropOff1.longitude,
+														destinations:store().home.selectedAddress.selectedExtraDropOff2.latitude + "," + store().home.selectedAddress.selectedExtraDropOff2.longitude,
+														mode: "driving",
+														key: "AIzaSyBNDEF41tmSDitm8r73vTGbUviVpKC1XiM"
+													})
+													.finish((error, res)=>{
+														dispatch({
+															type:GET_DISTANCE_MATRIX,
+															payload:res.body
+														});
+
+														setTimeout(function() {
+															if(store().home.selectedAddress.selectedExtraDropOff1){
+																const fare2 = calculateFare(
+																	store().home.distanceMatrix.rows[0].elements[0].duration.value,
+																	store().home.distanceMatrix.rows[0].elements[0].distance.value,
+																	store().home.selectedVehicle
+																);
+				
+																// Start Calculate of extra drop off 3
+																if (store().home.selectedAddress.selectedExtraDropOff3) {
+																	request.get("https://maps.googleapis.com/maps/api/distancematrix/json")
+																	.query({
+																		origins:store().home.selectedAddress.selectedExtraDropOff2.latitude + "," + store().home.selectedAddress.selectedExtraDropOff2.longitude,
+																		destinations:store().home.selectedAddress.selectedExtraDropOff3.latitude + "," + store().home.selectedAddress.selectedExtraDropOff3.longitude,
+																		mode: "driving",
+																		key: "AIzaSyBNDEF41tmSDitm8r73vTGbUviVpKC1XiM"
+																	})
+																	.finish((error, res)=>{
+																		dispatch({
+																			type:GET_DISTANCE_MATRIX,
+																			payload:res.body
+																		});
+
+																		setTimeout(function() {
+																			if(store().home.selectedAddress.selectedExtraDropOff2){
+																				const fare3 = calculateFare(
+																					store().home.distanceMatrix.rows[0].elements[0].duration.value,
+																					store().home.distanceMatrix.rows[0].elements[0].distance.value,
+																					store().home.selectedVehicle
+																				);
+
+																				// Start Calculate of extra drop off 4
+																				if (store().home.selectedAddress.selectedExtraDropOff4) {
+																					request.get("https://maps.googleapis.com/maps/api/distancematrix/json")
+																					.query({
+																						origins:store().home.selectedAddress.selectedExtraDropOff3.latitude + "," + store().home.selectedAddress.selectedExtraDropOff3.longitude,
+																						destinations:store().home.selectedAddress.selectedExtraDropOff4.latitude + "," + store().home.selectedAddress.selectedExtraDropOff4.longitude,
+																						mode: "driving",
+																						key: "AIzaSyBNDEF41tmSDitm8r73vTGbUviVpKC1XiM"
+																					})
+																					.finish((error, res)=>{
+																						dispatch({
+																							type:GET_DISTANCE_MATRIX,
+																							payload:res.body
+																						});
+
+																						setTimeout(function() {
+																							if(store().home.selectedAddress.selectedExtraDropOff3){
+																								const fare4 = calculateFare(
+																									store().home.distanceMatrix.rows[0].elements[0].duration.value,
+																									store().home.distanceMatrix.rows[0].elements[0].distance.value,
+																									store().home.selectedVehicle
+																								);
+																
+																								dispatch({
+																									type: GET_FARE,
+																									payload: fare + fare1 + fare2 + fare3 + fare4
+																								})	
+
+																								dispatch({
+																									type: SET_LOADING_FARE,
+																									payload: false
+																								});
+																							}
+																						}, 2000)
+																					})
+																				} else {
+																					dispatch({
+																						type: GET_FARE,
+																						payload: fare + fare1 + fare2 + fare3
+																					})	
+
+																					dispatch({
+																						type: SET_LOADING_FARE,
+																						payload: false
+																					});
+																				}
+																				// End Calculate of extra drop off 4
+																			}
+																		}, 2000)
+																	})
+																} else {
+																	dispatch({
+																		type: GET_FARE,
+																		payload: fare + fare1 + fare2
+																	})	
+
+																	dispatch({
+																		type: SET_LOADING_FARE,
+																		payload: false
+																	});
+																}
+																// End Calculate of extra drop off 3
+															}
+														}, 2000)
+													})
+												} else {
+													dispatch({
+														type: GET_FARE,
+														payload: fare + fare1
+													})
+				
+													dispatch({
+														type: SET_LOADING_FARE,
+														payload: false
+													});
+												}
+												// End Calculate of extra drop off 2
+											}
+										}, 2000)
+									})
+								} else {
+									dispatch({
+										type: GET_FARE,
+										payload: fare
+									})
+
+									dispatch({
+										type: SET_LOADING_FARE,
+										payload: false
+									});
+								}
+								// End Calculate of extra drop off 1
+							}	
+						}, 2000)
+					})
+				} else {
+					Alert.alert('Error', "Please connect to the internet");
+				}
+			}
+		})
+		.catch((error) => console.log(error.message));
+	}
+}
+
+export function reCalculateFare(payload) {
+	return (dispatch, store) => {
+		//Get the distance and time
+		if(store().home.selectedAddress.selectedPickUp && store().home.selectedAddress.selectedDropOff){
+			var isInternetConnected = false;
+
+			isInternetConnected = true;
+
+			if (isInternetConnected) {
+				dispatch({
+					type: SET_LOADING_FARE,
+					payload: true
+				});
+				request.get("https://maps.googleapis.com/maps/api/distancematrix/json")
+				.query({
+					origins:store().home.selectedAddress.selectedPickUp.latitude + "," + store().home.selectedAddress.selectedPickUp.longitude,
+					destinations:store().home.selectedAddress.selectedDropOff.latitude + "," + store().home.selectedAddress.selectedDropOff.longitude,
+					mode: "driving",
+					key: "AIzaSyBNDEF41tmSDitm8r73vTGbUviVpKC1XiM"
+				})
+				.finish((error, res)=>{
+					dispatch({
+						type:GET_DISTANCE_MATRIX,
+						payload:res.body
+					});
+
+					setTimeout(function() {
+						if(store().home.selectedAddress.selectedPickUp && store().home.selectedAddress.selectedDropOff){
+							const fare = calculateFare(
+								store().home.distanceMatrix.rows[0].elements[0].duration.value,
+								store().home.distanceMatrix.rows[0].elements[0].distance.value,
+								store().home.selectedVehicle
+							);
+
+							// Start Calculate of extra drop off 1
+							if (store().home.selectedAddress.selectedExtraDropOff1) {
 								request.get("https://maps.googleapis.com/maps/api/distancematrix/json")
 								.query({
-									origins:store().home.selectedAddress.selectedPickUp.latitude + "," + store().home.selectedAddress.selectedPickUp.longitude,
-									destinations:store().home.selectedAddress.selectedDropOff.latitude + "," + store().home.selectedAddress.selectedDropOff.longitude,
+									origins:store().home.selectedAddress.selectedDropOff.latitude + "," + store().home.selectedAddress.selectedDropOff.longitude,
+									destinations:store().home.selectedAddress.selectedExtraDropOff1.latitude + "," + store().home.selectedAddress.selectedExtraDropOff1.longitude,
 									mode: "driving",
 									key: "AIzaSyBNDEF41tmSDitm8r73vTGbUviVpKC1XiM"
 								})
@@ -196,135 +466,393 @@ export function getSelectedAddress(payload) {
 										type:GET_DISTANCE_MATRIX,
 										payload:res.body
 									});
-								})
-		
-								setTimeout(function() {
-									if(store().home.selectedAddress.selectedPickUp && store().home.selectedAddress.selectedDropOff){
-										const fare = calculateFare(
-											store().home.distanceMatrix.rows[0].elements[0].duration.value,
-											store().home.distanceMatrix.rows[0].elements[0].distance.value,
-											store().home.selectedVehicle
-										);
-		
-										dispatch({
-											type: GET_FARE,
-											payload: fare
-										})
-									}
-								}, 2000)
-							// } else {
-							// 	Alert.alert('Error', "Please connect to the internet");
-							// }
-					// 	}
-					// )
-				} else {
-					NetInfo.isConnected.fetch().then(isConnected => {
-						if(isConnected) {
-							request.get("https://maps.googleapis.com/maps/api/distancematrix/json")
-							.query({
-								origins:store().home.selectedAddress.selectedPickUp.latitude + "," + store().home.selectedAddress.selectedPickUp.longitude,
-								destinations:store().home.selectedAddress.selectedDropOff.latitude + "," + store().home.selectedAddress.selectedDropOff.longitude,
-								mode: "driving",
-								key: "AIzaSyBNDEF41tmSDitm8r73vTGbUviVpKC1XiM"
-							})
-							.finish((error, res)=>{
-								dispatch({
-									type:GET_DISTANCE_MATRIX,
-									payload:res.body
-								});
 
-								setTimeout(function() {
-									if(store().home.selectedAddress.selectedPickUp && store().home.selectedAddress.selectedDropOff){
-										// const fare = calculateFare(
-										// 	dummyNumbers.baseFare,
-										// 	dummyNumbers.timeRate,
-										// 	store().home.distanceMatrix.rows[0].elements[0].duration.value,
-										// 	dummyNumbers.distanceRate,
-										// 	store().home.distanceMatrix.rows[0].elements[0].distance.value,
-										// 	dummyNumbers.surge,
-										// 	store().home.selectedVehicle
-										// );
+									setTimeout(function() {
+										if(store().home.selectedAddress.selectedDropOff && store().home.selectedAddress.selectedExtraDropOff1){
+											const fare1 = calculateFare(
+												store().home.distanceMatrix.rows[0].elements[0].duration.value,
+												store().home.distanceMatrix.rows[0].elements[0].distance.value,
+												store().home.selectedVehicle
+											);
 		
-										const fare = calculateFare(
-											store().home.distanceMatrix.rows[0].elements[0].duration.value,
-											store().home.distanceMatrix.rows[0].elements[0].distance.value,
-											store().home.selectedVehicle
-										);
-		
-										dispatch({
-											type: GET_FARE,
-											payload: fare
-										})
-									}
-								}, 2000)
-							})
-	
-							// request.get("https://maps.googleapis.com/maps/api/directions/json")
-							// .query({
-							// 	origin:store().home.selectedAddress.selectedPickUp.latitude + "," + store().home.selectedAddress.selectedPickUp.longitude,
-							// 	destination:store().home.selectedAddress.selectedDropOff.latitude + "," + store().home.selectedAddress.selectedDropOff.longitude
-							// })
-							// .finish((error, res)=>{
-							// 	let points = Polyline.decode(res.body.routes[0].overview_polyline.points);
-							// 	let coords = points.map((point, index) => {
-							// 		return  {
-							// 			latitude : point[0],
-							// 			longitude : point[1]
-							// 		}
-							// 	})
-							// 	dispatch({
-							// 		type:GET_DIRECTIONS,
-							// 		payload:coords
-							// 	});
-							// })
-	
-						} else {
-							Alert.alert('Error', "Please connect to the internet");
-						}
-					});
-				}
+											// Start Calculate of extra drop off 2
+											if (store().home.selectedAddress.selectedExtraDropOff2) {
+												request.get("https://maps.googleapis.com/maps/api/distancematrix/json")
+												.query({
+													origins:store().home.selectedAddress.selectedExtraDropOff1.latitude + "," + store().home.selectedAddress.selectedExtraDropOff1.longitude,
+													destinations:store().home.selectedAddress.selectedExtraDropOff2.latitude + "," + store().home.selectedAddress.selectedExtraDropOff2.longitude,
+													mode: "driving",
+													key: "AIzaSyBNDEF41tmSDitm8r73vTGbUviVpKC1XiM"
+												})
+												.finish((error, res)=>{
+													dispatch({
+														type:GET_DISTANCE_MATRIX,
+														payload:res.body
+													});
+
+													setTimeout(function() {
+														if(store().home.selectedAddress.selectedExtraDropOff1){
+															const fare2 = calculateFare(
+																store().home.distanceMatrix.rows[0].elements[0].duration.value,
+																store().home.distanceMatrix.rows[0].elements[0].distance.value,
+																store().home.selectedVehicle
+															);
+			
+															// Start Calculate of extra drop off 3
+															if (store().home.selectedAddress.selectedExtraDropOff3) {
+																request.get("https://maps.googleapis.com/maps/api/distancematrix/json")
+																.query({
+																	origins:store().home.selectedAddress.selectedExtraDropOff2.latitude + "," + store().home.selectedAddress.selectedExtraDropOff2.longitude,
+																	destinations:store().home.selectedAddress.selectedExtraDropOff3.latitude + "," + store().home.selectedAddress.selectedExtraDropOff3.longitude,
+																	mode: "driving",
+																	key: "AIzaSyBNDEF41tmSDitm8r73vTGbUviVpKC1XiM"
+																})
+																.finish((error, res)=>{
+																	dispatch({
+																		type:GET_DISTANCE_MATRIX,
+																		payload:res.body
+																	});
+
+																	setTimeout(function() {
+																		if(store().home.selectedAddress.selectedExtraDropOff2){
+																			const fare3 = calculateFare(
+																				store().home.distanceMatrix.rows[0].elements[0].duration.value,
+																				store().home.distanceMatrix.rows[0].elements[0].distance.value,
+																				store().home.selectedVehicle
+																			);
+
+																			// Start Calculate of extra drop off 4
+																			if (store().home.selectedAddress.selectedExtraDropOff4) {
+																				request.get("https://maps.googleapis.com/maps/api/distancematrix/json")
+																				.query({
+																					origins:store().home.selectedAddress.selectedExtraDropOff3.latitude + "," + store().home.selectedAddress.selectedExtraDropOff3.longitude,
+																					destinations:store().home.selectedAddress.selectedExtraDropOff4.latitude + "," + store().home.selectedAddress.selectedExtraDropOff4.longitude,
+																					mode: "driving",
+																					key: "AIzaSyBNDEF41tmSDitm8r73vTGbUviVpKC1XiM"
+																				})
+																				.finish((error, res)=>{
+																					dispatch({
+																						type:GET_DISTANCE_MATRIX,
+																						payload:res.body
+																					});
+
+																					setTimeout(function() {
+																						if(store().home.selectedAddress.selectedExtraDropOff3){
+																							const fare4 = calculateFare(
+																								store().home.distanceMatrix.rows[0].elements[0].duration.value,
+																								store().home.distanceMatrix.rows[0].elements[0].distance.value,
+																								store().home.selectedVehicle
+																							);
+															
+																							dispatch({
+																								type: GET_FARE,
+																								payload: fare + fare1 + fare2 + fare3 + fare4
+																							})	
+
+																							dispatch({
+																								type: SET_LOADING_FARE,
+																								payload: false
+																							});
+																						}
+																					}, 2000)
+																				})
+																			} else {
+																				dispatch({
+																					type: GET_FARE,
+																					payload: fare + fare1 + fare2 + fare3
+																				})	
+
+																				dispatch({
+																					type: SET_LOADING_FARE,
+																					payload: false
+																				});
+																			}
+																			// End Calculate of extra drop off 4
+																		}
+																	}, 2000)
+																})
+															} else {
+																dispatch({
+																	type: GET_FARE,
+																	payload: fare + fare1 + fare2
+																})	
+
+																dispatch({
+																	type: SET_LOADING_FARE,
+																	payload: false
+																});
+															}
+															// End Calculate of extra drop off 3
+														}
+													}, 2000)
+												})
+											} else {
+												dispatch({
+													type: GET_FARE,
+													payload: fare + fare1
+												})
+			
+												dispatch({
+													type: SET_LOADING_FARE,
+													payload: false
+												});
+											}
+											// End Calculate of extra drop off 2
+										}
+									}, 2000)
+								})
+							} else {
+								dispatch({
+									type: GET_FARE,
+									payload: fare
+								})
+
+								dispatch({
+									type: SET_LOADING_FARE,
+									payload: false
+								});
+							}
+							// End Calculate of extra drop off 1
+						}	
+					}, 2000)
+				})
+			} else {
+				Alert.alert('Error', "Please connect to the internet");
 			}
-		})
-		.catch((error) => console.log(error.message));
+		}
 	}
 }
 
 export function getSelectedVehicle(payload) {
-	// const dummyNumbers = {
-	// 	baseFare: 0.4,
-	// 	timeRate: 0.14,
-	// 	distanceRate: 0.97,
-	// 	surge: 1
-	// }
-
 	return(dispatch, store) => {
 		dispatch({
 			type: GET_SELECTED_VEHICLE,
 			payload
 		})
 
+		//Get the distance and time
 		if(store().home.selectedAddress.selectedPickUp && store().home.selectedAddress.selectedDropOff){
-			// const fare = calculateFare(
-			// 	dummyNumbers.baseFare,
-			// 	dummyNumbers.timeRate,
-			// 	store().home.distanceMatrix.rows[0].elements[0].duration.value,
-			// 	dummyNumbers.distanceRate,
-			// 	store().home.distanceMatrix.rows[0].elements[0].distance.value,
-			// 	dummyNumbers.surge,
-			// 	store().home.selectedVehicle
-			// );
+			var isInternetConnected = false;
 
-			const fare = calculateFare(
-				store().home.distanceMatrix.rows[0].elements[0].duration.value,
-				store().home.distanceMatrix.rows[0].elements[0].distance.value,
-				store().home.selectedVehicle
-			);
+			// if (Platform.OS === 'ios') {
+			// 	isInternetConnected = true;
+			// } else {
+			// 	NetInfo.isConnected.fetch().then(isConnected => {
+			// 		if(isConnected) {
+			// 			isInternetConnected = true;
+			// 		}
+			// 	});
+			// }
 
-			dispatch({
-				type: GET_FARE,
-				payload: fare
-			})
+			isInternetConnected = true;
+
+			if (isInternetConnected) {
+				dispatch({
+					type: SET_LOADING_FARE,
+					payload: true
+				});
+				request.get("https://maps.googleapis.com/maps/api/distancematrix/json")
+				.query({
+					origins:store().home.selectedAddress.selectedPickUp.latitude + "," + store().home.selectedAddress.selectedPickUp.longitude,
+					destinations:store().home.selectedAddress.selectedDropOff.latitude + "," + store().home.selectedAddress.selectedDropOff.longitude,
+					mode: "driving",
+					key: "AIzaSyBNDEF41tmSDitm8r73vTGbUviVpKC1XiM"
+				})
+				.finish((error, res)=>{
+					dispatch({
+						type:GET_DISTANCE_MATRIX,
+						payload:res.body
+					});
+
+					setTimeout(function() {
+						if(store().home.selectedAddress.selectedPickUp && store().home.selectedAddress.selectedDropOff){
+							const fare = calculateFare(
+								store().home.distanceMatrix.rows[0].elements[0].duration.value,
+								store().home.distanceMatrix.rows[0].elements[0].distance.value,
+								store().home.selectedVehicle
+							);
+
+							// Start Calculate of extra drop off 1
+							if (store().home.selectedAddress.selectedExtraDropOff1) {
+								request.get("https://maps.googleapis.com/maps/api/distancematrix/json")
+								.query({
+									origins:store().home.selectedAddress.selectedDropOff.latitude + "," + store().home.selectedAddress.selectedDropOff.longitude,
+									destinations:store().home.selectedAddress.selectedExtraDropOff1.latitude + "," + store().home.selectedAddress.selectedExtraDropOff1.longitude,
+									mode: "driving",
+									key: "AIzaSyBNDEF41tmSDitm8r73vTGbUviVpKC1XiM"
+								})
+								.finish((error, res)=>{
+									dispatch({
+										type:GET_DISTANCE_MATRIX,
+										payload:res.body
+									});
+
+									setTimeout(function() {
+										if(store().home.selectedAddress.selectedDropOff && store().home.selectedAddress.selectedExtraDropOff1){
+											const fare1 = calculateFare(
+												store().home.distanceMatrix.rows[0].elements[0].duration.value,
+												store().home.distanceMatrix.rows[0].elements[0].distance.value,
+												store().home.selectedVehicle
+											);
+		
+											// Start Calculate of extra drop off 2
+											if (store().home.selectedAddress.selectedExtraDropOff2) {
+												request.get("https://maps.googleapis.com/maps/api/distancematrix/json")
+												.query({
+													origins:store().home.selectedAddress.selectedExtraDropOff1.latitude + "," + store().home.selectedAddress.selectedExtraDropOff1.longitude,
+													destinations:store().home.selectedAddress.selectedExtraDropOff2.latitude + "," + store().home.selectedAddress.selectedExtraDropOff2.longitude,
+													mode: "driving",
+													key: "AIzaSyBNDEF41tmSDitm8r73vTGbUviVpKC1XiM"
+												})
+												.finish((error, res)=>{
+													dispatch({
+														type:GET_DISTANCE_MATRIX,
+														payload:res.body
+													});
+
+													setTimeout(function() {
+														if(store().home.selectedAddress.selectedExtraDropOff1){
+															const fare2 = calculateFare(
+																store().home.distanceMatrix.rows[0].elements[0].duration.value,
+																store().home.distanceMatrix.rows[0].elements[0].distance.value,
+																store().home.selectedVehicle
+															);
+			
+															// Start Calculate of extra drop off 3
+															if (store().home.selectedAddress.selectedExtraDropOff3) {
+																request.get("https://maps.googleapis.com/maps/api/distancematrix/json")
+																.query({
+																	origins:store().home.selectedAddress.selectedExtraDropOff2.latitude + "," + store().home.selectedAddress.selectedExtraDropOff2.longitude,
+																	destinations:store().home.selectedAddress.selectedExtraDropOff3.latitude + "," + store().home.selectedAddress.selectedExtraDropOff3.longitude,
+																	mode: "driving",
+																	key: "AIzaSyBNDEF41tmSDitm8r73vTGbUviVpKC1XiM"
+																})
+																.finish((error, res)=>{
+																	dispatch({
+																		type:GET_DISTANCE_MATRIX,
+																		payload:res.body
+																	});
+
+																	setTimeout(function() {
+																		if(store().home.selectedAddress.selectedExtraDropOff2){
+																			const fare3 = calculateFare(
+																				store().home.distanceMatrix.rows[0].elements[0].duration.value,
+																				store().home.distanceMatrix.rows[0].elements[0].distance.value,
+																				store().home.selectedVehicle
+																			);
+
+																			// Start Calculate of extra drop off 4
+																			if (store().home.selectedAddress.selectedExtraDropOff4) {
+																				request.get("https://maps.googleapis.com/maps/api/distancematrix/json")
+																				.query({
+																					origins:store().home.selectedAddress.selectedExtraDropOff3.latitude + "," + store().home.selectedAddress.selectedExtraDropOff3.longitude,
+																					destinations:store().home.selectedAddress.selectedExtraDropOff4.latitude + "," + store().home.selectedAddress.selectedExtraDropOff4.longitude,
+																					mode: "driving",
+																					key: "AIzaSyBNDEF41tmSDitm8r73vTGbUviVpKC1XiM"
+																				})
+																				.finish((error, res)=>{
+																					dispatch({
+																						type:GET_DISTANCE_MATRIX,
+																						payload:res.body
+																					});
+
+																					setTimeout(function() {
+																						if(store().home.selectedAddress.selectedExtraDropOff3){
+																							const fare4 = calculateFare(
+																								store().home.distanceMatrix.rows[0].elements[0].duration.value,
+																								store().home.distanceMatrix.rows[0].elements[0].distance.value,
+																								store().home.selectedVehicle
+																							);
+															
+																							dispatch({
+																								type: GET_FARE,
+																								payload: fare + fare1 + fare2 + fare3 + fare4
+																							})	
+
+																							dispatch({
+																								type: SET_LOADING_FARE,
+																								payload: false
+																							});
+																						}
+																					}, 2000)
+																				})
+																			} else {
+																				dispatch({
+																					type: GET_FARE,
+																					payload: fare + fare1 + fare2 + fare3
+																				})	
+
+																				dispatch({
+																					type: SET_LOADING_FARE,
+																					payload: false
+																				});
+																			}
+																			// End Calculate of extra drop off 4
+																		}
+																	}, 2000)
+																})
+															} else {
+																dispatch({
+																	type: GET_FARE,
+																	payload: fare + fare1 + fare2
+																})	
+
+																dispatch({
+																	type: SET_LOADING_FARE,
+																	payload: false
+																});
+															}
+															// End Calculate of extra drop off 3
+														}
+													}, 2000)
+												})
+											} else {
+												dispatch({
+													type: GET_FARE,
+													payload: fare + fare1
+												})
+			
+												dispatch({
+													type: SET_LOADING_FARE,
+													payload: false
+												});
+											}
+											// End Calculate of extra drop off 2
+										}
+									}, 2000)
+								})
+							} else {
+								dispatch({
+									type: GET_FARE,
+									payload: fare
+								})
+
+								dispatch({
+									type: SET_LOADING_FARE,
+									payload: false
+								});
+							}
+							// End Calculate of extra drop off 1
+						}	
+					}, 2000)
+				})
+			} else {
+				Alert.alert('Error', "Please connect to the internet");
+			}
 		}
+
+		// if(store().home.selectedAddress.selectedPickUp && store().home.selectedAddress.selectedDropOff){
+		// 	const fare = calculateFare(
+		// 		store().home.distanceMatrix.rows[0].elements[0].duration.value,
+		// 		store().home.distanceMatrix.rows[0].elements[0].distance.value,
+		// 		store().home.selectedVehicle
+		// 	);
+
+		// 	dispatch({
+		// 		type: GET_FARE,
+		// 		payload: fare
+		// 	})
+		// }
 	}
 }
 
@@ -335,10 +863,11 @@ export function getNearByDrivers(){
 			// NetInfo.addEventListener('change',
 			// 	(networkType)=> {
 			// 		if (networkType == 'wifi' || networkType == 'cell') {
-						request.get("http://52.220.212.6:3121/api/driverLocation")
+						request.get("http://52.220.212.6:3121/api/getNearByDrivers")
 						.query({
 							latitude:store().home.region.latitude,
-							longitude:store().home.region.longitude	
+							longitude:store().home.region.longitude,
+							vehicle:store().home.selectedVehicle
 						})
 						.finish((error, res)=>{
 							if(res){
@@ -356,10 +885,11 @@ export function getNearByDrivers(){
 		} else {
 			NetInfo.isConnected.fetch().then(isConnected => {
 				if(isConnected) {
-					request.get("http://52.220.212.6:3121/api/driverLocation")
+					request.get("http://52.220.212.6:3121/api/getNearByDrivers")
 					.query({
 						latitude:store().home.region.latitude,
-						longitude:store().home.region.longitude	
+						longitude:store().home.region.longitude,
+						vehicle:store().home.selectedVehicle
 					})
 					.finish((error, res)=>{
 						if(res){
@@ -395,6 +925,18 @@ function handleCloseResultType(state, action) {
 				$set: false
 			},
 			dropOff: {
+				$set: false
+			},
+			extraDropOff1: {
+				$set: false
+			},
+			extraDropOff2: {
+				$set: false
+			},
+			extraDropOff3: {
+				$set: false
+			},
+			extraDropOff4: {
 				$set: false
 			}
 		}
@@ -487,6 +1029,78 @@ function handleToggleSearchResult(state, action){
 			}
 		})
 	}
+
+	if(action.payload === "extraDropOff1") {
+		return update(state, {
+			resultTypes: {
+				extraDropOff1: {
+					$set: true
+				}
+			},
+			predictions: {
+				$set: {}
+			},
+			selectedAddress: {
+				selectedExtraDropOff1: {
+					$set: null
+				}
+			}
+		})
+	}
+
+	if(action.payload === "extraDropOff2") {
+		return update(state, {
+			resultTypes: {
+				extraDropOff2: {
+					$set: true
+				}
+			},
+			predictions: {
+				$set: {}
+			},
+			selectedAddress: {
+				selectedExtraDropOff2: {
+					$set: null
+				}
+			}
+		})
+	}
+
+	if(action.payload === "extraDropOff3") {
+		return update(state, {
+			resultTypes: {
+				extraDropOff3: {
+					$set: true
+				}
+			},
+			predictions: {
+				$set: {}
+			},
+			selectedAddress: {
+				selectedExtraDropOff3: {
+					$set: null
+				}
+			}
+		})
+	}
+
+	if(action.payload === "extraDropOff4") {
+		return update(state, {
+			resultTypes: {
+				extraDropOff4: {
+					$set: true
+				}
+			},
+			predictions: {
+				$set: {}
+			},
+			selectedAddress: {
+				selectedExtraDropOff4: {
+					$set: null
+				}
+			}
+		})
+	}
 }
 
 function handleGetAddressPredictions(state, action) {
@@ -498,7 +1112,23 @@ function handleGetAddressPredictions(state, action) {
 }
 
 function handleGetSelectedAddress(state, action) {
-	let selectedTitle = state.resultTypes.pickUp ? "selectedPickUp" : "selectedDropOff";
+	// let selectedTitle = state.resultTypes.pickUp ? "selectedPickUp" : "selectedDropOff";
+	var selectedTitle = "";
+
+	if (state.resultTypes.pickUp) {
+		selectedTitle = "selectedPickUp"
+	} else if (state.resultTypes.dropOff) {
+		selectedTitle = "selectedDropOff"
+	} else if (state.resultTypes.extraDropOff1) {
+		selectedTitle = "selectedExtraDropOff1"
+	} else if (state.resultTypes.extraDropOff2) {
+		selectedTitle = "selectedExtraDropOff2"
+	} else if (state.resultTypes.extraDropOff3) {
+		selectedTitle = "selectedExtraDropOff3"
+	} else if (state.resultTypes.extraDropOff4) {
+		selectedTitle = "selectedExtraDropOff4"
+	}
+
 	return update(state, {
 		selectedAddress: {
 			[selectedTitle]:{
@@ -510,6 +1140,18 @@ function handleGetSelectedAddress(state, action) {
 				$set: false
 			},
 			dropOff: {
+				$set: false
+			},
+			extraDropOff1: {
+				$set: false
+			},
+			extraDropOff2: {
+				$set: false
+			},
+			extraDropOff3: {
+				$set: false
+			},
+			extraDropOff4: {
 				$set: false
 			}
 		}
@@ -557,6 +1199,14 @@ function handleIsMapReady(state, action) {
 	});
 }
 
+function handleSetLoadingFare(state, action) {
+	return update(state, {
+		isFareLoading:{
+			$set:action.payload
+		}
+	});
+}
+
 function handleResetBooking(state, action) {
 	return update(state, {
 		inputData:{
@@ -573,8 +1223,109 @@ function handleResetBooking(state, action) {
 		},
 		fare: {
 			$set: null
+		},
+		showExtraDropOff1: {
+			$set: false
+		},
+		showExtraDropOff2: {
+			$set: false
+		},
+		showExtraDropOff3: {
+			$set: false
+		},
+		showExtraDropOff4: {
+			$set: false
 		}
 	});
+}
+
+function handleShowExtraDropOff(state, action) {
+	if(action.payload === 1) {
+		return update(state, {
+			showExtraDropOff1: {
+				$set: true
+			},
+			selectedAddress: {
+				selectedExtraDropOff1: {
+					$set: null
+				}
+			}
+		})
+	}
+
+	if(action.payload === 2) {
+		return update(state, {
+			showExtraDropOff2: {
+				$set: true
+			},
+			selectedAddress: {
+				selectedExtraDropOff2: {
+					$set: null
+				}
+			}
+		})
+	}
+
+	if(action.payload === 3) {
+		return update(state, {
+			showExtraDropOff3: {
+				$set: true
+			},
+			selectedAddress: {
+				selectedExtraDropOff3: {
+					$set: null
+				}
+			}
+		})
+	}
+
+	if(action.payload === 4) {
+		return update(state, {
+			showExtraDropOff4: {
+				$set: true
+			},
+			selectedAddress: {
+				selectedExtraDropOff4: {
+					$set: null
+				}
+			}
+		})
+	}
+}
+
+function handleHideExtraDropOff(state, action) {
+	if(action.payload === 1) {
+		return update(state, {
+			showExtraDropOff1: {
+				$set: false
+			},
+
+		})
+	}
+
+	if(action.payload === 2) {
+		return update(state, {
+			showExtraDropOff2: {
+				$set: false
+			}
+		})
+	}
+
+	if(action.payload === 3) {
+		return update(state, {
+			showExtraDropOff3: {
+				$set: false
+			}
+		})
+	}
+
+	if(action.payload === 4) {
+		return update(state, {
+			showExtraDropOff4: {
+				$set: false
+			}
+		})
+	}
 }
 
 const ACTION_HANDLERS = {
@@ -591,7 +1342,10 @@ const ACTION_HANDLERS = {
 	CLOSE_RESULT_TYPE:handleCloseResultType,
 	GET_DIRECTIONS:handleGetDirections,
 	IS_MAP_READY: handleIsMapReady,
-	RESET_BOOKING: handleResetBooking
+	RESET_BOOKING: handleResetBooking,
+	SHOW_EXTRA_DROP_OFF: handleShowExtraDropOff,
+	HIDE_EXTRA_DROP_OFF: handleHideExtraDropOff,
+	SET_LOADING_FARE: handleSetLoadingFare
 }
 
 const initialState = {

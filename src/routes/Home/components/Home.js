@@ -10,6 +10,8 @@ import Fab from "./Fab";
 import SideBar from '../../../components/SideBar';
 import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
 import OneSignal from 'react-native-onesignal';
+
+var deepEqual = require('fast-deep-equal');
 var Spinner = require("react-native-spinkit");
 
 const justBoxLogo = require("../../../assets/images/logo.png");
@@ -19,6 +21,7 @@ class Home extends React.Component {
 
     componentDidMount() {
         if (Platform.OS === 'android') {
+            // Check location service for Android
             LocationServicesDialogBox.checkLocationServicesIsEnabled({
                 message: "<h2>Use Location?</h2>This app wants to change your device settings:<br/><br/>Use GPS, Wi-Fi, and cell network for location<br/><br/><a href='#'>Learn more</a>",
                 ok: "YES",
@@ -38,6 +41,7 @@ class Home extends React.Component {
                 console.log(error.message);
             });
             
+            // Handle back press for Android
             BackHandler.addEventListener('hardwareBackPress', () => {
                 LocationServicesDialogBox.forceCloseDialog();
             });
@@ -49,6 +53,7 @@ class Home extends React.Component {
             }, 5000);
         }
 
+        // Initialize One Signal
         OneSignal.configure({});
         OneSignal.enableSound(true);
         OneSignal.enableVibrate(true);
@@ -59,6 +64,10 @@ class Home extends React.Component {
         if (this.props.reset) {
             this.props.resetBooking(); 
         }
+    }
+
+    shouldComponentUpdate(nextProps) {
+        return !deepEqual(this.props, nextProps);
     }
 
     render() {
@@ -78,55 +87,66 @@ class Home extends React.Component {
                 content={<SideBar navigator={this.navigator} account={this.props.account} />}
                 onClose={() => closeDrawer()} >
                 <Container>
-                        <View style={{flex:1}}>
-                            <HeaderComponent 
-                                    logo={justBoxLogo}
-                                    showAdditionalModal={this.props.showAdditionalModal}
-                                    resetBooking={this.props.resetBooking} /> 
-                                <View style={styles.floatView}>
-                                    <Spinner style={styles.spinner} isVisible={ (this.props.isMapReady == false ? true : false ) } size={40} type="Wave" color="#ffffff"/>
-                                </View>
-                                { (this.props.isMapReady === true) &&
-                                    <MapContainer 
-                                        initialRegion={initialRegion}
-                                        region={this.props.region} 
-                                        getInputData={this.props.getInputData} 
-                                        toggleSearchResultmodal={this.props.toggleSearchResultmodal}
-                                        getAddressPredictions={this.props.getAddressPredictions}
-                                        resultTypes={this.props.resultTypes}
-                                        predictions={this.props.predictions}
-                                        getSelectedAddress={this.props.getSelectedAddress}
-                                        selectedAddress={this.props.selectedAddress}
-                                        carMarker={carMarker}
-                                        nearByDrivers={this.props.nearByDrivers}
-                                        isSearchAddressLoading={this.props.isSearchAddressLoading}
-                                        closeResultType={this.props.closeResultType}
-                                        // directions={this.props.directions}
-                                    />
-                                    ||
-                                    <Content />
-                                }
-
-                            { this.props.fare &&
-                                <Fare 
+                    <View style={{flex:1}}>
+                        <HeaderComponent 
+                                logo={justBoxLogo}
+                                showAdditionalModal={this.props.showAdditionalModal}
+                                resetBooking={this.props.resetBooking} 
+                                resultTypes={this.props.resultTypes}
+                                closeResultType={this.props.closeResultType} /> 
+                            <View style={styles.floatView}>
+                                <Spinner style={styles.spinner} isVisible={ (this.props.isMapReady == false ? true : false ) } size={40} type="Wave" color="#ffffff"/>
+                            </View>
+                            { (this.props.isMapReady === true) &&
+                                <MapContainer 
+                                    initialRegion={initialRegion}
+                                    region={this.props.region} 
+                                    getInputData={this.props.getInputData} 
+                                    toggleSearchResultmodal={this.props.toggleSearchResultmodal}
+                                    getAddressPredictions={this.props.getAddressPredictions}
+                                    resultTypes={this.props.resultTypes}
+                                    predictions={this.props.predictions}
+                                    getSelectedAddress={this.props.getSelectedAddress}
+                                    selectedAddress={this.props.selectedAddress}
+                                    carMarker={carMarker}
+                                    nearByDrivers={this.props.nearByDrivers}
+                                    isSearchAddressLoading={this.props.isSearchAddressLoading}
+                                    closeResultType={this.props.closeResultType}
+                                    showExtraDropOff={this.props.showExtraDropOff}
+                                    hideExtraDropOff={this.props.hideExtraDropOff}
+                                    showExtraDropOff1={this.props.showExtraDropOff1}
+                                    showExtraDropOff2={this.props.showExtraDropOff2}
+                                    showExtraDropOff3={this.props.showExtraDropOff3}
+                                    showExtraDropOff4={this.props.showExtraDropOff4}
                                     fare={this.props.fare}
-                                    additionalPrice={this.props.additionalPrice}
+                                    reCalculateFare={this.props.reCalculateFare}
+                                    // directions={this.props.directions}
                                 />
+                                ||
+                                <Content />
                             }
-                            <SelectVehicle 
-                                getSelectedVehicle={this.props.getSelectedVehicle}
-                                selectedVehicle={this.props.selectedVehicle} 
+
+                        { this.props.fare &&
+                            <Fare 
+                                fare={this.props.fare}
+                                additionalPrice={this.props.additionalPrice}
+                                isFareLoading={this.props.isFareLoading}
                             />
-                            { this.props.fare &&
-                                <Footer>
-                                    <FooterTab style={styles.btnFooterContainer} iosBarStyle="light-content" androidStatusBarColor="#E90000">
-                                        <Button success style={styles.button} onPress={() => Actions.additionalServices()}>
-                                            <Text style={styles.subText}>PROCEED</Text>
-                                        </Button>
-                                    </FooterTab>
-                                </Footer>
-                            }
-                        </View>
+                        }
+                        <SelectVehicle 
+                            getSelectedVehicle={this.props.getSelectedVehicle}
+                            selectedVehicle={this.props.selectedVehicle} 
+                        />
+                        { this.props.fare &&
+                            <Footer>
+                                <FooterTab style={styles.btnFooterContainer} iosBarStyle="light-content" androidStatusBarColor="#E90000">
+                                    <Button success style={styles.button} onPress={() => Actions.additionalServices()}>
+                                        <Text style={styles.subText}>PROCEED</Text>
+                                    </Button>
+                                </FooterTab>
+                            </Footer>
+                        }
+                    </View>
                 </Container>
             </Drawer>
         );

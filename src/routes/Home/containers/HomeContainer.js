@@ -14,7 +14,10 @@ import {
     updateBookingStatus,
     removeBooking,
     resetBooking,
-    updatePushNotificationID
+    updatePushNotificationID,
+    showExtraDropOff,
+    hideExtraDropOff,
+    reCalculateFare
 } from "../modules/home";
 
 const mapStateToProps = (state) => ({   
@@ -30,7 +33,12 @@ const mapStateToProps = (state) => ({
     isSearchAddressLoading: state.home.isSearchAddressLoading || false,
     account: state.login.account || {},
     isMapReady: state.home.isMapReady || false,
-    directions: state.home.directions
+    directions: state.home.directions,
+    showExtraDropOff1: state.home.showExtraDropOff1 || false,
+    showExtraDropOff2: state.home.showExtraDropOff2 || false,
+    showExtraDropOff3: state.home.showExtraDropOff3 || false,
+    showExtraDropOff4: state.home.showExtraDropOff4 || false,
+    isFareLoading: state.home.isFareLoading || false
 });
 
 const mapActionCreators = {
@@ -46,7 +54,10 @@ const mapActionCreators = {
     updateBookingStatus,
     removeBooking,
     resetBooking,
-    updatePushNotificationID
+    updatePushNotificationID,
+    showExtraDropOff,
+    hideExtraDropOff,
+    reCalculateFare
 };
 
 export default connect(mapStateToProps, mapActionCreators)(Home);

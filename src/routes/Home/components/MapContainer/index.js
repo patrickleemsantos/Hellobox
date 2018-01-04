@@ -21,7 +21,15 @@ export const MapContainer = ({region,
                                 isSearchAddressLoading,
                                 closeResultType,
                                 initialRegion,
-                                directions
+                                directions,
+                                showExtraDropOff,
+                                hideExtraDropOff,
+                                showExtraDropOff1,
+                                showExtraDropOff2,
+                                showExtraDropOff3,
+                                showExtraDropOff4,
+                                fare,
+                                reCalculateFare
                             }) => {
 
     const { selectedPickUp, selectedDropOff } = selectedAddress || {};
@@ -90,9 +98,18 @@ export const MapContainer = ({region,
             <SearchBox getInputData={getInputData} 
                         toggleSearchResultmodal={toggleSearchResultmodal} 
                         getAddressPredictions={getAddressPredictions}
+                        getSelectedAddress={getSelectedAddress}
                         selectedAddress={selectedAddress}
+                        showExtraDropOff={showExtraDropOff}
+                        hideExtraDropOff={hideExtraDropOff}
+                        showExtraDropOff1={showExtraDropOff1}
+                        showExtraDropOff2={showExtraDropOff2}
+                        showExtraDropOff3={showExtraDropOff3}
+                        showExtraDropOff4={showExtraDropOff4}
+                        fare={fare}
+                        reCalculateFare={reCalculateFare}
             />
-            { (resultTypes.pickUp || resultTypes.dropOff) && 
+            { (resultTypes.pickUp || resultTypes.dropOff || resultTypes.extraDropOff1 || resultTypes.extraDropOff2 || resultTypes.extraDropOff3 || resultTypes.extraDropOff4) && 
             <SearchResults 
                     updateSearchAddressLoadingStatus={updateSearchAddressLoadingStatus}
                     isSearchAddressLoading={isSearchAddressLoading}

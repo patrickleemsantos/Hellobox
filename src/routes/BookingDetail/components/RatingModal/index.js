@@ -66,7 +66,7 @@ export const RatingModal = ({ showRatingModal, booking, selectedStar, setSelecte
                         autoCapitalize="none"
                         autoCorrect={false}
                         underlineColorAndroid='transparent'
-                        // returnKeyType="go"
+                        returnKeyType="go"
                         onChangeText={ (text)=> getComment(text) }
                         onSubmitEditing={() => handleSaveComment()}
                     />

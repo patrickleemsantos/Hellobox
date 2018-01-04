@@ -47,9 +47,7 @@ class BookingDetail extends React.Component {
                                 rx.props.trackDriver();
                             }, 5000);
                             this.props.setTrackTimer(trackTimer);
-                            console.log("trackTimer true: " + this.props.trackTimer);
                         } else {
-                            console.log("trackTimer false: " + this.props.trackTimer);
                             clearInterval(this.props.trackTimer);
                         }
                     }

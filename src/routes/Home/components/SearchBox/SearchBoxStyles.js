@@ -5,7 +5,12 @@ const styles = {
     searchBox:{
         top:0,
         position:"absolute",
-        width:width
+        width:width,
+        backgroundColor: "#FFFFFF",
+        opacity:0.9,
+        marginLeft: 3,
+        marginRight: 3,
+        height: 160
     },
     inputWrapper:{
         marginLeft:15,

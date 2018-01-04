@@ -6,14 +6,15 @@ const styles = {
         width:width,
         height:40,
         padding:10,
-        backgroundColor:"#B0B0B0"
+        backgroundColor:"#FDFEFE"
     },
     fareText: {
-        fontSize: 12
+        fontSize: 15
     },
     amountText:{
         fontWeight:"bold",
-        fontSize: 12
+        fontSize: 15,
+        color: "#E90000",
     },
     showBreakdownText:{
         fontSize: 12
@@ -28,11 +29,16 @@ const styles = {
         flex: 1, 
         flexDirection: 'row', 
         justifyContent: 'flex-end', 
-        alignItems: 'flex-end'
+        alignItems: 'flex-end',
+        paddingBottom: 10
     },
     btnBreakdown: {
         height:10,
         paddingTop:13,
+    },
+    spinner: {
+        color: "#E90000",
+        alignSelf: "center",
     }
 };
 

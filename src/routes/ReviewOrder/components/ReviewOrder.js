@@ -19,6 +19,7 @@ class ReviewOrder extends React.Component {
                     let account = JSON.parse(result);
                     if (account.account_id === this.props.booking.account.account_id) {         
                         Actions.bookingDetail({booking: this.props.booking});
+                        // Actions.home({type: 'reset'});
                     }
                 });
             }
@@ -37,7 +38,7 @@ class ReviewOrder extends React.Component {
     }
     
     render () {    
-        const { selectedPickUp, selectedDropOff } = this.props.selectedAddress;
+        const { selectedPickUp, selectedDropOff, selectedExtraDropOff1, selectedExtraDropOff2, selectedExtraDropOff3, selectedExtraDropOff4 } = this.props.selectedAddress;
         const { status } = this.props.booking;
 
         return (
@@ -80,6 +81,63 @@ class ReviewOrder extends React.Component {
                                         <Text style={styles.locationDropOff}>{selectedDropOff.address}</Text>
                                     </View>
                                 </View>
+
+                                { selectedExtraDropOff1 && 
+                                    <View>
+                                        <View style={styles.ellipsisContainer}>
+                                            <Icon style={styles.ellipsisIcon} name="ellipsis-v" />
+                                        </View>
+                                        <View style={styles.dropOffContainer}>
+                                            <Icon style={styles.destinationIcon} name="location-arrow" />
+                                            <View style={styles.locationValueContainer}>
+                                                <Text style={styles.locationDropOff}>{selectedExtraDropOff1.address}</Text>
+                                            </View>
+                                        </View>
+                                    </View>
+                                }
+
+                                { selectedExtraDropOff2 && 
+                                    <View>
+                                        <View style={styles.ellipsisContainer}>
+                                            <Icon style={styles.ellipsisIcon} name="ellipsis-v" />
+                                        </View>
+                                        <View style={styles.dropOffContainer}>
+                                            <Icon style={styles.destinationIcon} name="location-arrow" />
+                                            <View style={styles.locationValueContainer}>
+                                                <Text style={styles.locationDropOff}>{selectedExtraDropOff2.address}</Text>
+                                            </View>
+                                        </View>
+                                    </View>
+                                }
+
+                                { selectedExtraDropOff3 && 
+                                    <View>
+                                        <View style={styles.ellipsisContainer}>
+                                            <Icon style={styles.ellipsisIcon} name="ellipsis-v" />
+                                        </View>
+                                        <View style={styles.dropOffContainer}>
+                                            <Icon style={styles.destinationIcon} name="location-arrow" />
+                                            <View style={styles.locationValueContainer}>
+                                                <Text style={styles.locationDropOff}>{selectedExtraDropOff3.address}</Text>
+                                            </View>
+                                        </View>
+                                    </View>
+                                }
+
+                                { selectedExtraDropOff4 && 
+                                    <View>
+                                        <View style={styles.ellipsisContainer}>
+                                            <Icon style={styles.ellipsisIcon} name="ellipsis-v" />
+                                        </View>
+                                        <View style={styles.dropOffContainer}>
+                                            <Icon style={styles.destinationIcon} name="location-arrow" />
+                                            <View style={styles.locationValueContainer}>
+                                                <Text style={styles.locationDropOff}>{selectedExtraDropOff4.address}</Text>
+                                            </View>
+                                        </View>
+                                    </View>
+                                }
+
                             </View>
 
                             { (this.props.additionalServices.length > 0) && 
@@ -109,10 +167,10 @@ class ReviewOrder extends React.Component {
                                 </View>
                             }
                             <View style={styles.priceContainter}>
-                                <Text style={styles.priceValue}>Fare: P {this.props.fare}</Text>
+                                <Text style={styles.priceValue}>Fare: P {this.props.fare.toLocaleString('en')}</Text>
                             </View>
                             <View style={styles.additionalPriceContainter}>
-                                <Text style={styles.additionalPriceValue}>Additional Price: P {this.props.additionalPrice}</Text>
+                                <Text style={styles.additionalPriceValue}>Additional Price: P {this.props.additionalPrice.toLocaleString('en')}</Text>
                             </View>
                         </Content> 
                     

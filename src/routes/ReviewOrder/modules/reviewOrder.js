@@ -24,11 +24,40 @@ const LONGITUDE_DELTA = ASPECT_RATIO * LATITUDE_DELTA;
 //------------------------
 //Actions
 //------------------------
+
 //Book Car
 export function bookCar(payload) {
 	var randomize = require('randomatic');
 
 	return (dispatch, store) => {
+
+		let drop_off1 = store().home.selectedAddress.selectedExtraDropOff1 ? {
+																				address:store().home.selectedAddress.selectedExtraDropOff1.address,
+																				name:store().home.selectedAddress.selectedExtraDropOff1.name,
+																				latitude:store().home.selectedAddress.selectedExtraDropOff1.latitude,
+																				longitude:store().home.selectedAddress.selectedExtraDropOff1.longitude
+																			} : {};
+
+		let drop_off2 = store().home.selectedAddress.selectedExtraDropOff2 ? {
+																				address:store().home.selectedAddress.selectedExtraDropOff2.address,
+																				name:store().home.selectedAddress.selectedExtraDropOff2.name,
+																				latitude:store().home.selectedAddress.selectedExtraDropOff2.latitude,
+																				longitude:store().home.selectedAddress.selectedExtraDropOff2.longitude
+																			} : {};
+		
+		let drop_off3 = store().home.selectedAddress.selectedExtraDropOff3 ? {
+																				address:store().home.selectedAddress.selectedExtraDropOff3.address,
+																				name:store().home.selectedAddress.selectedExtraDropOff3.name,
+																				latitude:store().home.selectedAddress.selectedExtraDropOff3.latitude,
+																				longitude:store().home.selectedAddress.selectedExtraDropOff3.longitude
+																			} : {};
+		
+		let drop_off4 = store().home.selectedAddress.selectedExtraDropOff4 ? {
+																				address:store().home.selectedAddress.selectedExtraDropOff4.address,
+																				name:store().home.selectedAddress.selectedExtraDropOff4.name,
+																				latitude:store().home.selectedAddress.selectedExtraDropOff4.latitude,
+																				longitude:store().home.selectedAddress.selectedExtraDropOff4.longitude
+																			} : {};
 
 		if (Platform.OS === 'ios') {
 			// NetInfo.addEventListener('change',
@@ -59,7 +88,10 @@ export function bookCar(payload) {
 										latitude:store().home.selectedAddress.selectedDropOff.latitude,
 										longitude:store().home.selectedAddress.selectedDropOff.longitude
 									},
-									vehicle:store().home.selectedVehicle,
+									drop_off1: drop_off1,
+									drop_off2: drop_off2,
+									drop_off3: drop_off3,
+									drop_off4: drop_off4,
 									fare:store().home.fare,
 									additional_price:store().additionalServices.additionalPrice,
 									additional_services:store().additionalServices.additionalServices,
@@ -67,6 +99,7 @@ export function bookCar(payload) {
 									rating: 0,
 									pick_up_date: store().additionalServices.pickUpDateTime,
 									note: store().additionalServices.bookingNote,
+									driver_price: 0,
 									timestamp: dateFormat(new Date(), "dd mmm yyyy, hh:MM TT")
 								},
 								nearByDriver: {
@@ -125,6 +158,10 @@ export function bookCar(payload) {
 									latitude:store().home.selectedAddress.selectedDropOff.latitude,
 									longitude:store().home.selectedAddress.selectedDropOff.longitude
 								},
+								drop_off1: drop_off1,
+								drop_off2: drop_off2,
+								drop_off3: drop_off3,
+								drop_off4: drop_off4,
 								vehicle:store().home.selectedVehicle,
 								fare:store().home.fare,
 								additional_price:store().additionalServices.additionalPrice,
@@ -133,6 +170,7 @@ export function bookCar(payload) {
 								rating: 0,
 								pick_up_date: store().additionalServices.pickUpDateTime,
 								note: store().additionalServices.bookingNote,
+								driver_price: 0,
 								timestamp: dateFormat(new Date(), "dd mmm yyyy, hh:MM TT")
 							},
 							nearByDriver: {
