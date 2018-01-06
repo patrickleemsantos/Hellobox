@@ -129,7 +129,7 @@ export function saveComment() {
 							request.put("http://52.220.212.6:3121/api/updateBookingRating")
 							.send({
 								id: store().bookingDetail.currentBooking._id,
-								rating: store().bookingDetail.selectedStar,
+								rating: parseInt(store().bookingDetail.selectedStar),
 								comment: store().bookingDetail.comment
 							})
 							.finish((error, res)=> {
