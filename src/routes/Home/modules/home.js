@@ -25,7 +25,8 @@ const { GET_CURRENT_LOCATION,
 		RESET_BOOKING,
 		SHOW_EXTRA_DROP_OFF,
 		HIDE_EXTRA_DROP_OFF,
-		SET_LOADING_FARE
+		SET_LOADING_FARE,
+		STATE_RESET
 	} = constants;
 
 const { width, height } = Dimensions.get("window");
@@ -905,6 +906,13 @@ export function getNearByDrivers(){
 			});
 		}
 	};
+}
+
+export function clearState(payload) {
+	return {
+		type: STATE_RESET,
+		payload
+	}
 }
 
 //------------------------

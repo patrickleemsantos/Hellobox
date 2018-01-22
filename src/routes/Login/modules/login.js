@@ -15,7 +15,8 @@ const { GET_USERNAME,
         UPDATE_LOADING_STATUS,
         SET_ACCOUNT,
         CLEAR_INPUTS,
-        SET_LOGIN_PREFERENCE
+        SET_LOGIN_PREFERENCE,
+        SHOW_FORGOT_PASSWORD_MODAL
 	} = constants;
 
 const { width, height } = Dimensions.get("window");
@@ -54,6 +55,13 @@ export function setAccount(payload) {
 export function setLoginPreference(payload) {
     return{
 		type: SET_LOGIN_PREFERENCE,
+		payload
+	}
+}
+
+export function setShowForgotPasswordModal(payload) {
+    return{
+		type: SHOW_FORGOT_PASSWORD_MODAL,
 		payload
 	}
 }
@@ -258,6 +266,14 @@ function handleSetLoginPreference(state, action) {
     })
 }
 
+function handleShowForgotPasswordModal(state, action) {
+    return update(state, {
+        showForgotPasswordModal: {
+            $set: action.payload
+        }
+    })
+}
+
 const ACTION_HANDLERS = {
 	GET_USERNAME: handleGetUsername,
     GET_PASSWORD: handleGetPassword,
@@ -265,7 +281,8 @@ const ACTION_HANDLERS = {
     SET_ACCOUNT: handleSetAccount,
     UPDATE_LOADING_STATUS: handleLoadingStatus,
     CLEAR_INPUTS: handleClearInputs,
-    SET_LOGIN_PREFERENCE: handleSetLoginPreference
+    SET_LOGIN_PREFERENCE: handleSetLoginPreference,
+    SHOW_FORGOT_PASSWORD_MODAL: handleShowForgotPasswordModal
 }
 
 const initialState = {

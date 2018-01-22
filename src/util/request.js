@@ -16,6 +16,7 @@ var requestWrapper = function(method) {
             .timeout(defaultAjaxTimeout);
     };
 };
+
 export default {
     get: requestWrapper("get"),
     put: requestWrapper("put"),

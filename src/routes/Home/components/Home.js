@@ -84,7 +84,11 @@ class Home extends React.Component {
         return (
             <Drawer
                 ref={(ref) => { this.drawer = ref; }}
-                content={<SideBar navigator={this.navigator} account={this.props.account} />}
+                content={<SideBar 
+                                navigator={this.navigator} 
+                                account={this.props.account} 
+                                clearState={this.props.clearState} 
+                            />}
                 onClose={() => closeDrawer()} >
                 <Container>
                     <View style={{flex:1}}>

@@ -17,7 +17,8 @@ import {
     updatePushNotificationID,
     showExtraDropOff,
     hideExtraDropOff,
-    reCalculateFare
+    reCalculateFare,
+    clearState
 } from "../modules/home";
 
 const mapStateToProps = (state) => ({   
@@ -57,7 +58,8 @@ const mapActionCreators = {
     updatePushNotificationID,
     showExtraDropOff,
     hideExtraDropOff,
-    reCalculateFare
+    reCalculateFare,
+    clearState
 };
 
 export default connect(mapStateToProps, mapActionCreators)(Home);

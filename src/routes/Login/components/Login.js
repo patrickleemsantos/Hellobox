@@ -12,7 +12,8 @@ import {
   StatusBar,
   TouchableOpacity
 } from 'react-native';
-import { Spinner, ListItem, CheckBox, Body, Text } from "native-base";
+import { Container, Spinner, ListItem, CheckBox, Body, Text, Form, Item, Content, Input, Button } from "native-base";
+import Modal from 'react-native-modalbox';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const helloBoxLogo = require("../../../assets/images/logo.png");
@@ -51,96 +52,116 @@ export default class Login extends Component {
         
         return (
             <KeyboardAvoidingView behavior="padding" style={styles.container}>
-            <View style={styles.logoContainer}>
-                <Image
-                    style={styles.logo}
-                    source={helloBoxLogo}
-                />
-                <Text style={styles.title}></Text>
-            </View>
-
-            { (this.props.isLoading == true) &&
-                <Spinner color='red' />
-            }
-
-            <View style={styles.loginPreference}>
-                <View style={styles.loginPreferenceMobileNo}>
-                    <CheckBox 
-                        checked={this.props.loginPreference == "mobile" ? true : false}
-                        onPress={() => handleLoginPreference("mobile")} />
-                    <Body>
-                        <Text stlye={styles.cbMobileNoText}>Mobile Number</Text>
-                    </Body>
+                <View style={styles.logoContainer}>
+                    <Image
+                        style={styles.logo}
+                        source={helloBoxLogo}
+                    />
+                    <Text style={styles.title}></Text>
                 </View>
-                <View style={styles.loginPreferenceEmail}>
-                    <CheckBox 
-                        checked={this.props.loginPreference == "email" ? true : false}
-                        onPress={() => handleLoginPreference("email")} />
-                    <Body>
-                        <Text stlye={styles.cbEmailText}>E-mail</Text>
-                    </Body>
-                </View>
-            </View>
-            <View style={styles.formContainer}>
-                <StatusBar
-                barStyle="light-content"
-                />
-                <TextInput
-                    onChangeText={ handleUsername.bind(this) }
-                    placeholder={this.props.loginPreference == "mobile" ? "Mobile number (9081234567)" : "E-mail address" }
-                    placeholderTextColor="rgba(255,255,255,0.7)"
-                    returnKeyType="next"
-                    onSubmitEditing={() => this.passwordInput.focus()}
-                    // keyboardType="email-address"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    underlineColorAndroid='transparent'
-                    style={styles.input}
-                    value={this.props.username}
-                />
-                <TextInput
-                    onChangeText={ handlePassword.bind(this) }
-                    placeholder="Password"
-                    placeholderTextColor="rgba(255,255,255,0.7)"
-                    returnKeyType="go"
-                    secureTextEntry
-                    style={styles.input}
-                    underlineColorAndroid='transparent'
-                    ref={(input) => this.passwordInput = input}
-                    value={this.props.password}
-                />
 
-                <TouchableOpacity
-                    onPress={(this.props.login.bind(this))}
-                    disabled={this.props.isLoading}
-                    style={styles.buttonContainer}>
-                    <Text style={styles.buttonText}><Icon name="sign-in" size={15} color="#FFF" />  LOGIN</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.loginOptions}>
-                <TouchableOpacity
-                    disabled={this.props.isLoading}>
-                    <Text style={styles.optionText}>Forgot Password?</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => Actions.register()}
-                    disabled={this.props.isLoading}>
-                    <Text style={styles.optionText}>Create an Account</Text>
-                </TouchableOpacity>
-            </View>
-            {/* <View style={styles.oAuthbuttons}>
-                <Icon.Button
-                    name="facebook"
-                    backgroundColor="#3b5998">
-                    Login via Facebook
-                </Icon.Button>
-                <Icon.Button
-                    name="google"
-                    backgroundColor="#DD4B39">
-                    Login via Google
-                </Icon.Button>
-            </View> */}
-            </KeyboardAvoidingView>
+                { (this.props.isLoading == true) &&
+                    <Spinner color='red' />
+                }
+
+                <View style={styles.loginPreference}>
+                    <View style={styles.loginPreferenceMobileNo}>
+                        <CheckBox 
+                            checked={this.props.loginPreference == "mobile" ? true : false}
+                            onPress={() => handleLoginPreference("mobile")} />
+                        <Body>
+                            <Text stlye={styles.cbMobileNoText}>Mobile Number</Text>
+                        </Body>
+                    </View>
+                    <View style={styles.loginPreferenceEmail}>
+                        <CheckBox 
+                            checked={this.props.loginPreference == "email" ? true : false}
+                            onPress={() => handleLoginPreference("email")} />
+                        <Body>
+                            <Text stlye={styles.cbEmailText}>E-mail</Text>
+                        </Body>
+                    </View>
+                </View>
+                <View style={styles.formContainer}>
+                    <StatusBar
+                    barStyle="light-content"
+                    />
+                    <TextInput
+                        onChangeText={ handleUsername.bind(this) }
+                        placeholder={this.props.loginPreference == "mobile" ? "Mobile number (9081234567)" : "E-mail address" }
+                        placeholderTextColor="rgba(255,255,255,0.7)"
+                        returnKeyType="next"
+                        onSubmitEditing={() => this.passwordInput.focus()}
+                        // keyboardType="email-address"
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        underlineColorAndroid='transparent'
+                        style={styles.input}
+                        value={this.props.username}
+                    />
+                    <TextInput
+                        onChangeText={ handlePassword.bind(this) }
+                        placeholder="Password"
+                        placeholderTextColor="rgba(255,255,255,0.7)"
+                        returnKeyType="go"
+                        secureTextEntry
+                        style={styles.input}
+                        underlineColorAndroid='transparent'
+                        ref={(input) => this.passwordInput = input}
+                        value={this.props.password}
+                    />
+
+                    <TouchableOpacity
+                        onPress={(this.props.login.bind(this))}
+                        disabled={this.props.isLoading}
+                        style={styles.buttonContainer}>
+                        <Text style={styles.buttonText}><Icon name="sign-in" size={15} color="#FFF" />  LOGIN</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.loginOptions}>
+                    <TouchableOpacity
+                        onPress={() => this.props.setShowForgotPasswordModal(true)}
+                        disabled={this.props.isLoading}>
+                        <Text style={styles.optionText}>Forgot Password?</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => Actions.register()}
+                        disabled={this.props.isLoading}>
+                        <Text style={styles.optionText}>Create an Account</Text>
+                    </TouchableOpacity>
+                </View>
+                {/* <View style={styles.oAuthbuttons}>
+                    <Icon.Button
+                        name="facebook"
+                        backgroundColor="#3b5998">
+                        Login via Facebook
+                    </Icon.Button>
+                    <Icon.Button
+                        name="google"
+                        backgroundColor="#DD4B39">
+                        Login via Google
+                    </Icon.Button>
+                </View> */}
+                <Modal 
+                    style={[styles.modal, styles.modalContainer]} 
+                    isOpen={this.props.showForgotPasswordModal}
+                    position={"center"} 
+                    keyboardShouldPersistTaps={'handled'}
+                    backButtonClose={true}
+                    onClosed={() => this.props.setShowForgotPasswordModal(false)}>
+                    <Content>
+                        <Form>
+                            <Text style={styles.titleForgotModal}>Forgot Password?</Text>
+                            <Item last>
+                                <Input style={styles.txtForgotEmail} placeholder="Email-address" />
+                            </Item>
+                            <Button full style={styles.btnForgotSubmit}>
+                                <Text>Submit</Text>
+                            </Button>
+                        </Form>
+                    </Content>
+                </Modal>
+            </KeyboardAvoidingView>           
         );
     }
 }
@@ -245,5 +266,29 @@ const styles = StyleSheet.create({
     optionText: {
         fontSize: 13,
         color: "#808080"
+    },
+    modal: {
+        justifyContent: 'center',
+        flex: 1
+    },
+    modalContainer: {
+        height: 300,
+        width: 300,
+        paddingTop: 70,
+        paddingLeft: 10,
+        paddingRight: 10
+    },
+    titleForgotModal: {
+        fontSize: 15,
+        marginBottom: 20,
+        alignSelf: "center"
+    },
+    btnForgotSubmit: {
+        marginTop: 20,
+        backgroundColor: "#E90000",
+        fontSize: 11
+    },
+    txtForgotEmail: {
+        fontSize: 14
     }
   });

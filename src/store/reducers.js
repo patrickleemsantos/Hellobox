@@ -9,18 +9,34 @@ import { ReviewOrderReducer as reviewOrder } from "../routes/ReviewOrder/modules
 import { RegisterReducer as register } from "../routes/Register/modules/register"
 import { AccountInformationReducer as accountInformation } from "../routes/AccountInformation/modules/accountInformation"
 
-export const makeRootReducer = () => {
-    return combineReducers({
-        login,
-        home,
-        trackDriver,
-        bookings,
-        bookingDetail,
-        additionalServices,
-        reviewOrder,
-        register,
-        accountInformation
-    });
-}
+// export const makeRootReducer = () => {
+//     return combineReducers({
+//         login,
+//         home,
+//         trackDriver,
+//         bookings,
+//         bookingDetail,
+//         additionalServices,
+//         reviewOrder,
+//         register,
+//         accountInformation
+//     });
+// }
+
+export const makeRootReducer =
+(asyncReducers) =>
+(state, action) =>
+combineReducers({
+    login,
+    home,
+    trackDriver,
+    bookings,
+    bookingDetail,
+    additionalServices,
+    reviewOrder,
+    register,
+    accountInformation,
+    ...asyncReducers
+})(action.type === 'STATE_RESET' ? undefined : state, action)
 
 export default makeRootReducer;

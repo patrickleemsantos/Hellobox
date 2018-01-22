@@ -6,7 +6,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 
 const routes = ["Home", "Chat", "Profile"];
 
-export const SideBar = ({ account }) => {
+export const SideBar = ({ account, clearState }) => {
     
     accountInformation = () => {
         Actions.accountInformation();
@@ -17,6 +17,7 @@ export const SideBar = ({ account }) => {
     }
 
     logout = () => {
+        clearState();
         AsyncStorage.setItem('account', "");
         Actions.login();
     };    

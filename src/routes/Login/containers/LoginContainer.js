@@ -5,7 +5,8 @@ import {
     getPassword,
     setAccount,
     login,
-    setLoginPreference
+    setLoginPreference,
+    setShowForgotPasswordModal
 } from "../modules/login";
 
 const mapStateToProps = (state) => ({   
@@ -14,7 +15,8 @@ const mapStateToProps = (state) => ({
     loginResult: state.login.loginResult || {},
     account: state.login.account || {},
     isLoading: state.login.isLoading || false,
-    loginPreference: state.login.loginPreference || "mobile"
+    loginPreference: state.login.loginPreference || "mobile",
+    showForgotPasswordModal: state.login.showForgotPasswordModal || false
 });
 
 const mapActionCreators = {
@@ -22,7 +24,8 @@ const mapActionCreators = {
     getPassword,
     setAccount,
     login,
-    setLoginPreference
+    setLoginPreference,
+    setShowForgotPasswordModal
 };
 
 export default connect(mapStateToProps, mapActionCreators)(Login);
